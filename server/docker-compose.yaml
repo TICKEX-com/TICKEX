@@ -1,6 +1,5 @@
 networks:
-  # Dedicated network for Kafka cluster
-  kafka-network:
+
   tickexNetwork:
 
 services:
