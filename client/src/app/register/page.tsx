@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
- 
   CardFooter,
   CardHeader,
   CardTitle,
@@ -19,11 +18,14 @@ function page() {
       <Card className="w-1/4">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">
-            Log in to Ticke<span className="text-purple-600">X</span>
+            Sign up to Ticke<span className="text-purple-600">X</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
-        
+        <div className="grid gap-2">
+            <Label htmlFor="username">Username</Label>
+            <Input id="username" type="username" placeholder="tickex" />
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="tickex@example.com" />
@@ -32,29 +34,15 @@ function page() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" />
           </div>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <Button variant="outline">
-            <icons.google className="mr-2 h-4 w-4" />
-            Google
-          </Button>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Log in</Button>
+          <Button className="w-full">Sign up</Button>
         </CardFooter>
         <CardContent>
           <span className="bg-background px-2 text-muted-foreground">
-            Need a Ticke
-            <span className="text-purple-600 font-bold">X</span> account?  
-             <Link href='/register' className="underline text-purple-600"> Sign up here</Link>
+           Already have a Ticke
+            <span className="text-purple-600 font-bold">X</span> account?
+             <Link href='/login' className="underline text-purple-600"> Log in here</Link>
           </span>
         </CardContent>
       </Card>
