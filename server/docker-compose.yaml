@@ -1,5 +1,4 @@
 networks:
-
   tickexNetwork:
 
 services:
@@ -12,7 +11,7 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
-      - kafka-network 
+      - tickexNetwork
 
   kafka:
     image: 'bitnami/kafka:latest'
@@ -28,7 +27,6 @@ services:
     volumes:
       - ./Kafka:/bitnami/kafka 
     networks:
-      - kafka-network
       - tickexNetwork  
 
   tickex-discovery-service:
