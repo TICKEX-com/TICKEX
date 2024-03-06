@@ -1,20 +1,23 @@
 networks:
+  # Dedicated network for Kafka cluster
+  kafka-network:
   tickexNetwork:
-    name: tickexNetwork
 
 services:
-
+  # Kafka components
   zookeeper:
     image: 'bitnami/zookeeper:latest'
+    container_name: zookeeper
     ports:
       - '2181:2181'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
-      - tickexNetwork
+      - kafka-network 
 
   kafka:
     image: 'bitnami/kafka:latest'
+    container_name: kafka
     ports:
       - '9092:9092'
     environment:
@@ -22,45 +25,42 @@ services:
       - KAFKA_LISTENERS=PLAINTEXT://:9092
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      - ALLOW_PLAINTEXT_LISTENER=yes 
     volumes:
-      - ./Kafka:/bitnami/kafka
+      - ./Kafka:/bitnami/kafka 
+    networks:
+      - kafka-network
+      - tickexNetwork  
+
+  tickex-discovery-service:
+    build: ./discovery-service
+    container_name: discovery-service
+    ports:
+      - '8761:8761'
+    expose:
+      - '8761'
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      retries: 10
     networks:
       - tickexNetwork
-    depends_on:
-      - zookeeper
-      
-  discovery-service:
-      build: ./discovery-service
-      container_name: tickex-discovery-service
-      ports:
-        - '8761:8761'
-      expose:
-        -  '8761'
-      healthcheck:
-        test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]  
-        interval: 10s
-        retries: 10
-      networks:
-        - tickexNetwork
-      depends_on:
-        - kafka  
-    
-  gateway-service:
-      build: ./gateway-service
-      container_name: tickex-gateway-service
-      ports:
-        - '8765:8765'
-      expose:
-        -  '8765'
-      healthcheck:
-        test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]  
-        interval: 10s
-        retries: 10
-      networks:
-        - tickexNetwork
-      depends_on:
-        - discovery-service
 
-    
- 
+  tickex-gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - '8765:8765'
+    expose:
+      - '8765'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/actuator/health"]
+      interval: 10s
+      retries: 10
+    depends_on:
+      tickex-discovery-service:
+        condition: service_healthy
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    networks:
+      - tickexNetwork
