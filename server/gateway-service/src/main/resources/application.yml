@@ -1,0 +1,25 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  cloud:
+    discovery:
+      enabled: true
+    config:
+      enabled: false
+  application:
+    name: gateway-service
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
+    healthcheck:
+      enabled: true
+    registry-fetch-interval-seconds: 200
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
