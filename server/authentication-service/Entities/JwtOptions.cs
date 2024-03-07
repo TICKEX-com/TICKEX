@@ -1,4 +1,4 @@
-﻿namespace Authentication.Entities
+﻿namespace authentication_service.Entities
 {
     public class JwtOptions
     {

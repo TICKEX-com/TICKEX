@@ -1,9 +1,9 @@
-﻿using Authentication.Entities;
+﻿using authentication_service.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Authentication.Data
+namespace authentication_service.Data
 {
     public class DataContext : IdentityDbContext<User>
     {

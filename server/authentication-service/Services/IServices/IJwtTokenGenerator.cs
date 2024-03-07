@@ -1,6 +1,8 @@
-﻿using Authentication.Entities;
+﻿
 
-namespace Authentication.Services.IServices
+using authentication_service.Entities;
+
+namespace authentication_service.Services.IServices
 {
     public interface IJwtTokenGenerator
     {

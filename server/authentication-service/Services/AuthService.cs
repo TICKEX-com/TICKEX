@@ -1,11 +1,11 @@
-﻿using Authentication.Data;
-using Authentication.DTOs;
-using Authentication.Entities;
-using Authentication.Services.IServices;
+﻿using authentication_service.Data;
+using authentication_service.DTOs;
+using authentication_service.Entities;
+using authentication_service.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace Authentication.Services
+namespace authentication_service.Services
 {
     public class AuthService : IAuthService
     {
