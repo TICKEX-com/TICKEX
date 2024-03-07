@@ -19,7 +19,7 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-          
+
       - name: Test and Build
         run: |
           cd server/payment-service
@@ -35,7 +35,7 @@ jobs:
       - name: push image
         uses: docker/build-push-action@v5
         with:
-          context: ./eureka-server
+          context: ./payment-service
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-eureka-server:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-payment-service:latest
