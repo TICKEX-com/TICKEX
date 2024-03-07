@@ -69,8 +69,21 @@ namespace authentication_service.Services
             return loginResponseDto;
         }
 
-        public async Task<string> Register(RegisterationRequestDto requestDto)
+        // Register a Client
+        public async Task<string> RegisterClient(RegisterReqClientDto requestDto)
         {
+            // Vérification de l'adresse e-mail
+            if (!IsValidEmail(requestDto.Email))
+            {
+                return "Invalid email format.";
+            }
+
+            // Vérification du mot de passe et du mot de passe de confirmation
+            if (requestDto.Password != requestDto.ConfirmPassword)
+            {
+                return "Passwords do not match.";
+            }
+
             // Create user object with the fields we want
             User user = new()
             {
@@ -87,18 +100,16 @@ namespace authentication_service.Services
                 var result = await _userManager.CreateAsync(user, requestDto.Password);
                 if (result.Succeeded)
                 {
-                    var userToReturn = _db.Users.First(u => u.Email == requestDto.Email);
-
-                    UserDto userDto = new()
+                    var roleName = "CLIENT";
+                    if (!_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
                     {
-                        Email = userToReturn.Email,
-                        ID = userToReturn.Id,
-                        firstname = userToReturn.firstname,
-                        lastname = userToReturn.lastname,
-                        PhoneNumber = userToReturn.PhoneNumber
-                    };
+                        //create role if it does not exist
+                        _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
+                    }
+                    // Add role to user
+                    await _userManager.AddToRoleAsync(user, roleName);
 
-                    return "";
+                    return "success";
                 }
                 else
                 {
@@ -107,9 +118,77 @@ namespace authentication_service.Services
             }
             catch (Exception ex)
             {
-
+                return ex.Message;
             }
             return "Error Encountered";
+        }
+
+        // Register an Organizer
+        public async Task<string> RegisterOrganizer(RegisterReqOrganizerDto requestDto)
+        {
+            // Vérification de l'adresse e-mail
+            if (!IsValidEmail(requestDto.Email))
+            {
+                return "Invalid email format.";
+            }
+
+            // Vérification du mot de passe et du mot de passe de confirmation
+            if (requestDto.Password != requestDto.ConfirmPassword)
+            {
+                return "Passwords do not match.";
+            }
+
+            // Create user object with the fields we want
+            User user = new()
+            {
+                UserName = requestDto.Username,
+                Email = requestDto.Email,
+                NormalizedEmail = requestDto.Email.ToUpper(),
+                firstname = requestDto.firstname,
+                lastname = requestDto.lastname,
+                PhoneNumber = requestDto.PhoneNumber,
+                certificat = requestDto.Certificat
+            };
+            try
+            {
+                // Insert user in the database
+                var result = await _userManager.CreateAsync(user, requestDto.Password);
+                if (result.Succeeded)
+                {
+                    var roleName = "ORGANIZER";
+                    if (!_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
+                    {
+                        //create role if it does not exist
+                        _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
+                    }
+                    // Add role to user
+                    await _userManager.AddToRoleAsync(user, roleName);
+                    
+                    return "success";
+                }
+                else
+                {
+                    return result.Errors.FirstOrDefault().Description;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "Error Encountered";
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email && email.EndsWith("@gmail.com");
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

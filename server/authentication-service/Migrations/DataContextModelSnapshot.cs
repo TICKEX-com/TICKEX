@@ -207,6 +207,9 @@ namespace authentication_service.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("certificat")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("date_naissance")
                         .HasColumnType("nvarchar(max)");
 
