@@ -35,7 +35,7 @@ jobs:
       - name: push image
         uses: docker/build-push-action@v5
         with:
-          context: ./payment-service
+          context: ./server/payment-service
           dockerfile: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-payment-service:latest
