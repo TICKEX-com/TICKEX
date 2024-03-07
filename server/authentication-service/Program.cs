@@ -1,9 +1,10 @@
-using Authentication.Data;
-using Authentication.Entities;
-using Authentication.Services.IServices;
-using Authentication.Services;
+using authentication_service.Data;
+using authentication_service.Entities;
+using authentication_service.Services;
+using authentication_service.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Steeltoe.Discovery.Client;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
+builder.Services.AddDiscoveryClient();
 // Add new columns 
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
 

@@ -1,9 +1,8 @@
-﻿using Authentication.DTOs;
-using Authentication.Services.IServices;
-using Microsoft.AspNetCore.Http;
+﻿using authentication_service.DTOs;
+using authentication_service.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Authentication.Controllers
+namespace authentication_service.Controllers
 {
     [Route("api/auth")]
     [ApiController]

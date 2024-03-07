@@ -1,4 +1,4 @@
-﻿namespace Authentication.DTOs
+﻿namespace authentication_service.DTOs
 {
     public class RegisterationRequestDto
     {
