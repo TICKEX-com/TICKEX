@@ -12,8 +12,8 @@ using authentication_service.Data;
 namespace authentication_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240307120833_initialmigrate")]
-    partial class initialmigrate
+    [Migration("20240307200354_initialmigration")]
+    partial class initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,6 +209,9 @@ namespace authentication_service.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("certificat")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("date_naissance")
                         .HasColumnType("nvarchar(max)");

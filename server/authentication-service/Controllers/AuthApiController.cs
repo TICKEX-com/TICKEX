@@ -16,11 +16,24 @@ namespace authentication_service.Controllers
             _response = new();
         }
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterationRequestDto requestDto)
+        [HttpPost("Register/Client")]
+        public async Task<IActionResult> RegisterClient([FromBody] RegisterReqClientDto requestDto)
         {
-            var errorMessage = await _authService.Register(requestDto);
-            if (!string.IsNullOrEmpty(errorMessage))
+            var errorMessage = await _authService.RegisterClient(requestDto);
+            if (errorMessage != "success")
+            {
+                _response.IsSuccess = false;
+                _response.Message = errorMessage;
+                return BadRequest(_response);
+            }
+            return Ok(_response);
+        }
+
+        [HttpPost("Register/Organizer")]
+        public async Task<IActionResult> RegisterOrganizer([FromBody] RegisterReqOrganizerDto requestDto)
+        {
+            var errorMessage = await _authService.RegisterOrganizer(requestDto);
+            if (errorMessage != "success")
             {
                 _response.IsSuccess = false;
                 _response.Message = errorMessage;
@@ -44,9 +57,9 @@ namespace authentication_service.Controllers
         }
 
         [HttpPost("AssignRole")]
-        public async Task<IActionResult> AssignRole([FromBody] RegisterationRequestDto requestDto)
+        public async Task<IActionResult> AssignRole([FromBody] AssignRoleReqDto requestDto)
         {
-            var assignRoleSuccessful = await _authService.AssignRole(requestDto.Email, requestDto.Role.ToUpper());
+            var assignRoleSuccessful = await _authService.AssignRole(requestDto.Email, requestDto.roleName.ToUpper());
             if (!assignRoleSuccessful)
             {
                 _response.IsSuccess = false;
