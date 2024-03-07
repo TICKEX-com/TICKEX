@@ -15,6 +15,6 @@ public class PaymentServiceApplication {
 
 	@GetMapping("/pay")
 	public String payment(){
-		return "Order Payment SUCCESS";
+		return "Order Payment SUCCES";
 	}
 }
