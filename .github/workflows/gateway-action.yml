@@ -3,7 +3,7 @@ name: gateway-service CI/CD
 on:
   push:
     branches:
-      - gateway-service
+      - payment-service
 
 
 jobs:
