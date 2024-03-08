@@ -1,9 +1,9 @@
-name: payment-service CI/CD
+name: discovery-service CI/CD
 
 on:
   push:
     branches:
-      - payment-service
+      - discovery-service
 
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
 
       - name: Test and Build
         run: |
-          cd server/payment-service
+          cd server/discovery-service
           mvn clean install
         working-directory: ./  
 
@@ -35,7 +35,7 @@ jobs:
       - name: push image
         uses: docker/build-push-action@v5
         with:
-          context: ./server/payment-service
+          context: ./server/discovery-service
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-payment-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-discovery-service:latest
