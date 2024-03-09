@@ -24,27 +24,14 @@ namespace event_service.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEvents()
+        public async Task<IActionResult> GetEvents()
         {
             try
             {
                 // var events = _eventService.GetEvents();
-                _responseDto.Result = _mapper.Map<ICollection<EventDTO>>(_eventService.GetEvents());
-            } catch (Exception ex)
-            {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
-            }
-            
-            return Ok(_responseDto);
-        }
+                _responseDto.Result = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEvents());
+                _responseDto.Message = "Events returned";
 
-        [HttpGet("{id}")]
-        public IActionResult GetEvent(int id)
-        {
-            try
-            {
-                _responseDto.Result = _mapper.Map<EventDTO>(_eventService.GetEvent(id));
             }
             catch (Exception ex)
             {
@@ -52,6 +39,42 @@ namespace event_service.Controllers
                 _responseDto.Message = ex.Message;
             }
 
+            return Ok(_responseDto);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEvent(int id)
+        {
+            try
+            {
+                _responseDto.Result = _mapper.Map<EventByIdDto>(await _eventService.GetEvent(id));
+                _responseDto.Message = "Event returned";
+
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
+
+            return Ok(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEvent([FromBody] EventReqDto ev)
+        {
+            try
+            {
+                if (await _eventService.CreateEvent(ev)) {
+                    _responseDto.Result = _mapper.Map<EventReqDto>(ev);
+                    _responseDto.Message = "Event saved";   
+                } 
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
             return Ok(_responseDto);
         }
     }

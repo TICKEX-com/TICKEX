@@ -59,6 +59,7 @@ void ApplyMigration()
 
         if (_db.Database.GetPendingMigrations().Count() > 0)
         {
+            _db.Database.EnsureDeleted();
             _db.Database.Migrate();
         }
     }
