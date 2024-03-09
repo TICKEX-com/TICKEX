@@ -26,6 +26,9 @@ builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Data
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
+// Add HttpContextAccessor for Cookie 
+builder.Services.AddHttpContextAccessor(); 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
