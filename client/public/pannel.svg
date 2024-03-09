@@ -1,0 +1,21 @@
+<svg width="1552" height="699" viewBox="0 0 1452 899" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path id="gvdnyulaha" d="M0 0h1446v64H0z"/>
+        <path id="76lz1dnrxc" d="M0 0h1446v64H0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g transform="rotate(-180 723 449.393)">
+            <mask id="d3vukpx6cb" fill="#fff">
+                <use xlink:href="#gvdnyulaha"/>
+            </mask>
+            <path d="M-6 56.775C196.726 46.394 313.682 64 344.87 64c46.78 0 145.188-17.189 197.405-16.963 52.217.227 215.189 6.167 298.19-13.155 63.577-14.799 330.84-6.927 491.264 7.835 49.016 4.51 80.45 11.764 108.271 15.01V0H-6v56.775z" fill="#e0e0e0" mask="url(#d3vukpx6cb)" transform="rotate(-180 717 32)"/>
+        </g>
+        <path fill="#e0e0e0" d="M2 52h1444v784H2z"/>
+        <g transform="translate(6)">
+            <mask id="2dr6ulmf6d" fill="#fff">
+                <use xlink:href="#76lz1dnrxc"/>
+            </mask>
+            <path d="M-6 56.775C196.726 46.394 313.682 64 344.87 64c46.78 0 145.188-17.189 197.405-16.963 52.217.227 215.189 6.167 298.19-13.155 63.577-14.799 330.84-6.927 491.264 7.835 49.016 4.51 80.45 11.764 108.271 15.01V0H-6v56.775z" fill="#e0e0e0" mask="url(#2dr6ulmf6d)" transform="rotate(-180 717 32)"/>
+        </g>
+    </g>
+</svg>
