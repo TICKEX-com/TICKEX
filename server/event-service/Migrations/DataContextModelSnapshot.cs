@@ -22,6 +22,21 @@ namespace event_service.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Ticket", b =>
+                {
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventId", "ClientId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Ticket");
+                });
+
             modelBuilder.Entity("event_service.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -51,6 +66,19 @@ namespace event_service.Migrations
                         });
                 });
 
+            modelBuilder.Entity("event_service.Entities.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("event_service.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -69,13 +97,10 @@ namespace event_service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DesignId")
+                    b.Property<int?>("DesignId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Is_finished")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Is_public")
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
@@ -88,7 +113,11 @@ namespace event_service.Migrations
                     b.Property<bool>("On_sell")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OrganizerId")
+                    b.Property<string>("OrganizerUsername")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PosterId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -99,6 +128,8 @@ namespace event_service.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("PosterId");
+
                     b.ToTable("Events");
 
                     b.HasData(
@@ -106,30 +137,28 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 3, 7, 11, 33, 10, 908, DateTimeKind.Local).AddTicks(1204),
+                            Date = new DateTime(2024, 3, 9, 15, 55, 24, 954, DateTimeKind.Local).AddTicks(8845),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
-                            Is_public = false,
                             Location = "maps",
                             MinPrize = 500f,
                             On_sell = false,
-                            OrganizerId = 1,
+                            OrganizerUsername = "hhhh",
                             Title = "Match"
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 2,
-                            Date = new DateTime(2024, 3, 7, 11, 33, 10, 908, DateTimeKind.Local).AddTicks(1341),
+                            Date = new DateTime(2024, 3, 9, 15, 55, 24, 954, DateTimeKind.Local).AddTicks(8981),
                             Description = "i am a movie",
                             DesignId = 2,
                             Is_finished = false,
-                            Is_public = false,
                             Location = "maps",
                             MinPrize = 500f,
                             On_sell = false,
-                            OrganizerId = 2,
+                            OrganizerUsername = "ooooo",
                             Title = "Cinema"
                         });
                 });
@@ -142,12 +171,8 @@ namespace event_service.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EventId")
+                    b.Property<int?>("EventId")
                         .HasColumnType("int");
-
-                    b.Property<string>("type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("url")
                         .IsRequired()
@@ -160,6 +185,38 @@ namespace event_service.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("event_service.Entities.Poster", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Poster");
+                });
+
+            modelBuilder.Entity("Ticket", b =>
+                {
+                    b.HasOne("event_service.Entities.Client", null)
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("event_service.Entities.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("event_service.Entities.Event", b =>
                 {
                     b.HasOne("event_service.Entities.Category", "Category")
@@ -168,18 +225,20 @@ namespace event_service.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("event_service.Entities.Poster", "Poster")
+                        .WithMany()
+                        .HasForeignKey("PosterId");
+
                     b.Navigation("Category");
+
+                    b.Navigation("Poster");
                 });
 
             modelBuilder.Entity("event_service.Entities.Image", b =>
                 {
-                    b.HasOne("event_service.Entities.Event", "Event")
+                    b.HasOne("event_service.Entities.Event", null)
                         .WithMany("Images")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
+                        .HasForeignKey("EventId");
                 });
 
             modelBuilder.Entity("event_service.Entities.Event", b =>

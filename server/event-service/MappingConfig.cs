@@ -11,7 +11,10 @@ public class MappingConfig
         var mappingConfig = new MapperConfiguration(
             config =>
             {
-                config.CreateMap<EventDTO, Event>().ReverseMap();
+                config.CreateMap<EventReqDto, Event>().ReverseMap();
+                config.CreateMap<EventsDto, Event>().ReverseMap();
+                config.CreateMap<EventByIdDto, Event>().ReverseMap();
+
             });
         return mappingConfig;
     }
