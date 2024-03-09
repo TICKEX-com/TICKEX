@@ -12,7 +12,7 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240309145525_initial")]
+    [Migration("20240309210337_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -140,7 +140,7 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 3, 9, 15, 55, 24, 954, DateTimeKind.Local).AddTicks(8845),
+                            Date = new DateTime(2024, 3, 9, 22, 3, 37, 352, DateTimeKind.Local).AddTicks(326),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
@@ -154,7 +154,7 @@ namespace event_service.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            Date = new DateTime(2024, 3, 9, 15, 55, 24, 954, DateTimeKind.Local).AddTicks(8981),
+                            Date = new DateTime(2024, 3, 9, 22, 3, 37, 352, DateTimeKind.Local).AddTicks(514),
                             Description = "i am a movie",
                             DesignId = 2,
                             Is_finished = false,

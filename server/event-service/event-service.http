@@ -1,6 +1,6 @@
-@event_service_HostAddress = http://localhost:5106
+@event_service_HostAddress = http://localhost:5073
 
-GET {{event_service_HostAddress}}/weatherforecast/
+GET {{event_service_HostAddress}}/event_service/
 Accept: application/json
 
 ###

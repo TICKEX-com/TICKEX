@@ -142,8 +142,8 @@ namespace event_service.Migrations
                 columns: new[] { "Id", "CategoryId", "Date", "Description", "DesignId", "Is_finished", "Location", "MinPrize", "On_sell", "OrganizerUsername", "PosterId", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 3, 9, 15, 55, 24, 954, DateTimeKind.Local).AddTicks(8845), "i am a football match", 1, false, "maps", 500f, false, "hhhh", null, "Match" },
-                    { 2, 2, new DateTime(2024, 3, 9, 15, 55, 24, 954, DateTimeKind.Local).AddTicks(8981), "i am a movie", 2, false, "maps", 500f, false, "ooooo", null, "Cinema" }
+                    { 1, 1, new DateTime(2024, 3, 9, 22, 3, 37, 352, DateTimeKind.Local).AddTicks(326), "i am a football match", 1, false, "maps", 500f, false, "hhhh", null, "Match" },
+                    { 2, 2, new DateTime(2024, 3, 9, 22, 3, 37, 352, DateTimeKind.Local).AddTicks(514), "i am a movie", 2, false, "maps", 500f, false, "ooooo", null, "Cinema" }
                 });
 
             migrationBuilder.CreateIndex(
