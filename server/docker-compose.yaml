@@ -63,7 +63,7 @@ services:
       - tickexNetwork
 
   tickex-payment-service:
-    build: ./payment-service
+    image: 'madockerhub/tickex-payment-service'
     container_name: payment-service
     ports:
       - '8081:8081'
