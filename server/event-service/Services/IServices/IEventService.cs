@@ -1,10 +1,12 @@
-﻿using event_service.Entities;
+﻿using event_service.DTOs;
+using event_service.Entities;
 
 namespace event_service.Services.IServices
 {
     public interface IEventService
     {
-        ICollection<Event> GetEvents();
-        Event GetEvent(int id);
+        Task<ICollection<Event>> GetEvents();
+        Task<Event> GetEvent(int id);
+        Task<bool> CreateEvent(EventReqDto Event);
     }
 }

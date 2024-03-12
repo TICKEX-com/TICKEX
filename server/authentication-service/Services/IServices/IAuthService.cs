@@ -8,7 +8,7 @@ namespace authentication_service.Services.IServices
     {
         Task<string> RegisterClient(RegisterReqClientDto requestDto);
         Task<string> RegisterOrganizer(RegisterReqOrganizerDto requestDto);
-        Task<LoginResponseDto> Login(LoginRequestDto requestDto);
+        Task<LoginResponseDto> Login(HttpContext httpContext, LoginRequestDto requestDto);
         Task<bool> AssignRole(string email, string roleName);
     }
 }

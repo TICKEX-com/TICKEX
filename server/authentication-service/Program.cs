@@ -25,6 +25,9 @@ builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Data
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IUserService, UserService>();
+// Add HttpContextAccessor for Cookie 
+builder.Services.AddHttpContextAccessor();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -59,6 +62,7 @@ void ApplyMigration()
 
         if (_db.Database.GetPendingMigrations().Count() > 0)
         {
+            _db.Database.EnsureDeleted();
             _db.Database.Migrate();
         }
     }
