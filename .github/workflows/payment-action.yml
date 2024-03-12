@@ -3,7 +3,7 @@ name: payment-service CI/CD
 on:
   push:
     branches:
-      - payment-service
+      - dev
 
 
 jobs:
