@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useEffect } from 'react';
 
-const storedUserInfo =localStorage.getItem('userInfo')
-const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo): null;
+
+
+
 
 const initialState = {
-  userInfo: parsedUserInfo
+  userInfo: null
 };
 
 const authSlice = createSlice({
@@ -13,11 +15,11 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action) => {
       state.userInfo = action.payload;
-      localStorage.setItem('userInfo', JSON.stringify(action.payload));
+      
     },
     logout: (state, action) => {
       state.userInfo = null;
-      localStorage.removeItem('userInfo');
+     
     },
   },
 });
