@@ -9,11 +9,14 @@ namespace authentication_service.Controllers
     public class AuthApiController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         protected ResponseDto _response;
-        public AuthApiController(IAuthService authService)
+
+        public AuthApiController(IAuthService authService, IHttpContextAccessor httpContextAccessor)
         {
             _authService = authService;
             _response = new();
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost("Register/Client")]
@@ -45,7 +48,7 @@ namespace authentication_service.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
         {
-            var loginResponse = await _authService.Login(loginRequest);
+            var loginResponse = await _authService.Login(_httpContextAccessor.HttpContext,loginRequest);
             if (loginResponse.User == null)
             {
                 _response.IsSuccess = false;

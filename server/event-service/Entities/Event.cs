@@ -19,11 +19,9 @@ namespace event_service.Entities
         [Required]
         public float MinPrize { get; set; }
         [NotMapped]
-        public Design design { get; set; }
-        [Required]
-        public int DesignId { get; set; }
-        [NotMapped]
-        public List<Client> Clients { get; set; }
+        public Design? Design { get; set; } = null;
+        public int? DesignId { get; set; } = null;
+        public List<Client> Clients { get; set; } = null;
         [Required]
         public Category Category { get; set; }
         [Required]
@@ -31,14 +29,13 @@ namespace event_service.Entities
         [NotMapped]
         public Organizer Organizer { get; set; }
         [Required]
-        public int OrganizerId { get; set; }
+        public string OrganizerUsername { get; set; }
+        public Poster Poster { get; set; } = null;
+        public int? PosterId { get; set; } = null;
+        public List<Image> Images { get; set; } = null;
         [Required]
-        public List<Image> Images { get; set; }
+        public bool On_sell { get; set; } = false ;
         [Required]
-        public bool Is_public { get; set; }
-        [Required]
-        public bool On_sell { get; set; }
-        [Required]
-        public bool Is_finished { get; set; }
+        public bool Is_finished { get; set; } = false ;
     }
 }

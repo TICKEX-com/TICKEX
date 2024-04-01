@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:configserver:http://localhost:8888
   application:
     name: discovery-service
 
@@ -9,12 +11,3 @@ eureka:
   client:
     fetch-registry: false
     register-with-eureka: false
-  server:
-    enable-self-preservation: true
-    renewal-percent-threshold: 0.02
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'

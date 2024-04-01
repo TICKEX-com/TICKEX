@@ -2,8 +2,11 @@
 using authentication_service.DTOs;
 using authentication_service.Entities;
 using authentication_service.Services.IServices;
+using Azure;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using System;
+using System.Net.Http;
 
 namespace authentication_service.Services
 {
@@ -38,14 +41,14 @@ namespace authentication_service.Services
             return false;
         }
 
-        public async Task<LoginResponseDto> Login(LoginRequestDto requestDto)
+        public async Task<LoginResponseDto> Login(HttpContext httpContext, LoginRequestDto requestDto)
         {
             var user = _db.Users.FirstOrDefault(u => u.UserName.ToLower() == requestDto.UserName.ToLower());
             bool isValid = await _userManager.CheckPasswordAsync(user, requestDto.Password);
 
             if (user == null || isValid == false)
             {
-                return new LoginResponseDto() { User = null, Token = "" };
+                return new LoginResponseDto() { User = null };
             }
 
             //if user was found , Generate JWT Token and add roles 
@@ -55,15 +58,25 @@ namespace authentication_service.Services
             UserDto userDto = new()
             {
                 ID = user.Id,
+                Username = requestDto.UserName,
                 Email = user.Email,
                 firstname = user.firstname,
                 lastname = user.lastname,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Role = roles.FirstOrDefault()
             };
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(7), 
+            };
+
+            httpContext.Response.Cookies.Append("jwtToken", token, cookieOptions);
+
             LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
-                User = userDto,
-                Token = token
+                User = userDto
             };
 
             return loginResponseDto;

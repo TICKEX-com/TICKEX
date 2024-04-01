@@ -5,10 +5,10 @@ namespace authentication_service.Entities
 {
     public class User : IdentityUser
     {
-        public string? firstname { get; set; }
-        public string? lastname { get; set; }
-        public string? ville { get; set; }
-        public string? date_naissance { get; set; }
-        public string? certificat {  get; set; }
+        public string? firstname { get; set; } = string.Empty;
+        public string? lastname { get; set; } = string.Empty;
+        public string? ville { get; set; } = string.Empty;
+        public string? date_naissance { get; set; } = string.Empty;
+        public string? certificat {  get; set; } = string.Empty;
     }
 }

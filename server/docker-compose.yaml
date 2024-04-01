@@ -30,7 +30,7 @@ services:
       - tickexNetwork  
 
   tickex-discovery-service:
-    build: ./discovery-service
+    image: 'madockerhub/tickex-discovery-service'
     container_name: discovery-service
     ports:
       - '8761:8761'
@@ -44,7 +44,7 @@ services:
       - tickexNetwork
 
   tickex-gateway-service:
-    build: ./gateway-service
+    image: 'madockerhub/tickex-gateway-service'
     container_name: gateway-service
     ports:
       - '8765:8765'
@@ -61,3 +61,41 @@ services:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
     networks:
       - tickexNetwork
+
+  tickex-payment-service:
+    image: 'madockerhub/tickex-payment-service'
+    container_name: payment-service
+    ports:
+      - '8081:8081'
+    expose:
+      - '8081'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/actuator/health"]
+      interval: 10s
+      retries: 10
+    depends_on:
+      tickex-discovery-service:
+        condition: service_healthy
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    networks:
+      - tickexNetwork
+      
+    # tickex-event-service:
+    #   image: 'madockerhub/tickex-event-service'
+    #   container_name: event-service
+    #   ports:
+    #     - '9091:9091'
+    #   expose:
+    #     - '9091'
+    #   healthcheck:
+    #     test: ["CMD", "curl", "-f", "http://localhost:8765/actuator/health"]
+    #     interval: 10s
+    #     retries: 10
+    #   depends_on:
+    #     tickex-discovery-service:
+    #       condition: service_healthy
+    #   environment:
+    #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    #   networks:
+    #     - tickexNetwork  
