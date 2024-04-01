@@ -59,6 +59,17 @@ namespace authentication_service.Controllers
             return Ok(_response);
         }
 
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            if (await _authService.Logout(_httpContextAccessor.HttpContext))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+
         [HttpPost("AssignRole")]
         public async Task<IActionResult> AssignRole([FromBody] AssignRoleReqDto requestDto)
         {
