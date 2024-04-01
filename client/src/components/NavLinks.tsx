@@ -17,40 +17,29 @@ import {
 
 const components: { title: string; href: string; description: string }[] = [
 	{
-		title: "Alert Dialog",
+		title: "How it works ?",
 		href: "/docs/primitives/alert-dialog",
 		description:
 			"A modal dialog that interrupts the user with important content and expects a response.",
 	},
 	{
-		title: "Hover Card",
+		title: "Add New Event",
 		href: "/docs/primitives/hover-card",
 		description:
 			"For sighted users to preview content available behind a link.",
 	},
 	{
-		title: "Progress",
-		href: "/docs/primitives/progress",
+		title: "Event Promotion",
+		href: "/docs/primitives/hover-card",
 		description:
-			"Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+			"For sighted users to preview content available behind a link.",
 	},
 	{
-		title: "Scroll-area",
-		href: "/docs/primitives/scroll-area",
-		description: "Visually or semantically separates content.",
-	},
-	{
-		title: "Tabs",
-		href: "/docs/primitives/tabs",
+		title: "Seat Map App",
+		href: "/docs/primitives/hover-card",
 		description:
-			"A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-	},
-	{
-		title: "Tooltip",
-		href: "/docs/primitives/tooltip",
-		description:
-			"A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-	},
+			"For sighted users to preview content available behind a link.",
+	}, 
 ];
 
 export function NavLinks() {
@@ -70,7 +59,7 @@ export function NavLinks() {
 						></Image>
 					</NavigationMenuTrigger>
 					<NavigationMenuContent>
-						<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+						<ul className="grid w-[200px] gap-3 p-4 md:w-[200px] grid-cols-1 lg:w-[250px] ">
 							{components.map((component) => (
 								<ListItem
 									key={component.title}
@@ -112,15 +101,15 @@ export function NavLinks() {
 					</NavigationMenuTrigger>
           			
 					<NavigationMenuContent>
-						<ul className="grid  gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+						<ul className="grid grid-cols-1  gap-3 p-4 md:w-[300px] lg:w-[400px] sm:w-[200px]">
 						
-							<ListItem href="/docs" title="Introduction">
+							<ListItem href="/docs" title="Blog">
 								Re-usable components built using Radix UI and Tailwind CSS.
 							</ListItem>
-							<ListItem href="/docs/installation" title="Installation">
+							<ListItem href="/docs/installation" title="Who Are We ?">
 								How to install dependencies and structure your app.
 							</ListItem>
-							<ListItem href="/docs/primitives/typography" title="Typography">
+							<ListItem href="/docs/primitives/typography" title="Support">
 								Styles for headings, paragraphs, lists...etc
 							</ListItem>
 						</ul>

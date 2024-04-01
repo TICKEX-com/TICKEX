@@ -13,7 +13,7 @@ import {
 export default function Location() {
   return (
     <Select>
-      <SelectTrigger className="w-[180px] h-fit border-0 p-0 pl-2 outline-none">
+      <SelectTrigger className="w-[180px] h-fit border-0 p-0 outline-none">
         <SelectValue placeholder="Select a location" className="text-gray-600"/>
       </SelectTrigger>
       <SelectContent>

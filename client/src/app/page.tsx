@@ -6,34 +6,38 @@ import Navbar1 from "@/components/Navbar1";
 import SearchBar from "@/components/SearchBar";
 import Location from "@/components/location";
 import Slider from "@/components/slider";
-import { Button } from "@/components/ui/button";
 import { DialogOverlay } from "@/components/ui/dialog";
 import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
 import { Copyright, MapPin, Search, Sliders } from "lucide-react";
 import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
+import { motion } from "framer-motion";
 
 import * as React from "react";
 import Paginate from "@/components/Paginate";
+import { useRef } from "react";
+import Footer from "@/components/footer";
 
 const features = ["Event Promotion", "Live Events", "Seat Map"];
 
 export default function Home() {
+	const scrollRef = useRef(null);
+
 	return (
-		<>
+		<div className="font-roboto">
 			<Dialog>
-				<div className="container font-roboto relative w-full ">
-					<Navbar1>
+				<div className=" font-roboto relative w-full">
+					<Navbar1 with_NewEvent={true}>
 						<NavLinks></NavLinks>
 					</Navbar1>
-					<DialogOverlay className="fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+					<DialogOverlay className="container fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
 						<DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
 							<SearchBar></SearchBar>
 						</DialogContent>
 					</DialogOverlay>
 					<div className="container flex flex-row align-center items-center justify-center w-full">
 						<div className="container">
-							<div className="flex flex-col font-roboto align-center text-4xl space-y-2 font-bold mb-3">
+							<div className="flex flex-col  font-roboto align-center text-4xl space-y-2 font-bold mb-3">
 								<h1 className=" flex flex-row space-x-4 align-middle">
 									<p>Unlock the excitement</p>
 									<Image
@@ -65,8 +69,9 @@ export default function Home() {
 								perfect event to make memories and share unforgettable moments.
 								Don't wait, your next great experience is just a click away!
 							</p>
+							<div className="mt-12 flex flex-row items-center align-middle space-x-2">
+
 							<DialogTrigger asChild>
-								<div className="mt-12 flex flex-row items-center align-middle space-x-2">
 									<div>
 										<div className="flex flex-row align-center items-center">
 											<Search height={15}></Search>
@@ -85,6 +90,8 @@ export default function Home() {
 											height={100}
 										></Image>
 									</div>
+							    </DialogTrigger>
+								
 									<div>
 										<div className="flex flex-row align-center items-center mb-2">
 											<MapPin height={15} />
@@ -98,7 +105,6 @@ export default function Home() {
 										></Image>
 									</div>
 								</div>
-							</DialogTrigger>
 							<div className="flex flex-row justify-end mt-10">
 								<Image
 									src={"/dots.svg"}
@@ -108,7 +114,7 @@ export default function Home() {
 								></Image>
 							</div>
 						</div>
-						<div className="w-full h-full relative ">
+						<div className="w-full h-full relative mt-10">
 							<Image
 								src={"/untitled.svg"}
 								alt="d"
@@ -223,7 +229,7 @@ export default function Home() {
 					<EventCard></EventCard>
 					<Paginate></Paginate>
 				</div>
-				
+
 				<Image
 					src={"/halfsquare.svg"}
 					alt="two"
@@ -231,7 +237,6 @@ export default function Home() {
 					height={50}
 					className="absolute top-[90%] right-[5%]"
 				></Image>
-				
 			</main>
 			<main className="w-full h-[30vh] bg-black mb-12 flex flex-col items-center justify-start font-roboto">
 				<h1 className="text-white my-auto text-lg font-semibold">
@@ -281,10 +286,15 @@ export default function Home() {
 					<div className="flex flex-col items-left absolute top-[30%] left-[25%] ">
 						<p className="text-white font-roboto text-lg max-w-xl">
 							“I have tried all the major ticketing sites for my film festival
-							and found TickX to be head and shoulders above the
-							competition. The site is exceptionally user-friendly.”
+							and found TickX to be head and shoulders above the competition.
+							The site is exceptionally user-friendly.”
 						</p>
-						<h2 className="mt-10 font-roboto  text-lg font-extrabold flex flex-row items-center">Anass Chatt<p className="text-sm text-gray-300 font-light">, Drugs Dealer</p></h2>
+						<h2 className="mt-10 font-roboto  text-lg font-extrabold flex flex-row items-center">
+							Anass Chatt
+							<p className="text-sm text-gray-300 font-light">
+								, Event Organizer
+							</p>
+						</h2>
 					</div>
 					<Image
 						src={"/quote-end.png"}
@@ -295,9 +305,7 @@ export default function Home() {
 					></Image>
 				</div>
 			</main>
-			<footer className="w-full h-[20vh] flex border bg-gray-300">
-				<div className=" flex flex-row items-center mx-auto w-fit space-x-2"><p>TickX corp.</p><Copyright className="mr-4"></Copyright>  2024-2025</div>
-			</footer>
-		</>
+			<Footer></Footer>
+		</div>
 	);
 }

@@ -2,17 +2,19 @@ import React from "react";
 import ThemeToggle from "./ThemeToggle";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import ShortProfile from "./ShortProfile";
 
 type props = {
 	children?: React.ReactNode;
+	with_NewEvent?:Boolean
 };
 const icons = ["/notifications.svg", "/panier.svg"];
-export default function Navbar1({ children }: props) {
+export default function Navbar1({ children,with_NewEvent }: props) {
 	return (
 		<nav
-			className={`w-full h-fit flex flex-row p-2 pb-0 px-3 dark:border-border_dark `}
+			className={`w-full container mx-auto fixed h-fit flex flex-row py-2 pb-0 px-3 items-center bg-white z-50`}
 		>
-			<div className="flex-1 w-full flex flex-row space-x-3 align-center my-auto justify-start">
+			<div className="container flex-1 w-full flex flex-row space-x-3 align-center my-auto justify-start">
 				<div className="text-2xl text-black font-semibold">
 					Tick<span className="text-purple-600">X</span>
 				</div>
@@ -20,8 +22,8 @@ export default function Navbar1({ children }: props) {
 					{children}
 				</div>
 			</div>
-			<div className=" flex-1 w-full flex flex-row align-center items-center justify-end">
-				<div className="flex flex-row text-black align-center justify-end  relative items-center">
+			<div className="container flex-1 w-full flex flex-row align-center items-center justify-end">
+				{with_NewEvent==true && <div className="flex flex-row text-black align-center justify-end  relative items-center">
 					<Image
 						src={"/ticket2.svg"}
 						alt="d"
@@ -32,7 +34,7 @@ export default function Navbar1({ children }: props) {
 					<p className="absolute text-white right-4 text-sm font-semibold cursor-pointer">
 						New Event
 					</p>
-				</div>
+				</div>}
 				
 				{icons.map((val,indx)=><div className="items-center">
 					<button className="relative group inline-flex h-12 w-16 items-center justify-center rounded-md bg-background px-2 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-accent/50 data-[active]:bg-accent/50">
@@ -54,7 +56,7 @@ export default function Navbar1({ children }: props) {
 				</div>)}
 
 				<div className="items-center">
-					<button className="relative group text-md font-semibold inline-flex h-12 w-16 items-center justify-center rounded-md bg-background px-4 py-2  transition-colors focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-accent/50 data-[active]:bg-accent/50">
+					{/* <button className="relative group text-md font-semibold inline-flex h-12 w-16 items-center justify-center rounded-md bg-background px-4 py-2  transition-colors focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-accent/50 data-[active]:bg-accent/50">
 						Login
 						<Image
 							src={"/next.svg"}
@@ -69,12 +71,12 @@ export default function Navbar1({ children }: props) {
 								top: 25,
 							}}
 						></Image>
-					</button>
-					{/* <ShortProfile></ShortProfile> */}
+					</button> */}
+					<ShortProfile></ShortProfile>
 				</div>
-				<div className="px-3">
+				{/* <div className="px-3">
 					<ThemeToggle></ThemeToggle>
-				</div>
+				</div> */}
 			</div>
 		</nav>
 	);

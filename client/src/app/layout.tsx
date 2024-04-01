@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 const robo = Roboto_Mono({ 
   subsets: ['latin'],
-  weight:["400"],
+  weight:["600"],
   variable: '--font-roboto',
 });
 const inter = Inter({ subsets: ["latin"] });
