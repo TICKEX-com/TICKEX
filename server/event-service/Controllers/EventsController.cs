@@ -66,8 +66,7 @@ namespace event_service.Controllers
             {
                 if (await _eventService.CreateEvent(ev))
                 {
-                    var createdEvent = _mapper.Map<EventReqDto>(ev);
-                    return Ok(createdEvent);
+                    return Ok(ev);
                 }
                 else
                 {
