@@ -11,8 +11,8 @@ namespace event_service.DTOs
         public float MinPrize { get; set; }
         public string OrganizerUsername { get; set; }
         public int CategoryId { get; set; }
-        // public IFormFile Poster { get; set; }
-        // public IFormFileCollection Images { get; set; }
+        public string Poster { get; set; }
+        public List<ImageDto> Images { get; set; }
 
     }
 }

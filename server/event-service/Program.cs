@@ -1,10 +1,12 @@
 using AutoMapper;
 using event_service;
+using event_service.Controllers;
 using event_service.Data;
 using event_service.Services;
 using event_service.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using Steeltoe.Discovery.Client;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Hosting;
 
 namespace event_service.Entities
 {
@@ -30,9 +31,9 @@ namespace event_service.Entities
         public Organizer Organizer { get; set; }
         [Required]
         public string OrganizerUsername { get; set; }
-        public Poster Poster { get; set; } = null;
-        public int? PosterId { get; set; } = null;
-        public List<Image> Images { get; set; } = null;
+        [Required]
+        public string Poster { get; set; }
+        public List<Image> Images { get; set; }
         [Required]
         public bool On_sell { get; set; } = false ;
         [Required]

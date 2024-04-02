@@ -7,7 +7,7 @@
         public DateTime Date { get; set; }
         public string Location { get; set; }
         public float MinPrize { get; set; }
-        // poster
+        public string Poster { get; set; }
         
     }
 }
