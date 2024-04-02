@@ -3,22 +3,23 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 9091
+EXPOSE 8080
+EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["event-service.csproj", "."]
-RUN dotnet restore "./././event-service.csproj"
+COPY ["authentication-service.csproj", "."]
+RUN dotnet restore "./././authentication-service.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./event-service.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./authentication-service.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./event-service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./authentication-service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "event-service.dll"]
+ENTRYPOINT ["dotnet", "authentication-service.dll"]
