@@ -17,12 +17,17 @@ namespace event_service.Services
 
         public async Task<Event> GetEvent(int id)
         {
-            return await _context.Events.FirstAsync(ev => ev.Id == id);
+            return await _context.Events.Include(img => img.Images).FirstAsync(ev => ev.Id == id);
         }
 
         public async Task<ICollection<Event>> GetEvents()
         {
             return await _context.Events.OrderBy(ev => ev.Id).ToListAsync();
+        }
+
+        public async Task<bool> IsEventExist(int id)
+        {
+            return await _context.Events.AnyAsync(ev => ev.Id == id);
         }
 
         public async Task<bool> CreateEvent(EventReqDto Event)
@@ -35,13 +40,28 @@ namespace event_service.Services
                 Location = Event.Location,
                 MinPrize = Event.MinPrize,
                 CategoryId = Event.CategoryId,
-                OrganizerUsername = Event.OrganizerUsername,
+                OrganizerUsername = Event.OrganizerUsername
             };
-            
+
+
+            if (!string.IsNullOrEmpty(Event.Poster))
+            {
+                ev.Poster = Event.Poster;
+            }
+
             _context.Events.Add(ev);
+
+            // Handle images
+            if (Event.Images != null && Event.Images.Any())
+            {
+                foreach (var image in Event.Images)
+                {
+                    // Add image
+                    _context.Images.Add(new Image { Id = image.Id , Event = ev});
+                }
+            }
             var result = await _context.SaveChangesAsync();
             return result > 0;
-            
         }
     }
 }

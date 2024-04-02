@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using event_service.Entities;
-using System.Linq.Expressions;
 
 namespace event_service.Data
 {
@@ -10,8 +9,9 @@ namespace event_service.Data
 
         public DbSet<Event> Events { get; set; }
         public DbSet<Client> Clients { get; set; }
-        public DbSet<Image> Images { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Image> Images { get; set; }
+
 
 
 
@@ -32,7 +32,8 @@ namespace event_service.Data
                     MinPrize = 500,
                     DesignId = 1,
                     OrganizerUsername = "hhhh",
-                    CategoryId = 1
+                    CategoryId = 1,
+                    Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
                 }
                 );
                 modelBuilder.Entity<Category>().HasData(
@@ -53,7 +54,8 @@ namespace event_service.Data
                         MinPrize = 500,
                         DesignId = 2,
                         OrganizerUsername = "ooooo",
-                        CategoryId = 2
+                        CategoryId = 2,
+                        Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
                     }
                 );
                 modelBuilder.Entity<Category>().HasData(
@@ -72,6 +74,12 @@ namespace event_service.Data
                                 l => l.HasOne(typeof(Client)).WithMany().HasForeignKey("ClientId").HasPrincipalKey(nameof(Client.Id)),
                                 r => r.HasOne(typeof(Event)).WithMany().HasForeignKey("EventId").HasPrincipalKey(nameof(Event.Id)),
                                 j => j.HasKey("EventId", "ClientId"));
+
+                modelBuilder.Entity<Event>()
+                            .HasMany(e => e.Images)
+                            .WithOne(e => e.Event)
+                            .HasForeignKey("EventId")
+                            .IsRequired(false); 
             } catch (Exception ex)
             {
                 Console.WriteLine( ex.ToString() );

@@ -12,7 +12,7 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240309210337_initial")]
+    [Migration("20240402131223_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -120,8 +120,9 @@ namespace event_service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PosterId")
-                        .HasColumnType("int");
+                    b.Property<string>("Poster")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -131,8 +132,6 @@ namespace event_service.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("PosterId");
-
                     b.ToTable("Events");
 
                     b.HasData(
@@ -140,7 +139,7 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 3, 9, 22, 3, 37, 352, DateTimeKind.Local).AddTicks(326),
+                            Date = new DateTime(2024, 4, 2, 13, 12, 23, 11, DateTimeKind.Local).AddTicks(1367),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
@@ -148,13 +147,14 @@ namespace event_service.Migrations
                             MinPrize = 500f,
                             On_sell = false,
                             OrganizerUsername = "hhhh",
+                            Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
                             Title = "Match"
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 2,
-                            Date = new DateTime(2024, 3, 9, 22, 3, 37, 352, DateTimeKind.Local).AddTicks(514),
+                            Date = new DateTime(2024, 4, 2, 13, 12, 23, 11, DateTimeKind.Local).AddTicks(1490),
                             Description = "i am a movie",
                             DesignId = 2,
                             Is_finished = false,
@@ -162,47 +162,25 @@ namespace event_service.Migrations
                             MinPrize = 500f,
                             On_sell = false,
                             OrganizerUsername = "ooooo",
+                            Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
                             Title = "Cinema"
                         });
                 });
 
             modelBuilder.Entity("event_service.Entities.Image", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("EventId")
                         .HasColumnType("int");
-
-                    b.Property<string>("url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("event_service.Entities.Poster", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Poster");
                 });
 
             modelBuilder.Entity("Ticket", b =>
@@ -228,20 +206,16 @@ namespace event_service.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("event_service.Entities.Poster", "Poster")
-                        .WithMany()
-                        .HasForeignKey("PosterId");
-
                     b.Navigation("Category");
-
-                    b.Navigation("Poster");
                 });
 
             modelBuilder.Entity("event_service.Entities.Image", b =>
                 {
-                    b.HasOne("event_service.Entities.Event", null)
+                    b.HasOne("event_service.Entities.Event", "Event")
                         .WithMany("Images")
                         .HasForeignKey("EventId");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("event_service.Entities.Event", b =>

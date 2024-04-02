@@ -2,8 +2,6 @@
 using event_service.DTOs;
 using event_service.Entities;
 using event_service.Services.IServices;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace event_service.Controllers
@@ -14,13 +12,11 @@ namespace event_service.Controllers
     {
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
-        protected ResponseDto _responseDto;
 
         public EventsController(IEventService eventService, IMapper mapper)
         {
             _eventService = eventService;
             _mapper = mapper;
-            _responseDto = new ResponseDto();
         }
 
         [HttpGet]
@@ -28,54 +24,61 @@ namespace event_service.Controllers
         {
             try
             {
-                // var events = _eventService.GetEvents();
-                _responseDto.Result = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEvents());
-                _responseDto.Message = "Events returned";
+                var events = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEvents());
 
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                return Ok(events);
             }
             catch (Exception ex)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
+                Console.WriteLine($"{ex.Message}");
+                return NotFound();
             }
-
-            return Ok(_responseDto);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEvent(int id)
         {
             try
             {
-                _responseDto.Result = _mapper.Map<EventByIdDto>(await _eventService.GetEvent(id));
-                _responseDto.Message = "Event returned";
+                var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEvent(id));                    
 
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                return Ok(_event);
             }
             catch (Exception ex)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
+                Console.WriteLine($"{ex.Message}");
+                return NotFound();
             }
-
-            return Ok(_responseDto);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateEvent([FromBody] EventReqDto ev)
         {
             try
             {
-                if (await _eventService.CreateEvent(ev)) {
-                    _responseDto.Result = _mapper.Map<EventReqDto>(ev);
-                    _responseDto.Message = "Event saved";   
-                } 
+                if (await _eventService.CreateEvent(ev))
+                {
+                    var createdEvent = _mapper.Map<EventReqDto>(ev);
+                    return Ok(createdEvent);
+                }
+                else
+                {
+                    return BadRequest("Failed to create event.");
+                }
             }
             catch (Exception ex)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
+                return StatusCode(500, $"{ex.Message}");
             }
-            return Ok(_responseDto);
         }
+
     }
 }

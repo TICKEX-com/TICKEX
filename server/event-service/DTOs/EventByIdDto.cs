@@ -8,6 +8,7 @@
         public DateTime Date { get; set; }
         public string Location { get; set; }
         public float MinPrize { get; set; }
-        
+        public string Poster { get; set; }
+        public List<ImageDto> Images { get; set; }
     }
 }
