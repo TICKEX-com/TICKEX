@@ -51,7 +51,7 @@ namespace event_service.Migrations
                     MinPrize = table.Column<float>(type: "real", nullable: false),
                     DesignId = table.Column<int>(type: "int", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    OrganizerUsername = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrganizerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Poster = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     On_sell = table.Column<bool>(type: "bit", nullable: false),
                     Is_finished = table.Column<bool>(type: "bit", nullable: false)
@@ -119,11 +119,11 @@ namespace event_service.Migrations
 
             migrationBuilder.InsertData(
                 table: "Events",
-                columns: new[] { "Id", "CategoryId", "Date", "Description", "DesignId", "Is_finished", "Location", "MinPrize", "On_sell", "OrganizerUsername", "Poster", "Title" },
+                columns: new[] { "Id", "CategoryId", "Date", "Description", "DesignId", "Is_finished", "Location", "MinPrize", "On_sell", "OrganizerId", "Poster", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 4, 2, 13, 12, 23, 11, DateTimeKind.Local).AddTicks(1367), "i am a football match", 1, false, "maps", 500f, false, "hhhh", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
-                    { 2, 2, new DateTime(2024, 4, 2, 13, 12, 23, 11, DateTimeKind.Local).AddTicks(1490), "i am a movie", 2, false, "maps", 500f, false, "ooooo", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Cinema" }
+                    { 1, 1, new DateTime(2024, 4, 4, 13, 57, 30, 354, DateTimeKind.Local).AddTicks(1675), "i am a football match", 1, false, "maps", 500f, false, "hhhh", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
+                    { 2, 2, new DateTime(2024, 4, 4, 13, 57, 30, 354, DateTimeKind.Local).AddTicks(1820), "i am a movie", 2, false, "maps", 500f, false, "ooooo", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Cinema" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -30,7 +30,7 @@ namespace event_service.Entities
         [NotMapped]
         public Organizer Organizer { get; set; }
         [Required]
-        public string OrganizerUsername { get; set; }
+        public string OrganizerId { get; set; }
         [Required]
         public string Poster { get; set; }
         public List<Image> Images { get; set; }

@@ -1,6 +1,6 @@
-using authentication_service;
 using authentication_service.Data;
 using authentication_service.Entities;
+using authentication_service.Extensions;
 using authentication_service.Services;
 using authentication_service.Services.IServices;
 using AutoMapper;

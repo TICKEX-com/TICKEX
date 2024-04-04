@@ -40,7 +40,7 @@ namespace event_service.Services
                 Location = Event.Location,
                 MinPrize = Event.MinPrize,
                 CategoryId = Event.CategoryId,
-                OrganizerUsername = Event.OrganizerUsername
+                OrganizerId = Event.OrganizerId
             };
 
 
@@ -62,6 +62,14 @@ namespace event_service.Services
             }
             var result = await _context.SaveChangesAsync();
             return result > 0;
+        }
+
+        public async Task<ICollection<Event>> GetEventsByOrganizer(string id)
+        {
+            return await _context.Events
+                                 .Where(ev => ev.OrganizerId == id)
+                                 .OrderBy(ev => ev.Id)
+                                 .ToListAsync();
         }
     }
 }
