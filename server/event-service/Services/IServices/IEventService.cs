@@ -7,8 +7,11 @@ namespace event_service.Services.IServices
     {
         Task<ICollection<Event>> GetEvents();
         Task<Event> GetEvent(int id);
+        Task<ICollection<Event>> GetEventsByOrganizer(string id);
         Task<bool> CreateEvent(EventReqDto Event);
         Task<bool> IsEventExist(int id);
+
+
 
     }
 }

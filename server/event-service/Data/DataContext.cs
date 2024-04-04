@@ -31,7 +31,7 @@ namespace event_service.Data
                     Location = "maps",
                     MinPrize = 500,
                     DesignId = 1,
-                    OrganizerUsername = "hhhh",
+                    OrganizerId = "hhhh",
                     CategoryId = 1,
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
                 }
@@ -53,7 +53,7 @@ namespace event_service.Data
                         Location = "maps",
                         MinPrize = 500,
                         DesignId = 2,
-                        OrganizerUsername = "ooooo",
+                        OrganizerId = "ooooo",
                         CategoryId = 2,
                         Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
                     }

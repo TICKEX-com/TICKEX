@@ -25,7 +25,7 @@ namespace authentication_service.Services
             var claimList = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email,user.Email),
-                new Claim(JwtRegisteredClaimNames.Sub,user.Id),
+                new Claim("Id",user.Id),
                 new Claim(JwtRegisteredClaimNames.Name,user.UserName),
                 new Claim("PhoneNumber", user.PhoneNumber)
             };

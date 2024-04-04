@@ -2,7 +2,7 @@
 using event_service.DTOs;
 using event_service.Entities;
 
-namespace event_service;
+namespace event_service.Extensions;
 
 public class MappingConfig
 {

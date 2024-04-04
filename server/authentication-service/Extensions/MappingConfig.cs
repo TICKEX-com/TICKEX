@@ -2,7 +2,7 @@
 using authentication_service.Entities;
 using AutoMapper;
 
-namespace authentication_service
+namespace authentication_service.Extensions
 {
     public class MappingConfig
     {

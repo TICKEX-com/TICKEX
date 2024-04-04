@@ -2,7 +2,7 @@
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 
-namespace event_service
+namespace event_service.Extensions
 {
     public class DriveHelper
     {
@@ -47,7 +47,7 @@ namespace event_service
             catch (Exception e)
             {
                 Console.WriteLine("An error occurred: " + e.Message);
-                return null; 
+                return null;
             }
         }
 

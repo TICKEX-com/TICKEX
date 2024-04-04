@@ -12,7 +12,7 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240402131223_initial")]
+    [Migration("20240404135731_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -116,7 +116,7 @@ namespace event_service.Migrations
                     b.Property<bool>("On_sell")
                         .HasColumnType("bit");
 
-                    b.Property<string>("OrganizerUsername")
+                    b.Property<string>("OrganizerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -139,14 +139,14 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 4, 2, 13, 12, 23, 11, DateTimeKind.Local).AddTicks(1367),
+                            Date = new DateTime(2024, 4, 4, 13, 57, 30, 354, DateTimeKind.Local).AddTicks(1675),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
                             Location = "maps",
                             MinPrize = 500f,
                             On_sell = false,
-                            OrganizerUsername = "hhhh",
+                            OrganizerId = "hhhh",
                             Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
                             Title = "Match"
                         },
@@ -154,14 +154,14 @@ namespace event_service.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            Date = new DateTime(2024, 4, 2, 13, 12, 23, 11, DateTimeKind.Local).AddTicks(1490),
+                            Date = new DateTime(2024, 4, 4, 13, 57, 30, 354, DateTimeKind.Local).AddTicks(1820),
                             Description = "i am a movie",
                             DesignId = 2,
                             Is_finished = false,
                             Location = "maps",
                             MinPrize = 500f,
                             On_sell = false,
-                            OrganizerUsername = "ooooo",
+                            OrganizerId = "ooooo",
                             Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
                             Title = "Cinema"
                         });

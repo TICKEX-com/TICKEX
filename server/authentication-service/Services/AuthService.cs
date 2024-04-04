@@ -61,6 +61,7 @@ namespace authentication_service.Services
 
             UserDto userDto = new()
             {
+                Id = user.Id,
                 Username = requestDto.UserName,
                 Email = user.Email,
                 firstname = user.firstname,
