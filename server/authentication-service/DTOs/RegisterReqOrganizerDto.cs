@@ -1,4 +1,6 @@
-﻿namespace authentication_service.DTOs
+﻿using authentication_service.Entities;
+
+namespace authentication_service.DTOs
 {
     public class RegisterReqOrganizerDto
     {
