@@ -1,4 +1,7 @@
-﻿namespace authentication_service.DTOs
+﻿using authentication_service.Entities;
+using System.Runtime.ConstrainedExecution;
+
+namespace authentication_service.DTOs
 {
     public class UserDto
     {

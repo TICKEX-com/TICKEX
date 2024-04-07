@@ -9,6 +9,6 @@ namespace authentication_service.Entities
         public string? lastname { get; set; } = string.Empty;
         public string? ville { get; set; } = string.Empty;
         public string? date_naissance { get; set; } = string.Empty;
-        public string? certificat {  get; set; } = string.Empty;
+        public string? certificat { get; set; } = string.Empty;
     }
 }
