@@ -12,7 +12,7 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240404135731_initial")]
+    [Migration("20240407112131_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -139,7 +139,7 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 4, 4, 13, 57, 30, 354, DateTimeKind.Local).AddTicks(1675),
+                            Date = new DateTime(2024, 4, 7, 11, 21, 30, 724, DateTimeKind.Local).AddTicks(1738),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
@@ -154,7 +154,7 @@ namespace event_service.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            Date = new DateTime(2024, 4, 4, 13, 57, 30, 354, DateTimeKind.Local).AddTicks(1820),
+                            Date = new DateTime(2024, 4, 7, 11, 21, 30, 724, DateTimeKind.Local).AddTicks(1833),
                             Description = "i am a movie",
                             DesignId = 2,
                             Is_finished = false,
@@ -169,14 +169,14 @@ namespace event_service.Migrations
 
             modelBuilder.Entity("event_service.Entities.Image", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("url")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("EventId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("url");
 
                     b.HasIndex("EventId");
 

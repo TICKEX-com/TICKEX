@@ -57,7 +57,7 @@ namespace event_service.Services
                 foreach (var image in Event.Images)
                 {
                     // Add image
-                    _context.Images.Add(new Image { Id = image.Id , Event = ev});
+                    _context.Images.Add(new Image { url = image.url , Event = ev});
                 }
             }
             var result = await _context.SaveChangesAsync();
