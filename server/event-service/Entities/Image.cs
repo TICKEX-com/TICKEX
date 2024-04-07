@@ -7,7 +7,7 @@ namespace event_service.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public string url { get; set; }
         public Event Event { get; set; }
     }
 }

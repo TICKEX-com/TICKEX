@@ -71,12 +71,12 @@ namespace event_service.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    url = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.PrimaryKey("PK_Images", x => x.url);
                     table.ForeignKey(
                         name: "FK_Images_Events_EventId",
                         column: x => x.EventId,
@@ -122,8 +122,8 @@ namespace event_service.Migrations
                 columns: new[] { "Id", "CategoryId", "Date", "Description", "DesignId", "Is_finished", "Location", "MinPrize", "On_sell", "OrganizerId", "Poster", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 4, 4, 13, 57, 30, 354, DateTimeKind.Local).AddTicks(1675), "i am a football match", 1, false, "maps", 500f, false, "hhhh", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
-                    { 2, 2, new DateTime(2024, 4, 4, 13, 57, 30, 354, DateTimeKind.Local).AddTicks(1820), "i am a movie", 2, false, "maps", 500f, false, "ooooo", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Cinema" }
+                    { 1, 1, new DateTime(2024, 4, 7, 11, 21, 30, 724, DateTimeKind.Local).AddTicks(1738), "i am a football match", 1, false, "maps", 500f, false, "hhhh", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
+                    { 2, 2, new DateTime(2024, 4, 7, 11, 21, 30, 724, DateTimeKind.Local).AddTicks(1833), "i am a movie", 2, false, "maps", 500f, false, "ooooo", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Cinema" }
                 });
 
             migrationBuilder.CreateIndex(
