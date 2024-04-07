@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { icons } from "@/components/ui/icons";
+import Image from 'next/image'
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,9 +17,31 @@ import { Label } from "@/components/ui/label";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import AlertCard from "@/components/Alert";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "@/lib/firebase";
+import { v4 } from 'uuid';
 
 function page() {
   const [value, setValue] = useState();
+  const [fileUpload, setFileUpload] = useState<FileList | null>(null);
+  const [fileUrl, setFileUrl] = useState<string>();
+  const uploadFile = () => {
+    if (!fileUpload || fileUpload.length === 0) return;
+    const file = fileUpload[0];
+    const fileType = file.type.split('/')[0];
+
+    const uniqueFileName = `${fileType}s/${file.name}-${v4()}`;
+    const fileRef = ref(storage, uniqueFileName);
+
+    uploadBytes(fileRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setFileUrl(url);
+        console.log(url);
+
+      });
+    });
+  };
+
   return (
     <div className="flex justify-center h-screen items-center">
       <Card className="w-[40%]">
@@ -64,20 +87,35 @@ function page() {
           <div className="grid gap-2">
             <label className="block">
               <Label htmlFor="confirmPassword">Justification Document</Label>
-              <input
-                type="file"
-                className="block w-full text-sm text-slate-500 mt-2
+              <div className="flex justify-between items-center gap-2">
+                <input
+                  type="file"
+                  onChange={(event) => { setFileUpload(event.target.files) }}
+                  className="block w-full text-sm text-slate-500 mt-2
                                 file:mr-4 file:py-2 file:px-4
                                 file:rounded-full file:border-0
                                 file:text-sm file:font-semibold
                             file:bg-violet-50 file:text-violet-700
                             hover:file:bg-violet-100"
-              />
+                />
+                
+                <button className="bg-purple-600 text-sm rounded-full  "onClick={uploadFile}>
+                  
+                  <Image
+                    src="/svg/upload.svg"
+                    width={30}
+                    height={30}
+                    alt="upload"
+                  />
+                </button>
+              </div>
+
             </label>
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Sign up</Button>
+          {fileUrl &&  <Button className="w-full" >Sign up</Button> }
+          
         </CardFooter>
         <CardContent>
           <span className="bg-background px-2 text-muted-foreground">

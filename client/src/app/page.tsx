@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import { useRouter} from "next/navigation"
+
 
 export default function Home() {
   return (

@@ -82,7 +82,7 @@ function page() {
             <div className="grid gap-2">
               <Label htmlFor="phone">Phone number</Label>
               <PhoneInput
-                inputClassName=" w-full focus:outline focus:border-purple-500 focus:ring-2 focus:ring-purple-500 "
+                inputClassName=" w-full  "
                 className=" grid gap-2 "
                 defaultCountry="ma"
                 name="phoneNumber"
