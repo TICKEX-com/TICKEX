@@ -35,7 +35,7 @@ services:
     container_name: authentication-service-db
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=1234Strong!Password 
+      - SA_PASSWORD=1234Strong!Password
     ports:
       - '1433:1433'
     networks:
@@ -82,7 +82,7 @@ services:
     environment:
       - DB_HOST=authentication-service-db 
       - DB_NAME=Authentication
-      - DB_SA_PASSWORD=1234Strong!Password 
+      - DB_SA_PASSWORD=1234Strong!Password
     depends_on:
       - tickex-gateway-service
     ports:
