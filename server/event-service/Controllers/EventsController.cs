@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using event_service.DTOs;
 using event_service.Services.IServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace event_service.Controllers
@@ -32,18 +31,20 @@ namespace event_service.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message}");
-                return NotFound();
+                return NotFound(ex.Message);
             }
         }
 
 
-        [HttpGet("byId/{id}")]
-        public async Task<IActionResult> GetEvent(int id)
+        [HttpGet("Events/{id}")]
+        public async Task<IActionResult> GetEventById(int id)
         {
             try
             {
-                var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEvent(id));                    
+                if (! await _eventService.IsEventExist(id))
+                    return NotFound();
+                
+                var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(id));                    
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
@@ -52,52 +53,29 @@ namespace event_service.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message}");
-                return NotFound();
+                return StatusCode(500, $"{ex.Message}");
             }
         }
 
-
-        [HttpPost("Event")]
-        [Authorize(Roles = "ORGANIZER")]
-        public async Task<IActionResult> CreateEvent([FromBody] EventReqDto ev)
+        [HttpGet("Events/Category/{id}")]
+        public async Task<IActionResult> GetEventsByCategory(int id)
         {
             try
             {
-                if (await _eventService.CreateEvent(ev))
-                {
-                    return Ok(ev);
-                }
-                else
-                {
-                    return BadRequest("Failed to create event.");
-                }
+                if (!await _eventService.IsCategoryExist(id))
+                    return NotFound();
+
+                var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(id));
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                return Ok(_event);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"{ex.Message}");
             }
         }
-
-        [HttpGet("Organizer/{id}/Events")]
-        [Authorize(Roles = "ORGANIZER")]
-        public async Task<IActionResult> GetEventsByOrganizer(string id)
-        {
-            try
-            {
-                var events = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEventsByOrganizer(id));
-
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-
-                return Ok(events);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"{ex.Message}");
-                return NotFound();
-            }
-        }
-
     }
 }

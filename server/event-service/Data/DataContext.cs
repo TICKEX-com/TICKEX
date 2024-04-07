@@ -8,7 +8,6 @@ namespace event_service.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Event> Events { get; set; }
-        public DbSet<Client> Clients { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Image> Images { get; set; }
 
@@ -71,16 +70,20 @@ namespace event_service.Data
                             .WithMany(e => e.Events)
                             .UsingEntity(
                                 "Ticket",
-                                l => l.HasOne(typeof(Client)).WithMany().HasForeignKey("ClientId").HasPrincipalKey(nameof(Client.Id)),
-                                r => r.HasOne(typeof(Event)).WithMany().HasForeignKey("EventId").HasPrincipalKey(nameof(Event.Id)),
+                                l => l.HasOne(typeof(Client)).WithMany().HasForeignKey("ClientId").HasPrincipalKey(nameof(Client.Id)).OnDelete(DeleteBehavior.Restrict),
+                                r => r.HasOne(typeof(Event)).WithMany().HasForeignKey("EventId").HasPrincipalKey(nameof(Event.Id)).OnDelete(DeleteBehavior.Restrict),
                                 j => j.HasKey("EventId", "ClientId"));
+
 
                 modelBuilder.Entity<Event>()
                             .HasMany(e => e.Images)
                             .WithOne(e => e.Event)
                             .HasForeignKey("EventId")
-                            .IsRequired(false); 
-            } catch (Exception ex)
+                            .IsRequired(false)
+                            .OnDelete(DeleteBehavior.Cascade);
+
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine( ex.ToString() );
                 Console.ReadLine();

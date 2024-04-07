@@ -22,11 +22,12 @@ namespace event_service.Entities
         [NotMapped]
         public Design? Design { get; set; } = null;
         public int? DesignId { get; set; } = null;
-        public List<Client> Clients { get; set; } = null;
         [Required]
         public Category Category { get; set; }
         [Required]
         public int CategoryId { get; set; }
+        [NotMapped]
+        public List<Client> Clients { get; set; }
         [NotMapped]
         public Organizer Organizer { get; set; }
         [Required]
