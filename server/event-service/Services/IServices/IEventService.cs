@@ -6,12 +6,15 @@ namespace event_service.Services.IServices
     public interface IEventService
     {
         Task<ICollection<Event>> GetEvents();
-        Task<Event> GetEvent(int id);
+        Task<Event> GetEventById(int id);
         Task<ICollection<Event>> GetEventsByOrganizer(string id);
-        Task<bool> CreateEvent(EventReqDto Event);
+        Task<Event> GetEventById(string OrganizerId, int id);
+        Task<ICollection<Event>> GetEventsByCategory(int id);
+        Task<bool> CreateEvent(EventReqDto Event, string OrganizerId);
+        Task<bool> DeleteEvent(string OrganizerId, int id);
+        Task<bool> UpdateEvent(EventReqDto Event, string OrganizerId, int id);
         Task<bool> IsEventExist(int id);
-
-
-
+        Task<bool> IsCategoryExist(int id);
+        Task<bool> OrganizerHasEvents(string id);
     }
 }

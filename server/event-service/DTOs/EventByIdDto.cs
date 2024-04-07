@@ -1,4 +1,6 @@
-﻿namespace event_service.DTOs
+﻿using event_service.Entities;
+
+namespace event_service.DTOs
 {
     public class EventByIdDto
     {
@@ -9,6 +11,7 @@
         public string Location { get; set; }
         public float MinPrize { get; set; }
         public string Poster { get; set; }
+        public Category Category { get; set; }
         public List<ImageDto> Images { get; set; }
     }
 }
