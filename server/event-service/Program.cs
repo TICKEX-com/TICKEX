@@ -1,10 +1,14 @@
 using AutoMapper;
-using event_service;
+using event_service.Controllers;
 using event_service.Data;
+using event_service.Extensions;
 using event_service.Services;
 using event_service.Services.IServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Steeltoe.Discovery.Client;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +19,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDiscoveryClient();
+
+builder.Services.AddSwaggerGen(option =>
+{
+    option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Enter the Bearer Authorization string as following: Bearer Generated-JWT-Token",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference= new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id=JwtBearerDefaults.AuthenticationScheme
+                }
+            }, new string[]{}
+        }
+    });
+});
 
 // Repository config
 builder.Services.AddScoped<IEventService, EventService>();
@@ -30,6 +59,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.AddAppAuthetication();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -43,6 +74,8 @@ if (app.Environment.IsDevelopment())
 ApplyMigration();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

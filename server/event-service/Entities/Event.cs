@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Hosting;
 
 namespace event_service.Entities
 {
@@ -21,18 +22,19 @@ namespace event_service.Entities
         [NotMapped]
         public Design? Design { get; set; } = null;
         public int? DesignId { get; set; } = null;
-        public List<Client> Clients { get; set; } = null;
         [Required]
         public Category Category { get; set; }
         [Required]
         public int CategoryId { get; set; }
         [NotMapped]
+        public List<Client> Clients { get; set; }
+        [NotMapped]
         public Organizer Organizer { get; set; }
         [Required]
-        public string OrganizerUsername { get; set; }
-        public Poster Poster { get; set; } = null;
-        public int? PosterId { get; set; } = null;
-        public List<Image> Images { get; set; } = null;
+        public string OrganizerId { get; set; }
+        [Required]
+        public string Poster { get; set; }
+        public List<Image> Images { get; set; }
         [Required]
         public bool On_sell { get; set; } = false ;
         [Required]

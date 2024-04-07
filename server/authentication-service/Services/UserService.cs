@@ -1,6 +1,9 @@
 ﻿using authentication_service.Data;
 using authentication_service.DTOs;
+using authentication_service.Entities;
 using authentication_service.Services.IServices;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,36 +13,68 @@ namespace authentication_service.Services
     {
         private readonly DataContext _dataContext;
         private readonly ResponseDto _responseDto;
+        private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public UserService(DataContext dataContext) 
+        public UserService(DataContext dataContext, IMapper mapper, UserManager<User> userManager) 
         {
+            _mapper = mapper;
             _dataContext = dataContext;
+            _userManager = userManager;
             _responseDto = new ResponseDto();
         }
 
-        public async Task<bool> GetClientByUsername(string username)
+        public async Task<UserDto> GetClientByUsername(string username)
         {
-            var client = await _dataContext.Clients.ToListAsync();
-            if(client.Any())
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            // Récupérer le rôle de l'utilisateur
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (user == null || roles.FirstOrDefault() == "ORGANIZER")
             {
-                return true;
-            }else
-            {
-                return false;
+                return null;
             }
+
+            // Création de l'objet UserDto à partir de l'utilisateur
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.UserName,
+                Email = user.Email,
+                firstname = user.firstname,
+                lastname = user.lastname,
+                PhoneNumber = user.PhoneNumber,
+                Role = roles.FirstOrDefault() // Prend le premier rôle trouvé, à adapter selon votre logique
+            };
+
+            return userDto;
         }
 
-        public async Task<bool> GetOrganizerByUsername(string username)
+        public async Task<UserDto> GetOrganizerByUsername(string username)
         {
-            var organizer = await _dataContext.Organizers.ToListAsync();
-            if (organizer.Any())
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            // Récupérer le rôle de l'utilisateur
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (user == null || roles.FirstOrDefault() == "CLIENT")
             {
-                return true;
+                return null;
             }
-            else
+
+            // Création de l'objet UserDto à partir de l'utilisateur
+            var userDto = new UserDto
             {
-                return false;
-            }
+                Id = user.Id,
+                Username = user.UserName,
+                Email = user.Email,
+                firstname = user.firstname,
+                lastname = user.lastname,
+                PhoneNumber = user.PhoneNumber,
+                Role = roles.FirstOrDefault(), // Prend le premier rôle trouvé, à adapter selon votre logique
+                certificat = user.certificat
+            };
+
+            return userDto;
         }
     }
 }

@@ -1,4 +1,4 @@
-name: discovery-service CI/CD
+name: discovery-service CI/CD Pipeline
 
 on:
   push:

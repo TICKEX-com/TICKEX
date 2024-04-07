@@ -1,4 +1,4 @@
-name: gateway-service CI/CD
+name: gateway-service CI/CD Pipeline
 
 on:
   push:

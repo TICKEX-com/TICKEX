@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net.Http;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace authentication_service.Services
 {
@@ -16,13 +18,15 @@ namespace authentication_service.Services
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IMapper _mapper;
 
-        public AuthService(DataContext db, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IJwtTokenGenerator jwtTokenGenerator)
+        public AuthService(DataContext db, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IJwtTokenGenerator jwtTokenGenerator, IMapper mapper)
         {
             _db = db;
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtTokenGenerator = jwtTokenGenerator;
+            _mapper = mapper;
         }
 
         public async Task<bool> AssignRole(string email, string roleName)
@@ -57,7 +61,7 @@ namespace authentication_service.Services
 
             UserDto userDto = new()
             {
-                ID = user.Id,
+                Id = user.Id,
                 Username = requestDto.UserName,
                 Email = user.Email,
                 firstname = user.firstname,
@@ -97,6 +101,13 @@ namespace authentication_service.Services
                 return "Passwords do not match.";
             }
 
+            // Vérification si l'e-mail existe déjà dans la base de données
+            var existingUser = await _userManager.FindByEmailAsync(requestDto.Email);
+            if (existingUser != null)
+            {
+                return "Email already exists.";
+            }
+
             // Create user object with the fields we want
             User user = new()
             {
@@ -129,6 +140,10 @@ namespace authentication_service.Services
                     return result.Errors.FirstOrDefault().Description;
                 }
             }
+            catch (DbUpdateException ex)
+            {
+                return "An error occurred while saving the entity changes. Database update exception: " + ex.Message;
+            }
             catch (Exception ex)
             {
                 return ex.Message;
@@ -149,6 +164,13 @@ namespace authentication_service.Services
             if (requestDto.Password != requestDto.ConfirmPassword)
             {
                 return "Passwords do not match.";
+            }
+
+            // Vérification si l'e-mail existe déjà dans la base de données
+            var existingUser = await _userManager.FindByEmailAsync(requestDto.Email);
+            if (existingUser != null)
+            {
+                return "Email already exists.";
             }
 
             // Create user object with the fields we want
@@ -189,6 +211,19 @@ namespace authentication_service.Services
                 return ex.Message;
             }
             return "Error Encountered";
+        }
+
+        public async Task<bool> Logout(HttpContext httpContext)
+        {
+            try
+            {
+                httpContext.Response.Cookies.Delete("jwtToken");
+                return true;
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         private bool IsValidEmail(string email)

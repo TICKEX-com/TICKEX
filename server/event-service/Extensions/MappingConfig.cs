@@ -2,7 +2,7 @@
 using event_service.DTOs;
 using event_service.Entities;
 
-namespace event_service;
+namespace event_service.Extensions;
 
 public class MappingConfig
 {
@@ -14,6 +14,7 @@ public class MappingConfig
                 config.CreateMap<EventReqDto, Event>().ReverseMap();
                 config.CreateMap<EventsDto, Event>().ReverseMap();
                 config.CreateMap<EventByIdDto, Event>().ReverseMap();
+                config.CreateMap<ImageDto, Image>().ReverseMap();
 
             });
         return mappingConfig;
