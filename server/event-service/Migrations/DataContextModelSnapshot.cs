@@ -136,7 +136,7 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 4, 7, 16, 27, 14, 913, DateTimeKind.Local).AddTicks(8204),
+                            Date = new DateTime(2024, 4, 8, 4, 26, 33, 792, DateTimeKind.Local).AddTicks(2879),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
@@ -151,7 +151,7 @@ namespace event_service.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            Date = new DateTime(2024, 4, 7, 16, 27, 14, 913, DateTimeKind.Local).AddTicks(8443),
+                            Date = new DateTime(2024, 4, 8, 4, 26, 33, 792, DateTimeKind.Local).AddTicks(3021),
                             Description = "i am a movie",
                             DesignId = 2,
                             Is_finished = false,
