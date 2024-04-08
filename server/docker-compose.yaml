@@ -29,6 +29,7 @@ services:
   #     - ./Kafka:/bitnami/kafka 
   #   networks:
   #     - tickexNetwork  
+  
 
   authentication-service-db: 
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -41,19 +42,16 @@ services:
     networks:
       - tickexNetwork
 
-  tickex-discovery-service:
-    image: 'madockerhub/tickex-discovery-service'
-    container_name: discovery-service
+  event-service-db: 
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: event-service-db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1234Strong!Password
     ports:
-      - '8761:8761'
-    expose:
-      - '8761'
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
-      interval: 10s
-      retries: 10
+      - '1434:1433'
     networks:
-      - tickexNetwork
+      - tickexNetwork    
 
   tickex-gateway-service:
     image: 'madockerhub/tickex-gateway-service'
@@ -74,13 +72,27 @@ services:
     networks:
       - tickexNetwork
 
+  tickex-discovery-service:
+    image: 'madockerhub/tickex-discovery-service'
+    container_name: discovery-service
+    ports:
+      - '8761:8761'
+    expose:
+      - '8761'
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      retries: 10
+    networks:
+      - tickexNetwork
+
   authentication-service:
     container_name: authentication-service
     build: 
       context: .
       dockerfile: authentication-service/Dockerfile
     environment:
-      - DB_HOST=authentication-service-db 
+      - DB_HOST=authentication-service-db
       - DB_NAME=Authentication
       - DB_SA_PASSWORD=1234Strong!Password
     depends_on:
@@ -88,6 +100,23 @@ services:
     ports:
       - '8081:8081'
       - '8080:8080'
+    networks:
+      - tickexNetwork
+
+  event-service:
+    container_name: event-service
+    build: 
+      context: .
+      dockerfile: event-service/Dockerfile
+    environment:
+      - DB_HOST=event-service-db
+      - DB_NAME=Events
+      - DB_SA_PASSWORD=1234Strong!Password
+    depends_on:
+      - tickex-gateway-service
+    ports:
+      - '8082:8082'
+      - '8083:8083'
     networks:
       - tickexNetwork
 
