@@ -5,11 +5,10 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Users\\AnasChatt\\Desktop\\TICKEX\\server\\event-service\\credentials.json"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:9091"
+      "applicationUrl": "http://localhost:8082"
     },
     "https": {
       "commandName": "Project",
@@ -19,7 +18,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7236;http://localhost:9091"
+      "applicationUrl": "https://localhost:7236;http://localhost:8082"
     },
     "IIS Express": {
       "commandName": "IISExpress",

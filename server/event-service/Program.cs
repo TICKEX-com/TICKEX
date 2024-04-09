@@ -1,5 +1,4 @@
 using AutoMapper;
-using event_service.Controllers;
 using event_service.Data;
 using event_service.Extensions;
 using event_service.Services;
@@ -8,21 +7,26 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Steeltoe.Discovery.Client;
-using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Add Database
+/*var dbHost = "localhost";
+var dbName = "Events";
+var dbPassword = "1234Strong!Password";*/
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
+
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};Connect Timeout=100;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
+
 
 // Add services to the container.
 
@@ -74,17 +78,19 @@ app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
 // {
-  
+
 // }
-ApplyMigration();
 
 // app.UseHttpsRedirection();
+// ApplyMigration();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+ApplyMigration();
 
 app.Run();
 

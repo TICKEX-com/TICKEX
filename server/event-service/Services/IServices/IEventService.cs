@@ -6,6 +6,8 @@ namespace event_service.Services.IServices
     public interface IEventService
     {
         Task<ICollection<Event>> GetEvents();
+        Task<ICollection<Event>> GetEventsByDate(string Date);
+        Task<ICollection<Event>> GetEventsByTitle(string title);
         Task<Event> GetEventById(int id);
         Task<ICollection<Event>> GetEventsByOrganizer(string id);
         Task<Event> GetEventById(string OrganizerId, int id);
