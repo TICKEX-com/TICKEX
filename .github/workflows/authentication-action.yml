@@ -16,8 +16,8 @@ jobs:
       - name: Build the Docker image      
         working-directory: server/authentication-service    
         run: |
-        pwd
-        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-authentication-service:latest
+          pwd
+          docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-authentication-service:latest
 
 
       - name: Login to Docker Hub
