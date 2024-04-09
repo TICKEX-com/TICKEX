@@ -4,7 +4,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <InvariantGlobalization>false</InvariantGlobalization>
     <RootNamespace>event_service</RootNamespace>
     <UserSecretsId>806d5b87-7372-4f6c-949f-9a0cd86ecf0e</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

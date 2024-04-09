@@ -3,6 +3,7 @@ using event_service.DTOs;
 using event_service.Entities;
 using event_service.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace event_service.Services
 {
@@ -153,5 +154,36 @@ namespace event_service.Services
 
         }
 
+        public async Task<ICollection<Event>> GetEventsByDate(string Date)
+        {
+            // Split the Date string into year, month, and day components
+            string[] dateComponents = Date.Split('-');
+
+            if (dateComponents.Length != 3)
+            {
+                // Handle invalid date format
+                throw new ArgumentException("Invalid date format. Expected yyyy-mm-dd.");
+            }
+
+            // Parse the components to integers
+            int y = int.Parse(dateComponents[0]);
+            int m = int.Parse(dateComponents[1]);
+            int d = int.Parse(dateComponents[2]);
+
+            return await _context.Events
+                .Where(ev => ev.Date.Year >= y && ev.Date.Month >= m && ev.Date.Day >= d)
+                .Include(ct => ct.Category)
+                .OrderBy(ev => ev.Id)
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Event>> GetEventsByTitle(string title)
+        {
+            return await _context.Events
+                .Where(ev => ev.Title.Contains(title))
+                .Include(ct => ct.Category)
+                .OrderBy(ev => ev.Id)
+                .ToListAsync();
+        }
     }
 }
