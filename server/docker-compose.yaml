@@ -31,7 +31,7 @@ services:
   #     - tickexNetwork  
   
 
-  authentication-service-db: 
+  authentication-service-db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: authentication-service-db
     environment:
@@ -42,7 +42,7 @@ services:
     networks:
       - tickexNetwork
 
-  event-service-db: 
+  event-service-db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: event-service-db
     environment:
@@ -65,8 +65,7 @@ services:
       interval: 10s
       retries: 10
     depends_on:
-      tickex-discovery-service:
-        condition: service_healthy
+      - tickex-discovery-service
     environment:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
     networks:
@@ -87,10 +86,8 @@ services:
       - tickexNetwork
 
   authentication-service:
+    image: 'madockerhub/server-authentication-service'
     container_name: authentication-service
-    build: 
-      context: .
-      dockerfile: authentication-service/Dockerfile
     environment:
       - DB_HOST=authentication-service-db
       - DB_NAME=Authentication
@@ -119,7 +116,6 @@ services:
       - '8083:8083'
     networks:
       - tickexNetwork
-
 
   # tickex-payment-service:
   #   image: 'madockerhub/tickex-payment-service'
