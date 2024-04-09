@@ -14,7 +14,7 @@ jobs:
     - name: Build the Docker image
       with:
         context: ./server/authentication-service
-      run: docker build . -t madockerhub/tickex-authentication-service:latest
+        run: docker build . -t madockerhub/tickex-authentication-service:latest
 
     - name: login to docker hub
       uses: docker/login-action@v3
