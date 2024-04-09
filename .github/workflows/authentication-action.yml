@@ -13,7 +13,7 @@ jobs:
       - name: Build the Docker image          
         run: |
           cd server
-          docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-authentication-service:latest
+          docker build ./authentication-service -t ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-authentication-service:latest
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
