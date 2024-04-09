@@ -14,7 +14,8 @@ jobs:
         run: |
           cd server
           docker build ./authentication-service -t ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-authentication-service:latest
-
+        working-directory: ./
+        
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
