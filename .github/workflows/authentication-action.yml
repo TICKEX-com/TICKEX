@@ -12,7 +12,7 @@ jobs:
       # Corrected step for building the Docker image
       - name: Build the Docker image          
         run: |
-          cd server/authentication-service
+          cd server
           docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/tickex-authentication-service:latest
 
       - name: Login to Docker Hub
