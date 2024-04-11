@@ -59,7 +59,7 @@ services:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
       interval: 10s
-      retries: 10
+      retries: 30
     networks:
       - tickexNetwork
 
@@ -89,8 +89,8 @@ services:
   authentication-service:
     container_name: authentication-service
     build: 
-      context: .
-      dockerfile: authentication-service/Dockerfile
+      context: ./authentication-service/
+      dockerfile: Dockerfile
     environment:
       - DB_HOST=authentication-service-db
       - DB_NAME=Authentication
@@ -106,8 +106,8 @@ services:
   event-service:
     container_name: event-service
     build: 
-      context: .
-      dockerfile: event-service/Dockerfile
+      context: ./event-service/
+      dockerfile: Dockerfile
     environment:
       - DB_HOST=event-service-db
       - DB_NAME=Events

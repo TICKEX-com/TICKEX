@@ -59,7 +59,7 @@ services:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
       interval: 10s
-      retries: 10
+      retries: 30
     networks:
       - tickexNetwork
 
