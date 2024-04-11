@@ -7,7 +7,7 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["authentication-service/authentication-service.csproj", "./"]
+COPY ["authentication-service.csproj", "./"]
 RUN dotnet restore "./authentication-service.csproj"
 COPY ./server/authentication-service/. .
 RUN dotnet build "authentication-service.csproj" -c Release -o /app/build
