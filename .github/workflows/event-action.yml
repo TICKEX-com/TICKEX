@@ -1,7 +1,7 @@
 name: event-service CI/CD
 on:
   push:
-    branches: [ "test-workflows" ]
+    branches: [ "dev" ]
 
 jobs:
   build:
