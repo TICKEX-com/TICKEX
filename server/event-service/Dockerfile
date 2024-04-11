@@ -7,9 +7,9 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["event-service/event-service.csproj", "."]
+COPY ["event-service.csproj", "./"]
 RUN dotnet restore "./event-service.csproj"
-COPY event-service/. .
+COPY . .
 RUN dotnet build "event-service.csproj" -c Release -o /app/build
 
 FROM build AS publish
