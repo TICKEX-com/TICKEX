@@ -48,15 +48,22 @@ namespace authentication_service.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
         {
-            var loginResponse = await _authService.Login(_httpContextAccessor.HttpContext,loginRequest);
-            if (loginResponse.User == null)
+            try
             {
-                _response.IsSuccess = false;
-                _response.Message = "Username or password is incorrect";
-                return BadRequest(_response);
+                var loginResponse = await _authService.Login(_httpContextAccessor.HttpContext, loginRequest);
+                if (loginResponse.User == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Username or password is incorrect";
+                    return BadRequest(_response);
+                }
+                _response.Result = loginResponse;
+                return Ok(_response);
+            } catch(Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
             }
-            _response.Result = loginResponse;
-            return Ok(_response);
+            
         }
 
         [HttpPost("Logout")]
@@ -84,3 +91,4 @@ namespace authentication_service.Controllers
         }
     }
 }
+
