@@ -37,4 +37,4 @@ management:
 server:
   port: 8888
 
-AllowedHosts: *
+AllowedHosts: "*"
