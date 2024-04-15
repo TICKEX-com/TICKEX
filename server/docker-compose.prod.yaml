@@ -34,9 +34,9 @@ services:
     image: 'madockerhub/tickex-gateway-service'
     container_name: gateway-service
     ports:
-      - '8765:8765'
+      - '8888:8888'
     expose:
-      - '8765'
+      -  '8888'
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8765/actuator/health"]
       interval: 10s
