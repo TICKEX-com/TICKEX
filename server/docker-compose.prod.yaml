@@ -42,8 +42,7 @@ services:
       interval: 10s
       retries: 10
     depends_on:
-      tickex-discovery-service:
-        condition: service_healthy
+      - event-service
     environment:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
     networks:
@@ -94,7 +93,7 @@ services:
       - DB_NAME=Authentication
       - DB_SA_PASSWORD=1234Strong!Password
     depends_on:
-      - tickex-gateway-service
+      - tickex-discovery-service
     ports:
       - '8081:8081'
       - '8080:8080'
@@ -109,7 +108,7 @@ services:
       - DB_NAME=Events
       - DB_SA_PASSWORD=1234Strong!Password
     depends_on:
-      - tickex-gateway-service
+      - authentication-service
     ports:
       - '8082:8080'
       - '8083:8081'
