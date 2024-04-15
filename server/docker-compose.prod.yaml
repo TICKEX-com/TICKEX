@@ -70,7 +70,7 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=1234Strong!Password
     ports:
-      - '1433:1433'
+      - '1433:1433'  
     networks:
       - tickexNetwork
 
@@ -93,7 +93,7 @@ services:
       - DB_NAME=Authentication
       - DB_SA_PASSWORD=1234Strong!Password
     depends_on:
-      - tickex-discovery-service
+      - authentication-service-db
     ports:
       - '8081:8081'
       - '8080:8080'
@@ -108,7 +108,7 @@ services:
       - DB_NAME=Events
       - DB_SA_PASSWORD=1234Strong!Password
     depends_on:
-      - authentication-service
+      - event-service-db
     ports:
       - '8082:8080'
       - '8083:8081'
@@ -116,17 +116,17 @@ services:
       - tickexNetwork
 
 
-  # tickex-payment-service:
-  #   image: 'madockerhub/tickex-payment-service'
-  #   container_name: payment-service
-  #   ports:
-  #     - '9091:9091'
-  #   expose:
-  #     - '9091'
-  #   depends_on:
-  #     tickex-discovery-service:
-  #       condition: service_healthy
-  #   environment:
-  #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-  #   networks:
-  #     - tickexNetwork
+  tickex-payment-service:
+    image: 'madockerhub/tickex-payment-service'
+    container_name: payment-service
+    ports:
+      - '9091:9091'
+    expose:
+      - '9091'
+    depends_on:
+      tickex-discovery-service:
+        condition: service_healthy
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    networks:
+      - tickexNetwork
