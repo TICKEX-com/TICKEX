@@ -8,13 +8,13 @@ spring:
     config:
       enabled: false
     gateway:
-      default-filters:
-            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-        globalcors:
-            cors-configurations:
-                '[/**]':
-                    allowedOrigins: "*"
-                    allowedMethods: "*"
+            default-filters:
+                - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            globalcors:
+                cors-configurations:
+                    '[/**]':
+                        allowedOrigins: "*"
+                        allowedMethods: "*"
 
     
   application:
