@@ -4,7 +4,6 @@ using authentication_service.Entities;
 using authentication_service.Services.IServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace authentication_service.Services
@@ -50,6 +49,57 @@ namespace authentication_service.Services
             return userDto;
         }
 
+        public async Task<ICollection<UserDto>> GetOrganizers()
+        {
+            // Get all users
+            var users = await _dataContext.Users.ToListAsync();
+
+            // Filter users to only include those with the role "ORGANIZER"
+            var organizerUsers = users.Where(u => _userManager.IsInRoleAsync(u, "ORGANIZER").Result).ToList();
+
+            // Map filtered users to UserDto
+            var organizerDtos = _mapper.Map<ICollection<UserDto>>(organizerUsers);
+
+            return organizerDtos;
+        }
+
+        public async Task<OrganizerDto> GetOrganizerById(string Id)
+        {
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == Id);
+            if (user != null)
+            {
+                // Récupérer le rôle de l'utilisateur
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.FirstOrDefault() == "CLIENT")
+                {
+                    return null;
+                }
+                // Création de l'objet UserDto à partir de l'utilisateur
+                var userDto = _mapper.Map<UserDto>(user);
+                var organizerDto = _mapper.Map<OrganizerDto>(userDto);
+
+                return organizerDto;
+            }
+            return null;
+            
+        }
+
+        public async Task<User> GetOrganizerById2(string id)
+        {
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user != null)
+            {
+                // Récupérer le rôle de l'utilisateur
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.FirstOrDefault() == "CLIENT")
+                {
+                    return null;
+                }
+            }
+            return user;
+        }
+
         public async Task<UserDto> GetOrganizerByUsername(string username)
         {
             var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
@@ -62,19 +112,85 @@ namespace authentication_service.Services
             }
 
             // Création de l'objet UserDto à partir de l'utilisateur
-            var userDto = new UserDto
-            {
-                Id = user.Id,
-                Username = user.UserName,
-                Email = user.Email,
-                firstname = user.firstname,
-                lastname = user.lastname,
-                PhoneNumber = user.PhoneNumber,
-                Role = roles.FirstOrDefault(), // Prend le premier rôle trouvé, à adapter selon votre logique
-                certificat = user.certificat
-            };
+            var userDto = _mapper.Map<UserDto>(user);
 
             return userDto;
+        }
+
+        public async Task<string> GetOrganizerIdByUsername(string username)
+        {
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            // Récupérer le rôle de l'utilisateur
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (user == null || roles.FirstOrDefault() == "CLIENT")
+            {
+                return null;
+            }
+
+            return user.Id;
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email && email.EndsWith("@gmail.com");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<string> UpdateOrganizer(UpdateReqOrganizerDto requestDto, string id)
+        {
+            var existingOrganizer = await GetOrganizerById2(id);
+            if (existingOrganizer == null)
+            {
+                return "Organizer not found.";
+            }
+
+            // Vérification de l'adresse e-mail
+            if (!IsValidEmail(requestDto.Email))
+            {
+                return "Invalid email format.";
+            }
+
+
+            // Check if the email already exists in the database (excluding the current organizer)
+            var existingUserWithEmail = await _userManager.FindByEmailAsync(requestDto.Email);
+            if (existingUserWithEmail != null && existingUserWithEmail.Id != id)
+            {
+                return "Email already exists.";
+            }
+
+            // Create user object with the fields we want
+
+            existingOrganizer.Email = requestDto.Email;
+            existingOrganizer.firstname = requestDto.firstname;
+            existingOrganizer.lastname = requestDto.lastname;
+            existingOrganizer.OrganizationName = requestDto.OrganizationName;
+            existingOrganizer.PhoneNumber = requestDto.PhoneNumber;
+ 
+            try
+            {
+                // Update user in the database
+                var result = await _userManager.UpdateAsync(existingOrganizer);
+                if (result.Succeeded)
+                {
+                    return "success";
+                }
+                else
+                {
+                    return result.Errors.FirstOrDefault()?.Description ?? "Failed to update organizer.";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 }

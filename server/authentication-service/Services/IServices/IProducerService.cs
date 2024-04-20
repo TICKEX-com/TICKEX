@@ -4,6 +4,6 @@ namespace authentication_service.Services.IServices
 {
     public interface IProducerService
     {
-        public Task<bool> publish(string topic, UserDto userdto);
+        public Task<bool> publish(string topic, OrganizerDto organizerDto);
     }
 }

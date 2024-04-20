@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using event_service.Entities;
+using Google.Api.Gax.ResourceNames;
 
 namespace event_service.Data
 {
@@ -10,15 +11,38 @@ namespace event_service.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Organizer> Organizers { get; set; }
+        public DbSet<Client> Clients { get; set; }  
 
-
-
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             try
             {
                 base.OnModelCreating(modelBuilder);
+
+                modelBuilder.Entity<Organizer>().HasData(
+                new Organizer
+                {
+                    Id = "1",
+                    Email = "anas@gmail.com",
+                    firstname = "anas",
+                    lastname = "chatt",
+                    PhoneNumber = "1234567890",
+                    OrganizationName = "ENSA"
+                }
+                );
+                modelBuilder.Entity<Organizer>().HasData(
+                new Organizer
+                {
+                    Id = "2",
+                    Email = "aimane@gmail.com",
+                    firstname = "aimane",
+                    lastname = "chanaa",
+                    PhoneNumber = "1234567890",
+                    OrganizationName = "ENSA"
+                }
+                );
 
                 modelBuilder.Entity<Event>().HasData(
                 new Event
@@ -30,9 +54,25 @@ namespace event_service.Data
                     Location = "maps",
                     MinPrize = 500,
                     DesignId = 1,
-                    OrganizerId = "hhhh",
+                    OrganizerId = "1",
                     CategoryId = 1,
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
+                }
+                );
+
+                modelBuilder.Entity<Event>().HasData(
+                new Event
+                {
+                    Id = 2,
+                    Title = "Match",
+                    Description = "i am a football match",
+                    Date = DateTime.Now,
+                    Location = "maps",
+                    MinPrize = 400,
+                    DesignId = 1,
+                    OrganizerId = "2",
+                    CategoryId = 1,
+                    Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995"
                 }
                 );
                 modelBuilder.Entity<Category>().HasData(
@@ -41,21 +81,6 @@ namespace event_service.Data
                     Id = 1,
                     Name = "Sport",
                 }
-                );
-                modelBuilder.Entity<Event>().HasData(
-                    new Event
-                    {
-                        Id = 2,
-                        Title = "Cinema",
-                        Description = "i am a movie",
-                        Date = DateTime.Now,
-                        Location = "maps",
-                        MinPrize = 500,
-                        DesignId = 2,
-                        OrganizerId = "ooooo",
-                        CategoryId = 2,
-                        Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
-                    }
                 );
                 modelBuilder.Entity<Category>().HasData(
                 new Category
