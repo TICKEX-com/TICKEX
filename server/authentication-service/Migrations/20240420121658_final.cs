@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace authentication_service.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class final : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,7 @@ namespace authentication_service.Migrations
                     firstname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     lastname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ville = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrganizationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     date_naissance = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     certificat = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

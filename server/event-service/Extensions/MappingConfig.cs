@@ -15,6 +15,7 @@ public class MappingConfig
                 config.CreateMap<EventsDto, Event>().ReverseMap();
                 config.CreateMap<EventByIdDto, Event>().ReverseMap();
                 config.CreateMap<ImageDto, Image>().ReverseMap();
+                config.CreateMap<OrganizerDto, Organizer>().ReverseMap();
 
             });
         return mappingConfig;

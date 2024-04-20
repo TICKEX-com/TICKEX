@@ -1,6 +1,9 @@
 ﻿using authentication_service.DTOs;
+using authentication_service.Services;
 using authentication_service.Services.IServices;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace authentication_service.Controllers
 {
@@ -9,14 +12,22 @@ namespace authentication_service.Controllers
     public class AuthApiController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         protected ResponseDto _response;
+        private readonly IProducerService _producerService;
+        private readonly IMapper _mapper;
 
-        public AuthApiController(IAuthService authService, IHttpContextAccessor httpContextAccessor)
+
+
+        public AuthApiController(IAuthService authService, IHttpContextAccessor httpContextAccessor, IProducerService producerService, IMapper mapper, IUserService userService)
         {
             _authService = authService;
+            _producerService = producerService;
             _response = new();
             _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
+            _userService = userService;
         }
 
         [HttpPost("Register/Client")]
@@ -37,11 +48,15 @@ namespace authentication_service.Controllers
         {
             var errorMessage = await _authService.RegisterOrganizer(requestDto);
             if (errorMessage != "success")
-            {
+            {     
                 _response.IsSuccess = false;
                 _response.Message = errorMessage;
                 return BadRequest(_response);
             }
+            var organizer = _mapper.Map<OrganizerDto>(requestDto);
+            organizer.Id = await _userService.GetOrganizerIdByUsername(requestDto.Username);
+            await _producerService.publish("Tickex", organizer);
+            _response.Result = organizer;
             return Ok(_response);
         }
 

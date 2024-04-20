@@ -28,7 +28,7 @@ namespace event_service.Entities
         public int CategoryId { get; set; }
         [NotMapped]
         public List<Client> Clients { get; set; }
-        [NotMapped]
+        [Required]
         public Organizer Organizer { get; set; }
         [Required]
         public string OrganizerId { get; set; }

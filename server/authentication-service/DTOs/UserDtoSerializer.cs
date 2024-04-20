@@ -5,9 +5,9 @@ using System.Text;
 
 namespace authentication_service.DTOs
 {
-    public class UserDtoSerializer : ISerializer<UserDto>
+    public class UserDtoSerializer : ISerializer<OrganizerDto>
     {
-        public byte[] Serialize(UserDto data, SerializationContext context)
+        public byte[] Serialize(OrganizerDto data, SerializationContext context)
         {
             if (data == null)
                 return null;

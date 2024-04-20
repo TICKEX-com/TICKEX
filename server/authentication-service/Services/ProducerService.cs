@@ -15,29 +15,25 @@ namespace authentication_service.Services
         {
             _config = config;
         }
-        public async Task<bool> publish(string topic, UserDto userdto)
+        public async Task<bool> publish(string topic, OrganizerDto organizerDto)
         {
-            UserDto userDto = new()
+            try
             {
-                Id = userdto.Id,
-                Username = userdto.Username,
-                Email = userdto.Email,
-                firstname = userdto.firstname,
-                lastname = userdto.lastname,
-                PhoneNumber = userdto.PhoneNumber,
-                Role = userdto.Role,
-                certificat = userdto.certificat
-            };
-
-            // string serializedEvent = JsonConvert.SerializeObject(e);
-            using (var producer = new ProducerBuilder<Null, UserDto>(_config)
-            .SetValueSerializer(new UserDtoSerializer())
-            .Build())
+                // string serializedEvent = JsonConvert.SerializeObject(e);
+                using (var producer = new ProducerBuilder<Null, OrganizerDto>(_config)
+                .SetValueSerializer(new UserDtoSerializer())
+                .Build())
+                {
+                    await producer.ProduceAsync(topic, new Message<Null, OrganizerDto> { Value = organizerDto });
+                    producer.Flush(TimeSpan.FromSeconds(10));
+                    return true;
+                }
+            } catch (Exception ex)
             {
-                await producer.ProduceAsync(topic, new Message<Null, UserDto> { Value = userDto });
-                producer.Flush(TimeSpan.FromSeconds(10));
-                return true;
+                Console.WriteLine(ex.Message);
+                return false;
             }
+            
         }
     }
 }

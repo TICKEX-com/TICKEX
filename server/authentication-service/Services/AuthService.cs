@@ -148,7 +148,6 @@ namespace authentication_service.Services
             {
                 return ex.Message;
             }
-            return "Error Encountered";
         }
 
         // Register an Organizer
@@ -181,6 +180,7 @@ namespace authentication_service.Services
                 NormalizedEmail = requestDto.Email.ToUpper(),
                 firstname = requestDto.firstname,
                 lastname = requestDto.lastname,
+                OrganizationName = requestDto.OrganizationName,
                 PhoneNumber = requestDto.PhoneNumber,
                 certificat = requestDto.Certificat
             };
@@ -210,7 +210,6 @@ namespace authentication_service.Services
             {
                 return ex.Message;
             }
-            return "Error Encountered";
         }
 
         public async Task<bool> Logout(HttpContext httpContext)
