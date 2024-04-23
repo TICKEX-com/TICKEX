@@ -1,5 +1,5 @@
-networks:
-  tickexNetwork:
+# networks:
+#   tickexNetwork:
 
 services:
 
@@ -31,49 +31,49 @@ services:
   #     - tickexNetwork  
       
   tickex-gateway-service:
-    image: 'madockerhub/tickex-gateway-service'
+    build: ./gateway-service
     container_name: gateway-service
     ports:
-      - '8888:8888'
-    expose:
-      -  '8888'
+      - '8080:8760'
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8765/actuator/health"]
       interval: 10s
       retries: 10
     depends_on:
-      tickex-discovery-service:
-        condition: service_healthy
+      - tickex-discovery-service
+      - tickex-payment-service
     environment:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-    networks:
-      - tickexNetwork
+
 
   tickex-discovery-service:
-    image: 'madockerhub/tickex-discovery-service'
+    build: ./discovery-service
     container_name: discovery-service
-    ports:
-      - '8761:8761'
     expose:
       - '8761'
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
-      interval: 10s
-      retries: 30
-    networks:
-      - tickexNetwork
 
-
-  authentication-service-db: 
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: authentication-service-db
+  tickex-payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    expose:
+      - '9091'
+    depends_on:
+      - tickex-discovery-service
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=1234Strong!Password
-    ports:
-      - '1433:1433'
-    networks:
-      - tickexNetwork
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+
+
+
+  # authentication-service-db: 
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   container_name: authentication-service-db
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=1234Strong!Password
+  #   ports:
+  #     - '1433:1433'
+  #   networks:
+  #     - tickexNetwork
 
   event-service-db: 
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -83,25 +83,24 @@ services:
       - SA_PASSWORD=1234Strong!Password
     ports:
       - '1434:1433'
-    networks:
-      - tickexNetwork      
+   
 
-  authentication-service:
-    container_name: authentication-service
-    build: 
-      context: ./authentication-service/
-      dockerfile: Dockerfile
-    environment:
-      - DB_HOST=authentication-service-db
-      - DB_NAME=Authentication
-      - DB_SA_PASSWORD=1234Strong!Password
-    depends_on:
-      - tickex-gateway-service
-    ports:
-      - '8081:8081'
-      - '8080:8080'
-    networks:
-      - tickexNetwork
+  # authentication-service:
+  #   container_name: authentication-service
+  #   build: 
+  #     context: ./authentication-service/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - DB_HOST=authentication-service-db
+  #     - DB_NAME=Authentication
+  #     - DB_SA_PASSWORD=1234Strong!Password
+  #   depends_on:
+  #     - tickex-gateway-service
+  #   ports:
+  #     - '8081:8081'
+  #     - '8080:8080'
+  #   networks:
+  #     - tickexNetwork
 
   event-service:
     container_name: event-service
@@ -112,26 +111,8 @@ services:
       - DB_HOST=event-service-db
       - DB_NAME=Events
       - DB_SA_PASSWORD=1234Strong!Password
-    depends_on:
-      - tickex-gateway-service
+    # depends_on:
+    #   - tickex-gateway-service
     ports:
       - '8082:8080'
       - '8083:8081'
-    networks:
-      - tickexNetwork
-
-
-  # tickex-payment-service:
-  #   image: 'madockerhub/tickex-payment-service'
-  #   container_name: payment-service
-  #   ports:
-  #     - '9091:9091'
-  #   expose:
-  #     - '9091'
-  #   depends_on:
-  #     tickex-discovery-service:
-  #       condition: service_healthy
-  #   environment:
-  #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-  #   networks:
-  #     - tickexNetwork

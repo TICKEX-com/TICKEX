@@ -12,9 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Add Database
-/*var dbHost = "localhost";
-var dbName = "Events";
-var dbPassword = "1234Strong!Password";*/
+// var dbHost = "localhost";
+// var dbName = "Events";
+// var dbPassword = "1234Strong!Password";
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
