@@ -17,7 +17,7 @@ namespace event_service.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -138,7 +138,7 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 4, 20, 13, 18, 35, 485, DateTimeKind.Local).AddTicks(6542),
+                            Date = new DateTime(2024, 4, 24, 18, 15, 44, 432, DateTimeKind.Local).AddTicks(1479),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
@@ -153,7 +153,7 @@ namespace event_service.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 4, 20, 13, 18, 35, 485, DateTimeKind.Local).AddTicks(6598),
+                            Date = new DateTime(2024, 4, 24, 18, 15, 44, 432, DateTimeKind.Local).AddTicks(1562),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
