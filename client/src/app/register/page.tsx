@@ -20,7 +20,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import AlertCard from "@/components/Alert";
 import { toast } from "sonner";
-import { User } from "../core/types/authentication.types";
+import { User } from "../../core/types/authentication.types";
 
 function page() {
   const router = useRouter();
