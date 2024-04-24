@@ -1,9 +1,7 @@
 ﻿using event_service.Data;
 using event_service.Entities;
 using event_service.Services.IServices;
-using Google.Api.Gax.ResourceNames;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 
 namespace event_service.Services
 {

@@ -154,8 +154,8 @@ namespace event_service.Migrations
                 columns: new[] { "Id", "CategoryId", "Date", "Description", "DesignId", "Is_finished", "Location", "MinPrize", "On_sell", "OrganizerId", "Poster", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 4, 20, 13, 18, 35, 485, DateTimeKind.Local).AddTicks(6542), "i am a football match", 1, false, "maps", 500f, false, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
-                    { 2, 1, new DateTime(2024, 4, 20, 13, 18, 35, 485, DateTimeKind.Local).AddTicks(6598), "i am a football match", 1, false, "maps", 400f, false, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "Match" }
+                    { 1, 1, new DateTime(2024, 4, 24, 18, 15, 44, 432, DateTimeKind.Local).AddTicks(1479), "i am a football match", 1, false, "maps", 500f, false, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
+                    { 2, 1, new DateTime(2024, 4, 24, 18, 15, 44, 432, DateTimeKind.Local).AddTicks(1562), "i am a football match", 1, false, "maps", 400f, false, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "Match" }
                 });
 
             migrationBuilder.CreateIndex(

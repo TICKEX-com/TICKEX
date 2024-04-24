@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Add Database
+
 /*var dbHost = "localhost";
 var dbName = "Events";
 var dbPassword = "1234Strong!Password";*/
@@ -121,11 +122,12 @@ void ApplyMigration()
                 _db.Database.EnsureDeleted();
                 _db.Database.Migrate();
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             Console.WriteLine("Error in applying migrations : " + ex.Message);
         }
-        
+
     }
 }
 
@@ -144,13 +146,13 @@ async void Consume()
                 e.Cancel = true; // prevent the process from terminating.
                 cts.Cancel();
             };
-        
+
             while (!cts.IsCancellationRequested)
             {
                 try
                 {
                     var cr = consumer.Consume(cts.Token);
-                    Console.WriteLine($"Consumed event from Tickex : key = {cr.Message.Key,-10} value = {cr.Message.Value}"); 
+                    Console.WriteLine($"Consumed event from Tickex : key = {cr.Message.Key,-10} value = {cr.Message.Value}");
 
                 }
                 catch (ConsumeException e)
