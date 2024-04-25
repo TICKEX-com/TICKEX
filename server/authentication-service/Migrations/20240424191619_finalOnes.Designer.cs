@@ -12,8 +12,8 @@ using authentication_service.Data;
 namespace authentication_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240420121658_final")]
-    partial class final
+    [Migration("20240424191619_finalOnes")]
+    partial class finalOnes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

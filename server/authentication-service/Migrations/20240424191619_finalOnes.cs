@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace authentication_service.Migrations
 {
     /// <inheritdoc />
-    public partial class final : Migration
+    public partial class finalOnes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

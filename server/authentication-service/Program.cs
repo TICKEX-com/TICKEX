@@ -10,20 +10,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Steeltoe.Discovery.Client;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-/*var dbHost = "localhost";
+var dbHost = "localhost";
 var dbName = "Authentication";
-var dbPassword = "1234Strong!Password";*/
+var dbPassword = "1234Strong!Password";
 
-var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+/*var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
+var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");*/
 
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};Connect Timeout=100;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 builder.Services.AddDbContext<DataContext>(options =>

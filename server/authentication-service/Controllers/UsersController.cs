@@ -85,10 +85,10 @@ namespace authentication_service.Controllers
         {
             try
             {
-                var organizer = await _userService.GetOrganizerById(id);
+                var organizer = _mapper.Map<OrganizerDto>(await _userService.GetOrganizerById(id));
                 if (organizer != null)
                 {
-                    // await _producerService.publish("Tickex", organizer);
+                    await _producerService.publish("Tickex", organizer);
                     _responseDto.Result = organizer;
                     _responseDto.Message = "Message send successfuly";
                     return Ok(_responseDto);
