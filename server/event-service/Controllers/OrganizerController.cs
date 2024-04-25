@@ -1,22 +1,46 @@
 ﻿using AutoMapper;
 using event_service.DTOs;
+using event_service.Entities;
 using event_service.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace event_service.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "ORGANIZER")]
     public class OrganizerController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public OrganizerController(IEventService eventService, IMapper mapper)
+        public OrganizerController(IEventService eventService, IMapper mapper, IUserService userService)
         {
             _eventService = eventService;
             _mapper = mapper;
+            _userService = userService;
+        }
+
+        [HttpGet("Organizers")]
+        public async Task<IActionResult> GetOrganizers()
+        {
+            try
+            {
+                var organizers = await _userService.GetOrganizers();
+
+                if (organizers.IsNullOrEmpty())
+                    return NotFound();
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                return Ok(organizers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+            }
         }
 
 

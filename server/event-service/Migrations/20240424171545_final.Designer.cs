@@ -12,15 +12,15 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240409144411_pre_final")]
-    partial class pre_final
+    [Migration("20240424171545_final")]
+    partial class final
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -79,7 +79,7 @@ namespace event_service.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Client");
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("event_service.Entities.Event", b =>
@@ -118,7 +118,7 @@ namespace event_service.Migrations
 
                     b.Property<string>("OrganizerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Poster")
                         .IsRequired()
@@ -132,6 +132,8 @@ namespace event_service.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("OrganizerId");
+
                     b.ToTable("Events");
 
                     b.HasData(
@@ -139,31 +141,31 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 4, 9, 14, 44, 10, 811, DateTimeKind.Local).AddTicks(744),
+                            Date = new DateTime(2024, 4, 24, 18, 15, 44, 432, DateTimeKind.Local).AddTicks(1479),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
                             Location = "maps",
                             MinPrize = 500f,
                             On_sell = false,
-                            OrganizerId = "hhhh",
+                            OrganizerId = "1",
                             Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
                             Title = "Match"
                         },
                         new
                         {
                             Id = 2,
-                            CategoryId = 2,
-                            Date = new DateTime(2024, 4, 9, 14, 44, 10, 811, DateTimeKind.Local).AddTicks(851),
-                            Description = "i am a movie",
-                            DesignId = 2,
+                            CategoryId = 1,
+                            Date = new DateTime(2024, 4, 24, 18, 15, 44, 432, DateTimeKind.Local).AddTicks(1562),
+                            Description = "i am a football match",
+                            DesignId = 1,
                             Is_finished = false,
                             Location = "maps",
-                            MinPrize = 500f,
+                            MinPrize = 400f,
                             On_sell = false,
-                            OrganizerId = "ooooo",
-                            Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
-                            Title = "Cinema"
+                            OrganizerId = "2",
+                            Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995",
+                            Title = "Match"
                         });
                 });
 
@@ -181,6 +183,56 @@ namespace event_service.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("event_service.Entities.Organizer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrganizationName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("firstname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("lastname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Organizers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            Email = "anas@gmail.com",
+                            OrganizationName = "ENSA",
+                            PhoneNumber = "1234567890",
+                            firstname = "anas",
+                            lastname = "chatt"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Email = "aimane@gmail.com",
+                            OrganizationName = "ENSA",
+                            PhoneNumber = "1234567890",
+                            firstname = "aimane",
+                            lastname = "chanaa"
+                        });
                 });
 
             modelBuilder.Entity("Ticket", b =>
@@ -206,7 +258,15 @@ namespace event_service.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("event_service.Entities.Organizer", "Organizer")
+                        .WithMany()
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Organizer");
                 });
 
             modelBuilder.Entity("event_service.Entities.Image", b =>

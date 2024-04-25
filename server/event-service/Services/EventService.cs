@@ -3,6 +3,7 @@ using event_service.DTOs;
 using event_service.Entities;
 using event_service.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace event_service.Services
@@ -10,15 +11,28 @@ namespace event_service.Services
     public class EventService : IEventService
     {
         private readonly DataContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IUserService _userService;
 
-        public EventService(DataContext context)
+
+
+        public EventService(DataContext context, IHttpClientFactory httpClientFactory, IUserService userService)
         {
             _context = context;
+            _userService = userService;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<Event> GetEventById(int id)
         {
-            return await _context.Events.Include(img => img.Images).Include(ct => ct.Category).FirstAsync(ev => ev.Id == id);
+            var _event = await _context.Events.Include(img => img.Images).Include(ct => ct.Category).Include(org => org.Organizer).FirstAsync(ev => ev.Id == id);
+            
+            if (_event.Organizer.OrganizationName.IsNullOrEmpty())
+            {
+                _event.Organizer.OrganizationName = _event.Organizer.firstname + " " + _event.Organizer.lastname;
+            }
+            return _event;
+            
         }
 
         public async Task<ICollection<Event>> GetEvents()
@@ -61,7 +75,7 @@ namespace event_service.Services
         }
 
         public async Task<bool> CreateEvent(EventReqDto Event, string OrganizerId)
-        {
+        {  
             Event ev = new()
             {
                 Title = Event.Title,

@@ -1,11 +1,9 @@
-﻿namespace event_service.Entities
+﻿namespace event_service.DTOs
 {
-    public class Organizer
+    public class OrganizerDto
     {
         public string Id { get; set; }
         public string Email { get; set; }
-        public string firstname { get; set; }
-        public string lastname { get; set; }
         public string OrganizationName { get; set; } = string.Empty;
         public string PhoneNumber { get; set; }
     }
