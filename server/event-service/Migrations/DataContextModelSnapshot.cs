@@ -138,7 +138,7 @@ namespace event_service.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 4, 24, 18, 15, 44, 432, DateTimeKind.Local).AddTicks(1479),
+                            Date = new DateTime(2024, 4, 25, 20, 7, 17, 812, DateTimeKind.Local).AddTicks(859),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,
@@ -153,7 +153,7 @@ namespace event_service.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            Date = new DateTime(2024, 4, 24, 18, 15, 44, 432, DateTimeKind.Local).AddTicks(1562),
+                            Date = new DateTime(2024, 4, 25, 20, 7, 17, 812, DateTimeKind.Local).AddTicks(918),
                             Description = "i am a football match",
                             DesignId = 1,
                             Is_finished = false,

@@ -109,8 +109,7 @@ namespace event_service.Data
             }
             catch (Exception ex)
             {
-                Console.WriteLine( ex.ToString() );
-                Console.ReadLine();
+                Console.WriteLine( ex.Message );
             }
             
         }

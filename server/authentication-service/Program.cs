@@ -15,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 /*var dbHost = "localhost";
 var dbName = "Authentication";
 var dbPassword = "1234Strong!Password";*/
@@ -29,6 +28,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
+
+builder.Services.AddControllers();
+
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 builder.Services.AddDiscoveryClient();
@@ -114,12 +116,19 @@ void ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())
     {
-        var _db = scope.ServiceProvider.GetRequiredService<DataContext>();
-
-        if (_db.Database.GetPendingMigrations().Count() > 0)
+        try
         {
-            _db.Database.EnsureDeleted();
-            _db.Database.Migrate();
+            var _db = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+            if (_db.Database.GetPendingMigrations().Count() > 0)
+            {
+                _db.Database.EnsureDeleted();
+                _db.Database.Migrate();
+            }
+        } catch(Exception ex) 
+        {
+            Console.WriteLine(ex.Message);
         }
+        
     }
 }
