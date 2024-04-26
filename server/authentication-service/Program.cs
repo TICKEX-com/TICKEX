@@ -10,14 +10,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Steeltoe.Discovery.Client;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-/*var dbHost = "localhost";
+/*var dbHost = "127.0.0.1,1433";
 var dbName = "Authentication";
 var dbPassword = "1234Strong!Password";*/
 
@@ -25,11 +23,14 @@ var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
-var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};Connect Timeout=100;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};Connect Timeout=10;Encrypt=False;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
+
+builder.Services.AddControllers();
+
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 builder.Services.AddDiscoveryClient();
@@ -86,7 +87,7 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-builder.AddAppAuthetication();
+        // causing runtime error :  builder.AddAppAuthetication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -115,12 +116,19 @@ void ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())
     {
-        var _db = scope.ServiceProvider.GetRequiredService<DataContext>();
-
-        if (_db.Database.GetPendingMigrations().Count() > 0)
+        try
         {
-            _db.Database.EnsureDeleted();
-            _db.Database.Migrate();
+            var _db = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+            if (_db.Database.GetPendingMigrations().Count() > 0)
+            {
+                _db.Database.EnsureDeleted();
+                _db.Database.Migrate();
+            }
+        } catch(Exception ex) 
+        {
+            Console.WriteLine(ex.Message);
         }
+        
     }
 }

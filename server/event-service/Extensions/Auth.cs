@@ -8,12 +8,14 @@ namespace event_service.Extensions
     {
         public static WebApplicationBuilder AddAppAuthetication(this WebApplicationBuilder builder)
         {
-            var settingsSection = builder.Configuration.GetSection("ApiSettings");
+            try 
+            { 
+                var settingsSection = builder.Configuration.GetSection("ApiSettings");
 
             var secret = settingsSection.GetValue<string>("Secret");
             var issuer = settingsSection.GetValue<string>("Issuer");
             var audience = settingsSection.GetValue<string>("Audience");
-
+            
             var key = Encoding.ASCII.GetBytes(secret);
 
 
@@ -35,6 +37,12 @@ namespace event_service.Extensions
             });
 
             return builder;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+            
         }
     }
 }

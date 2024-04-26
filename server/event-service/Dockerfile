@@ -18,4 +18,4 @@ RUN dotnet publish "event-service.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "event-service.dll"]
+ENTRYPOINT ["dotnet", "event-service.dll","--urls", "http://*:8080"]
