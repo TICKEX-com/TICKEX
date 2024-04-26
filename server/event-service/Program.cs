@@ -14,13 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Add Database
-// var dbHost = "127.0.0.1,1434";
-// var dbName = "Events";
-// var dbPassword = "1234Strong!Password";
+var dbHost = "127.0.0.1,1434";
+var dbName = "Events";
+var dbPassword = "1234Strong!Password";
 
-var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
-var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
+// var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+// var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+// var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
 var connectionString = $"Data Source={dbHost};Database={dbName};User ID=sa;Password={dbPassword};Connect Timeout=10;Encrypt=False;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
