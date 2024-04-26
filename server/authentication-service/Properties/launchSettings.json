@@ -18,14 +18,24 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Container (Dockerfile)": {
+    "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
+        "ASPNETCORE_HTTPS_PORTS": "8081",
         "ASPNETCORE_HTTP_PORTS": "8080"
       },
-      "publishAllPorts": true
+      "publishAllPorts": false
+    },
+    "ApiForDocker": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "/'",
+      "applicationUrl": "http://localhost:8080;http://localhost:8081",
+            "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -33,8 +43,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:11340",
-      "sslPort": 0
+      "applicationUrl": "http://authentication-service:8080"
     }
   }
 }

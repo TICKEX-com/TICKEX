@@ -12,17 +12,17 @@ using Steeltoe.Discovery.Client;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-// Add Database
 
-/*var dbHost = "localhost";
-var dbName = "Events";
-var dbPassword = "1234Strong!Password";*/
+// Add Database
+// var dbHost = "127.0.0.1,1434";
+// var dbName = "Events";
+// var dbPassword = "1234Strong!Password";
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
-var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};Connect Timeout=100;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+var connectionString = $"Data Source={dbHost};Database={dbName};User ID=sa;Password={dbPassword};Connect Timeout=10;Encrypt=False;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -71,7 +71,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.AddAppAuthetication();
+        // causing runtime error: builder.AddAppAuthetication();
 builder.Services.AddAuthorization();
 
 // Consumer Configuration
