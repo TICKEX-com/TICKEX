@@ -12,11 +12,7 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-<<<<<<<< HEAD:server/event-service/Migrations/20240420121835_final.Designer.cs
-    [Migration("20240420121835_final")]
-========
-    [Migration("20240425190718_final")]
->>>>>>>> origin/fix-gateway:server/event-service/Migrations/20240425190718_final.Designer.cs
+    [Migration("20240426193431_final")]
     partial class final
     {
         /// <inheritdoc />
@@ -52,11 +48,26 @@ namespace event_service.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("Prize")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Seats")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId");
 
                     b.ToTable("Categories");
 
@@ -64,12 +75,20 @@ namespace event_service.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Sport"
+                            Description = "Waaaera",
+                            EventId = 1,
+                            Name = "VIP",
+                            Prize = 500f,
+                            Seats = 100
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Cinema"
+                            Description = "siimple",
+                            EventId = 2,
+                            Name = "Normal",
+                            Prize = 50f,
+                            Seats = 400
                         });
                 });
 
@@ -94,9 +113,6 @@ namespace event_service.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -105,6 +121,9 @@ namespace event_service.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DesignId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventTypeId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Is_finished")
@@ -134,7 +153,7 @@ namespace event_service.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("EventTypeId");
 
                     b.HasIndex("OrganizerId");
 
@@ -144,14 +163,10 @@ namespace event_service.Migrations
                         new
                         {
                             Id = 1,
-                            CategoryId = 1,
-<<<<<<<< HEAD:server/event-service/Migrations/20240420121835_final.Designer.cs
-                            Date = new DateTime(2024, 4, 20, 13, 18, 35, 485, DateTimeKind.Local).AddTicks(6542),
-========
-                            Date = new DateTime(2024, 4, 25, 20, 7, 17, 812, DateTimeKind.Local).AddTicks(859),
->>>>>>>> origin/fix-gateway:server/event-service/Migrations/20240425190718_final.Designer.cs
+                            Date = new DateTime(2024, 4, 26, 20, 34, 31, 329, DateTimeKind.Local).AddTicks(6098),
                             Description = "i am a football match",
                             DesignId = 1,
+                            EventTypeId = 1,
                             Is_finished = false,
                             Location = "maps",
                             MinPrize = 500f,
@@ -163,14 +178,10 @@ namespace event_service.Migrations
                         new
                         {
                             Id = 2,
-                            CategoryId = 1,
-<<<<<<<< HEAD:server/event-service/Migrations/20240420121835_final.Designer.cs
-                            Date = new DateTime(2024, 4, 20, 13, 18, 35, 485, DateTimeKind.Local).AddTicks(6598),
-========
-                            Date = new DateTime(2024, 4, 25, 20, 7, 17, 812, DateTimeKind.Local).AddTicks(918),
->>>>>>>> origin/fix-gateway:server/event-service/Migrations/20240425190718_final.Designer.cs
+                            Date = new DateTime(2024, 4, 26, 20, 34, 31, 329, DateTimeKind.Local).AddTicks(6158),
                             Description = "i am a football match",
                             DesignId = 1,
+                            EventTypeId = 1,
                             Is_finished = false,
                             Location = "maps",
                             MinPrize = 400f,
@@ -178,6 +189,35 @@ namespace event_service.Migrations
                             OrganizerId = "2",
                             Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995",
                             Title = "Match"
+                        });
+                });
+
+            modelBuilder.Entity("event_service.Entities.EventType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Types");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Sport"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Cinema"
                         });
                 });
 
@@ -262,11 +302,22 @@ namespace event_service.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("event_service.Entities.Category", b =>
+                {
+                    b.HasOne("event_service.Entities.Event", "Event")
+                        .WithMany("Categories")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("event_service.Entities.Event", b =>
                 {
-                    b.HasOne("event_service.Entities.Category", "Category")
+                    b.HasOne("event_service.Entities.EventType", "EventType")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("EventTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -276,7 +327,7 @@ namespace event_service.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("EventType");
 
                     b.Navigation("Organizer");
                 });
@@ -293,6 +344,8 @@ namespace event_service.Migrations
 
             modelBuilder.Entity("event_service.Entities.Event", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("Images");
                 });
 #pragma warning restore 612, 618

@@ -23,9 +23,9 @@ namespace event_service.Entities
         public Design? Design { get; set; } = null;
         public int? DesignId { get; set; } = null;
         [Required]
-        public Category Category { get; set; }
+        public EventType EventType { get; set; }
         [Required]
-        public int CategoryId { get; set; }
+        public int EventTypeId { get; set; }
         [NotMapped]
         public List<Client> Clients { get; set; }
         [Required]
@@ -35,6 +35,8 @@ namespace event_service.Entities
         [Required]
         public string Poster { get; set; }
         public List<Image> Images { get; set; }
+        [Required]
+        public List<Category> Categories { get; set; }
         [Required]
         public bool On_sell { get; set; } = false ;
         [Required]

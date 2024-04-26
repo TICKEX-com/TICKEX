@@ -11,9 +11,9 @@ using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
 
 // Add Database
+
 /*var dbHost = "127.0.0.1,1434";
 var dbName = "Events";
 var dbPassword = "1234Strong!Password";*/
@@ -29,6 +29,7 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+builder.Services.AddControllers();
 
 // Add services to the container.
 
@@ -71,19 +72,24 @@ builder.Services.AddScoped<IUserService, UserService>();
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        // causing runtime error: builder.AddAppAuthetication();
-builder.Services.AddAuthorization();
 
-// Consumer Configuration
-builder.Services.AddHostedService<ConsumerService>();
-// builder.Services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
+builder.AddAppAuthetication();
+builder.Services.AddAuthorization();
 
 var consumerConfig = new ConsumerConfig();
 builder.Configuration.Bind("consumer", consumerConfig);
 builder.Services.AddSingleton(consumerConfig);
 
 
+// Consumer Configuration
+builder.Services.AddHostedService<ConsumerService>();
+// builder.Services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
+
+
+
+
 var app = builder.Build();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -128,50 +134,5 @@ void ApplyMigration()
             Console.WriteLine("Error in applying migrations : " + ex.Message);
         }
 
-    }
-}
-
-async void Consume()
-{
-    ConsumerConfig _consumerConfig;
-
-    using (var consumer = new ConsumerBuilder<Ignore, string>(consumerConfig).Build())
-    {
-        try
-        {
-            consumer.Subscribe("Tickex");
-
-            CancellationTokenSource cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) => {
-                e.Cancel = true; // prevent the process from terminating.
-                cts.Cancel();
-            };
-
-            while (!cts.IsCancellationRequested)
-            {
-                try
-                {
-                    var cr = consumer.Consume(cts.Token);
-                    Console.WriteLine($"Consumed event from Tickex : key = {cr.Message.Key,-10} value = {cr.Message.Value}");
-
-                }
-                catch (ConsumeException e)
-                {
-                    Console.WriteLine($"Consumer Error occured: {e.Error.Reason}");
-                }
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            // Ctrl + C
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Subscribe Error occured: {ex.Message}");
-        }
-        finally
-        {
-            consumer.Close();
-        }
     }
 }

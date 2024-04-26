@@ -4,7 +4,6 @@ using event_service.Entities;
 using event_service.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace event_service.Services
 {
@@ -25,7 +24,7 @@ namespace event_service.Services
 
         public async Task<Event> GetEventById(int id)
         {
-            var _event = await _context.Events.Include(img => img.Images).Include(ct => ct.Category).Include(org => org.Organizer).FirstAsync(ev => ev.Id == id);
+            var _event = await _context.Events.Include(img => img.Images).Include(ct => ct.EventType).Include(org => org.Organizer).FirstAsync(ev => ev.Id == id);
             
             if (_event.Organizer.OrganizationName.IsNullOrEmpty())
             {
@@ -37,7 +36,7 @@ namespace event_service.Services
 
         public async Task<ICollection<Event>> GetEvents()
         {
-            return await _context.Events.Include(ct => ct.Category).OrderBy(ev => ev.Id).ToListAsync();
+            return await _context.Events.Include(ct => ct.EventType).OrderBy(ev => ev.Id).ToListAsync();
         }
 
         public async Task<bool> IsEventExist(int id)
@@ -45,9 +44,9 @@ namespace event_service.Services
             return await _context.Events.AnyAsync(ev => ev.Id == id);
         }
 
-        public async Task<bool> IsCategoryExist(int id)
+        public async Task<bool> IsTypeExist(int id)
         {
-            return await _context.Categories.AnyAsync(ct => ct.Id == id);
+            return await _context.Types.AnyAsync(ct => ct.Id == id);
         }
 
         public async Task<bool> OrganizerHasEvents(string id)
@@ -59,19 +58,19 @@ namespace event_service.Services
         {
             return await _context.Events
                                  .Where(ev => ev.OrganizerId == id)
-                                 .Include(ct => ct.Category)
+                                 .Include(ct => ct.EventType)
                                  .OrderBy(ev => ev.Id)
                                  .ToListAsync();
         }
 
         public async Task<Event> GetEventById(string OrganizerId, int id)
         {
-            return await _context.Events.Where(ev => ev.OrganizerId == OrganizerId).Include(img => img.Images).Include(ct => ct.Category).FirstAsync(ev => ev.Id == id);
+            return await _context.Events.Where(ev => ev.OrganizerId == OrganizerId).Include(img => img.Images).Include(ct => ct.EventType).FirstAsync(ev => ev.Id == id);
         }
 
-        public async Task<ICollection<Event>> GetEventsByCategory(int id)
+        public async Task<ICollection<Event>> GetEventsByType(int id)
         {
-            return await _context.Events.Where(ct => ct.CategoryId == id).Include(ct => ct.Category).OrderBy(ev => ev.Id).ToListAsync();
+            return await _context.Events.Where(ct => ct.EventTypeId == id).Include(ct => ct.EventType).OrderBy(ev => ev.Id).ToListAsync();
         }
 
         public async Task<bool> CreateEvent(EventReqDto Event, string OrganizerId)
@@ -80,10 +79,10 @@ namespace event_service.Services
             {
                 Title = Event.Title,
                 Description = Event.Description,
-                Date = Event.Date,
+                Date = DateTime.Now,
                 Location = Event.Location,
                 MinPrize = Event.MinPrize,
-                CategoryId = Event.CategoryId,
+                EventTypeId = Event.EventTypeId,
                 OrganizerId = OrganizerId
             };
 
@@ -103,6 +102,20 @@ namespace event_service.Services
                     // Add image
                     var img = new Image { url = image.url, Event = ev };
                     _context.Images.Add(img);
+                }
+            }
+
+            if (Event.Categories != null && Event.Categories.Any())
+            {
+                foreach (var category in Event.Categories)
+                {
+                    var cat = new Category {
+                        Name = category.Name, 
+                        Description = category.Description,
+                        Seats = category.Seats,
+                        Prize = category.Prize,
+                        Event = ev};
+                        _context.Categories.Add(cat);
                 }
             }
             var result = await _context.SaveChangesAsync();
@@ -142,10 +155,10 @@ namespace event_service.Services
             // Update event properties
             existingEvent.Title = ev.Title;
             existingEvent.Description = ev.Description;
-            existingEvent.Date = ev.Date;
+            existingEvent.Date = DateTime.Now;
             existingEvent.Location = ev.Location;
             existingEvent.MinPrize = ev.MinPrize;
-            existingEvent.CategoryId = ev.CategoryId;
+            existingEvent.EventTypeId = ev.EventTypeId;
 
             // Update poster if provided
             if (!string.IsNullOrEmpty(ev.Poster))
@@ -186,7 +199,7 @@ namespace event_service.Services
 
             return await _context.Events
                 .Where(ev => ev.Date.Year >= y && ev.Date.Month >= m && ev.Date.Day >= d)
-                .Include(ct => ct.Category)
+                .Include(ct => ct.EventType)
                 .OrderBy(ev => ev.Id)
                 .ToListAsync();
         }
@@ -195,9 +208,15 @@ namespace event_service.Services
         {
             return await _context.Events
                 .Where(ev => ev.Title.Contains(title))
-                .Include(ct => ct.Category)
+                .Include(ct => ct.EventType)
                 .OrderBy(ev => ev.Id)
                 .ToListAsync();
         }
+
+        public async Task<ICollection<Category>> GetCategoriesByEventId(int id)
+        {
+            return await _context.Categories.Where(ev => ev.EventId == id).OrderBy(ev => ev.Id).ToListAsync();
+        }
+    
     }
 }

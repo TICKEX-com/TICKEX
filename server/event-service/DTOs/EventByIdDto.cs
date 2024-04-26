@@ -11,7 +11,7 @@ namespace event_service.DTOs
         public string Location { get; set; }
         public float MinPrize { get; set; }
         public string Poster { get; set; }
-        public Category Category { get; set; }
+        public EventType EventType { get; set; }
         public OrganizerDto Organizer { get; set; }
         public List<ImageDto> Images { get; set; }
     }

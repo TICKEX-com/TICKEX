@@ -12,7 +12,7 @@ using authentication_service.Data;
 namespace authentication_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240420121658_final")]
+    [Migration("20240426174821_final")]
     partial class final
     {
         /// <inheritdoc />

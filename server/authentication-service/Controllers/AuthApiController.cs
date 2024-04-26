@@ -33,31 +33,45 @@ namespace authentication_service.Controllers
         [HttpPost("Register/Client")]
         public async Task<IActionResult> RegisterClient([FromBody] RegisterReqClientDto requestDto)
         {
-            var errorMessage = await _authService.RegisterClient(requestDto);
-            if (errorMessage != "success")
+            try
             {
-                _response.IsSuccess = false;
-                _response.Message = errorMessage;
-                return BadRequest(_response);
+                var errorMessage = await _authService.RegisterClient(requestDto);
+                if (errorMessage != "success")
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = errorMessage;
+                    return BadRequest(_response);
+                }
+                return Ok(_response);
             }
-            return Ok(_response);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+            }
         }
 
         [HttpPost("Register/Organizer")]
         public async Task<IActionResult> RegisterOrganizer([FromBody] RegisterReqOrganizerDto requestDto)
         {
-            var errorMessage = await _authService.RegisterOrganizer(requestDto);
-            if (errorMessage != "success")
-            {     
-                _response.IsSuccess = false;
-                _response.Message = errorMessage;
-                return BadRequest(_response);
+            try
+            {
+                var errorMessage = await _authService.RegisterOrganizer(requestDto);
+                if (errorMessage != "success")
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = errorMessage;
+                    return BadRequest(_response);
+                }
+                var organizer = _mapper.Map<OrganizerDto>(requestDto);
+                organizer.Id = await _userService.GetOrganizerIdByUsername(requestDto.Username);
+                _response.Result = organizer;
+                await _producerService.publish("Tickex", organizer);
+                return Ok(_response);
             }
-            var organizer = _mapper.Map<OrganizerDto>(requestDto);
-            organizer.Id = await _userService.GetOrganizerIdByUsername(requestDto.Username);
-            await _producerService.publish("Tickex", organizer);
-            _response.Result = organizer;
-            return Ok(_response);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+            }
         }
 
         [HttpPost("Login")]
@@ -74,11 +88,12 @@ namespace authentication_service.Controllers
                 }
                 _response.Result = loginResponse;
                 return Ok(_response);
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, $"{ex.Message}");
             }
-            
+
         }
 
         [HttpPost("Logout")]
@@ -95,14 +110,23 @@ namespace authentication_service.Controllers
         [HttpPost("AssignRole")]
         public async Task<IActionResult> AssignRole([FromBody] AssignRoleReqDto requestDto)
         {
-            var assignRoleSuccessful = await _authService.AssignRole(requestDto.Email, requestDto.roleName.ToUpper());
-            if (!assignRoleSuccessful)
+            try
             {
-                _response.IsSuccess = false;
-                _response.Message = "Error Encoutered";
-                return BadRequest(_response);
+                var assignRoleSuccessful = await _authService.AssignRole(requestDto.Email, requestDto.roleName.ToUpper());
+                if (!assignRoleSuccessful)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Error Encoutered";
+                    return BadRequest(_response);
+                }
+                return Ok(_response);
             }
-            return Ok(_response);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+
+            }
+
         }
     }
 }

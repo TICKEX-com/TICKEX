@@ -9,6 +9,7 @@ namespace event_service.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Event> Events { get; set; }
+        public DbSet<EventType> Types { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Organizer> Organizers { get; set; }
@@ -55,7 +56,7 @@ namespace event_service.Data
                     MinPrize = 500,
                     DesignId = 1,
                     OrganizerId = "1",
-                    CategoryId = 1,
+                    EventTypeId = 1,
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
                 }
                 );
@@ -71,24 +72,49 @@ namespace event_service.Data
                     MinPrize = 400,
                     DesignId = 1,
                     OrganizerId = "2",
-                    CategoryId = 1,
+                    EventTypeId = 1,
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995"
                 }
                 );
-                modelBuilder.Entity<Category>().HasData(
-                new Category
+                modelBuilder.Entity<EventType>().HasData(
+                new EventType
                 {
                     Id = 1,
                     Name = "Sport",
                 }
                 );
-                modelBuilder.Entity<Category>().HasData(
-                new Category
+                modelBuilder.Entity<EventType>().HasData(
+                new EventType
                 {
                     Id = 2,
                     Name = "Cinema",
                 }
                 );
+
+                modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 1,
+                    Name = "VIP",
+                    Description = "Waaaera",
+                    Seats = 100,
+                    Prize = 500,
+                    EventId = 1
+                }
+                );
+
+                modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 2,
+                    Name = "Normal",
+                    Description = "siimple",
+                    Seats = 400,
+                    Prize = 50,
+                    EventId = 2
+                }
+                );
+                
 
                 modelBuilder.Entity<Event>()
                             .HasMany(e => e.Clients)

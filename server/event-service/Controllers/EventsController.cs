@@ -61,12 +61,12 @@ namespace event_service.Controllers
             }
         }
 
-        [HttpGet("Events/Category/{id}")]
-        public async Task<IActionResult> GetEventsByCategory(int id)
+        [HttpGet("Events/Type/{id}")]
+        public async Task<IActionResult> GetEventsByType(int id)
         {
             try
             {
-                if (!await _eventService.IsCategoryExist(id))
+                if (!await _eventService.IsTypeExist(id))
                     return NotFound();
 
                 var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(id));
@@ -117,6 +117,26 @@ namespace event_service.Controllers
                     return BadRequest(ModelState);
 
                 return Ok(events);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+            }
+        }
+
+        [HttpGet("Events/{id}/Categories")]
+        public async Task<IActionResult> GetCategoriesByEventId(int id)
+        {
+            try
+            {
+                if (!await _eventService.IsEventExist(id))
+                    return NotFound();
+                var cats = _mapper.Map<ICollection<CategoryDto>>(await _eventService.GetCategoriesByEventId(id));
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                return Ok(cats);
             }
             catch (Exception ex)
             {

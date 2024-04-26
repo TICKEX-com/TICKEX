@@ -87,7 +87,7 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-        // causing runtime error :  builder.AddAppAuthetication();
+builder.AddAppAuthetication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

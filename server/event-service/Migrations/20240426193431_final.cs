@@ -14,19 +14,6 @@ namespace event_service.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
@@ -55,6 +42,19 @@ namespace event_service.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Types",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Types", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -66,7 +66,7 @@ namespace event_service.Migrations
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MinPrize = table.Column<float>(type: "real", nullable: false),
                     DesignId = table.Column<int>(type: "int", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    EventTypeId = table.Column<int>(type: "int", nullable: false),
                     OrganizerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Poster = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     On_sell = table.Column<bool>(type: "bit", nullable: false),
@@ -76,15 +76,38 @@ namespace event_service.Migrations
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Events_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Events_Organizers_OrganizerId",
                         column: x => x.OrganizerId,
                         principalTable: "Organizers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Events_Types_EventTypeId",
+                        column: x => x.EventTypeId,
+                        principalTable: "Types",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Seats = table.Column<int>(type: "int", nullable: false),
+                    Prize = table.Column<float>(type: "real", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categories_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -132,15 +155,6 @@ namespace event_service.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Sport" },
-                    { 2, "Cinema" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Organizers",
                 columns: new[] { "Id", "Email", "OrganizationName", "PhoneNumber", "firstname", "lastname" },
                 values: new object[,]
@@ -150,23 +164,41 @@ namespace event_service.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Events",
-                columns: new[] { "Id", "CategoryId", "Date", "Description", "DesignId", "Is_finished", "Location", "MinPrize", "On_sell", "OrganizerId", "Poster", "Title" },
+                table: "Types",
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-<<<<<<<< HEAD:server/event-service/Migrations/20240420121835_final.cs
-                    { 1, 1, new DateTime(2024, 4, 20, 13, 18, 35, 485, DateTimeKind.Local).AddTicks(6542), "i am a football match", 1, false, "maps", 500f, false, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
-                    { 2, 1, new DateTime(2024, 4, 20, 13, 18, 35, 485, DateTimeKind.Local).AddTicks(6598), "i am a football match", 1, false, "maps", 400f, false, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "Match" }
-========
-                    { 1, 1, new DateTime(2024, 4, 25, 20, 7, 17, 812, DateTimeKind.Local).AddTicks(859), "i am a football match", 1, false, "maps", 500f, false, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
-                    { 2, 1, new DateTime(2024, 4, 25, 20, 7, 17, 812, DateTimeKind.Local).AddTicks(918), "i am a football match", 1, false, "maps", 400f, false, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "Match" }
->>>>>>>> origin/fix-gateway:server/event-service/Migrations/20240425190718_final.cs
+                    { 1, "Sport" },
+                    { 2, "Cinema" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Events",
+                columns: new[] { "Id", "Date", "Description", "DesignId", "EventTypeId", "Is_finished", "Location", "MinPrize", "On_sell", "OrganizerId", "Poster", "Title" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 4, 26, 20, 34, 31, 329, DateTimeKind.Local).AddTicks(6098), "i am a football match", 1, 1, false, "maps", 500f, false, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
+                    { 2, new DateTime(2024, 4, 26, 20, 34, 31, 329, DateTimeKind.Local).AddTicks(6158), "i am a football match", 1, 1, false, "maps", 400f, false, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "Match" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Description", "EventId", "Name", "Prize", "Seats" },
+                values: new object[,]
+                {
+                    { 1, "Waaaera", 1, "VIP", 500f, 100 },
+                    { 2, "siimple", 2, "Normal", 50f, 400 }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_CategoryId",
+                name: "IX_Categories_EventId",
+                table: "Categories",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_EventTypeId",
                 table: "Events",
-                column: "CategoryId");
+                column: "EventTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_OrganizerId",
@@ -188,6 +220,9 @@ namespace event_service.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
                 name: "Images");
 
             migrationBuilder.DropTable(
@@ -200,10 +235,10 @@ namespace event_service.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Organizers");
 
             migrationBuilder.DropTable(
-                name: "Organizers");
+                name: "Types");
         }
     }
 }
