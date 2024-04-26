@@ -33,8 +33,6 @@ import {
 import { usePathname } from "next/navigation";
 
 function TopNav() {
-
-    
   const pathname = usePathname();
   const segments = pathname.split("/").filter((item) => item !== "");
 

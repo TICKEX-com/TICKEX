@@ -43,14 +43,18 @@ function PaginationSection({
         </PaginationItem>
         <PaginationItem>
           {pages.map((page, index) => (
-            <PaginationLink className="cursor-pointer" key={index} onClick={()=>setCurrentPage(page)}>
+            <PaginationLink
+              className="cursor-pointer"
+              key={index}
+              onClick={() => setCurrentPage(page)}
+            >
               {page}
             </PaginationLink>
           ))}
         </PaginationItem>
 
         <PaginationItem className="cursor-pointer">
-          <PaginationNext  onClick={handleNextPage} />
+          <PaginationNext onClick={handleNextPage} />
         </PaginationItem>
       </PaginationContent>
     </Pagination>

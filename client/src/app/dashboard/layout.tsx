@@ -17,9 +17,6 @@ import {
 import TopNav from "@/components/TopNav";
 import { usePathname } from "next/navigation";
 
-
-
-
 export default function DashboardLayout({
   children,
 }: {
@@ -124,9 +121,11 @@ export default function DashboardLayout({
           </TooltipProvider>
         </nav>
       </aside>
-      <div >
+      <div>
         <TopNav />
-        <section className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">{children}</section>
+        <section className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+          {children}
+        </section>
       </div>
     </div>
   );
