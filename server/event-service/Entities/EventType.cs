@@ -1,8 +1,10 @@
-﻿namespace event_service.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace event_service.Entities
 {
     public class EventType
     {
-        public int Id { get; set; }
+        [Key]
         public string Name { get; set; }
     }
 }

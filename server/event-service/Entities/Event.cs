@@ -16,16 +16,17 @@ namespace event_service.Entities
         [Required]
         public DateTime Date { get; set; }
         [Required]
-        public string Location { get; set; }
+        public string Time { get; set; }
         [Required]
-        public float MinPrize { get; set; }
+        public string City { get; set; }
+        [Required]
+        public string Address { get; set; }
+        public float Duration { get; set; }
         [NotMapped]
         public Design? Design { get; set; } = null;
         public int? DesignId { get; set; } = null;
         [Required]
-        public EventType EventType { get; set; }
-        [Required]
-        public int EventTypeId { get; set; }
+        public string EventType { get; set; }
         [NotMapped]
         public List<Client> Clients { get; set; }
         [Required]
@@ -38,7 +39,7 @@ namespace event_service.Entities
         [Required]
         public List<Category> Categories { get; set; }
         [Required]
-        public bool On_sell { get; set; } = false ;
+        public bool On_sell { get; set; } = true ;
         [Required]
         public bool Is_finished { get; set; } = false ;
     }

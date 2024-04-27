@@ -42,19 +42,6 @@ namespace event_service.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Types",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Types", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -63,10 +50,12 @@ namespace event_service.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MinPrize = table.Column<float>(type: "real", nullable: false),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Duration = table.Column<float>(type: "real", nullable: false),
                     DesignId = table.Column<int>(type: "int", nullable: true),
-                    EventTypeId = table.Column<int>(type: "int", nullable: false),
+                    EventType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrganizerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Poster = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     On_sell = table.Column<bool>(type: "bit", nullable: false),
@@ -81,12 +70,6 @@ namespace event_service.Migrations
                         principalTable: "Organizers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Events_Types_EventTypeId",
-                        column: x => x.EventTypeId,
-                        principalTable: "Types",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,9 +79,9 @@ namespace event_service.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Seats = table.Column<int>(type: "int", nullable: false),
                     Prize = table.Column<float>(type: "real", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -164,41 +147,27 @@ namespace event_service.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Types",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Sport" },
-                    { 2, "Cinema" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Events",
-                columns: new[] { "Id", "Date", "Description", "DesignId", "EventTypeId", "Is_finished", "Location", "MinPrize", "On_sell", "OrganizerId", "Poster", "Title" },
+                columns: new[] { "Id", "Address", "City", "Date", "Description", "DesignId", "Duration", "EventType", "Is_finished", "On_sell", "OrganizerId", "Poster", "Time", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 4, 26, 20, 34, 31, 329, DateTimeKind.Local).AddTicks(6098), "i am a football match", 1, 1, false, "maps", 500f, false, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "Match" },
-                    { 2, new DateTime(2024, 4, 26, 20, 34, 31, 329, DateTimeKind.Local).AddTicks(6158), "i am a football match", 1, 1, false, "maps", 400f, false, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "Match" }
+                    { 1, "address", "Tangier", new DateTime(2024, 4, 27, 19, 6, 12, 989, DateTimeKind.Local).AddTicks(6657), "i am a football match", 1, 0f, "Sports", false, true, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "1.5", "Match" },
+                    { 2, "address", "Tangier", new DateTime(2024, 4, 27, 19, 6, 12, 989, DateTimeKind.Local).AddTicks(6719), "i am a movie", 1, 0f, "Cinema", false, true, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "2", "Match" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "Description", "EventId", "Name", "Prize", "Seats" },
+                columns: new[] { "Id", "Color", "EventId", "Name", "Prize", "Seats" },
                 values: new object[,]
                 {
-                    { 1, "Waaaera", 1, "VIP", 500f, 100 },
-                    { 2, "siimple", 2, "Normal", 50f, 400 }
+                    { 1, "#ff0000", 1, "VIP", 500f, 100 },
+                    { 2, "#ff0000", 2, "Normal", 50f, 400 }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_EventId",
                 table: "Categories",
                 column: "EventId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_EventTypeId",
-                table: "Events",
-                column: "EventTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_OrganizerId",
@@ -236,9 +205,6 @@ namespace event_service.Migrations
 
             migrationBuilder.DropTable(
                 name: "Organizers");
-
-            migrationBuilder.DropTable(
-                name: "Types");
         }
     }
 }

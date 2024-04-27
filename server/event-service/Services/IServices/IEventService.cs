@@ -12,12 +12,12 @@ namespace event_service.Services.IServices
         Task<Event> GetEventById(int id);
         Task<ICollection<Event>> GetEventsByOrganizer(string id);
         Task<Event> GetEventById(string OrganizerId, int id);
-        Task<ICollection<Event>> GetEventsByType(int id);
+        Task<ICollection<Event>> GetEventsByType(string name);
         Task<bool> CreateEvent(EventReqDto Event, string OrganizerId);
         Task<bool> DeleteEvent(string OrganizerId, int id);
         Task<bool> UpdateEvent(EventReqDto Event, string OrganizerId, int id);
         Task<bool> IsEventExist(int id);
-        Task<bool> IsTypeExist(int id);
+        Task<bool> IsTypeExist(string name);
         Task<bool> OrganizerHasEvents(string id);
     }
 }

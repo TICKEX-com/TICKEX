@@ -2,15 +2,32 @@ using AutoMapper;
 using Confluent.Kafka;
 using event_service.Data;
 using event_service.Extensions;
+using event_service.Protos;
 using event_service.Services;
 using event_service.Services.IServices;
+using Grpc.Net.Client.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Steeltoe.Discovery.Client;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
+/*builder.Services
+    .AddScoped<IGreeterService, GreeterService>()
+    .AddGrpcClient<Greeter.GreeterClient>((services, options) =>
+    {
+        options.Address = new Uri("http://localhost:5263");
+    })
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var handler = new HttpClientHandler();
+        handler.ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+        return handler;
+    });*/
 
 // Add Database
 
@@ -37,6 +54,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDiscoveryClient();
+
+
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -68,6 +87,8 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 
+
+
 // Mapper
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -89,6 +110,7 @@ builder.Services.AddHostedService<ConsumerService>();
 
 
 var app = builder.Build();
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
