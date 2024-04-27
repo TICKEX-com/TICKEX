@@ -9,7 +9,6 @@ namespace event_service.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Event> Events { get; set; }
-        public DbSet<EventType> Types { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Organizer> Organizers { get; set; }
@@ -52,11 +51,12 @@ namespace event_service.Data
                     Title = "Match",
                     Description = "i am a football match",
                     Date = DateTime.Now,
-                    Location = "maps",
-                    MinPrize = 500,
+                    City = "Tangier",
+                    Address = "address",
+                    Time = "1.5",
                     DesignId = 1,
                     OrganizerId = "1",
-                    EventTypeId = 1,
+                    EventType = "Sports",
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
                 }
                 );
@@ -66,39 +66,26 @@ namespace event_service.Data
                 {
                     Id = 2,
                     Title = "Match",
-                    Description = "i am a football match",
+                    Description = "i am a movie",
                     Date = DateTime.Now,
-                    Location = "maps",
-                    MinPrize = 400,
+                    City = "Tangier",
+                    Address = "address",
                     DesignId = 1,
+                    Time = "2",
                     OrganizerId = "2",
-                    EventTypeId = 1,
+                    EventType = "Cinema",
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995"
                 }
                 );
-                modelBuilder.Entity<EventType>().HasData(
-                new EventType
-                {
-                    Id = 1,
-                    Name = "Sport",
-                }
-                );
-                modelBuilder.Entity<EventType>().HasData(
-                new EventType
-                {
-                    Id = 2,
-                    Name = "Cinema",
-                }
-                );
-
+                
                 modelBuilder.Entity<Category>().HasData(
                 new Category
                 {
                     Id = 1,
                     Name = "VIP",
-                    Description = "Waaaera",
                     Seats = 100,
                     Prize = 500,
+                    Color = "#ff0000",
                     EventId = 1
                 }
                 );
@@ -108,9 +95,9 @@ namespace event_service.Data
                 {
                     Id = 2,
                     Name = "Normal",
-                    Description = "siimple",
                     Seats = 400,
                     Prize = 50,
+                    Color = "#ff0000",
                     EventId = 2
                 }
                 );

@@ -10,13 +10,29 @@ namespace event_service.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
+        // private readonly IGreeterService _greeterService;
         private readonly IMapper _mapper;
 
         public EventsController(IEventService eventService, IMapper mapper)
         {
             _eventService = eventService;
             _mapper = mapper;
+            // _greeterService = greeterService;
         }
+        // [HttpGet("grpc")]
+        // public async Task<IActionResult> TestGrpc()
+        // {
+        //     try
+        //     {
+        //         var test = await _greeterService.Hello();
+        //         Console.WriteLine(test);
+        //         return Ok(test);
+        //     } catch (Exception ex)
+        //     {
+        //         return StatusCode(500, $"{ex.Message}");
+
+        //     }
+        // }
 
         [HttpGet("Events")]
         public async Task<IActionResult> GetEvents()
@@ -61,20 +77,20 @@ namespace event_service.Controllers
             }
         }
 
-        [HttpGet("Events/Type/{id}")]
-        public async Task<IActionResult> GetEventsByType(int id)
+        [HttpGet("Events/Type/{name}")]
+        public async Task<IActionResult> GetEventsByType(string name)
         {
             try
             {
-                if (!await _eventService.IsTypeExist(id))
+                if (!await _eventService.IsTypeExist(name))
                     return NotFound();
 
-                var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(id));
+                var _events = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEventsByType(name));
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                return Ok(_event);
+                return Ok(_events);
             }
             catch (Exception ex)
             {

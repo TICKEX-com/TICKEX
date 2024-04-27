@@ -10,11 +10,10 @@ namespace event_service.Entities
         public int Id { get; set;}
         public string Name { get; set;}
         [Required]
-        public string Description { get; set;}
-        [Required]
         public int Seats { get; set;}
         [Required]
         public float Prize { get; set;}
+        public string Color { get; set; }
         public int EventId { get; set;}
         public Event Event { get; set;}
     }
