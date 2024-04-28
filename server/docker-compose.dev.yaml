@@ -1,7 +1,6 @@
 
 services:
 
-  # Kafka components
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     container_name: zookeeper
@@ -9,7 +8,11 @@ services:
       - '2181:2181'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-
+    depends_on:
+      authentication-service-db:
+        condition: service_healthy
+      event-service-db:
+        condition: service_healthy
 
   kafka:
     image: 'bitnami/kafka:latest'
@@ -22,21 +25,11 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092  
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes 
+      - KAFKA_CREATE_TOPICS=Tickex
     depends_on:
       - zookeeper
 
-
       
-  gateway-service:
-    build: ./gateway-service
-    container_name: gateway-service
-    ports:
-      - '8888:8888'
-    depends_on:
-      - discovery-service
-    environment:
-      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-
 
   discovery-service:
     build: ./discovery-service
@@ -44,20 +37,20 @@ services:
     expose:
       - '8761'
     ports:
-      - '8761:8761'      
+      - '8761:8761' 
 
 
-  # payment-service:
-  #   build: ./payment-service
-  #   container_name: payment-service
-  #   expose:
-  #     - '8090'
-  #   depends_on:
-  #     - discovery-service
-  #   ports:
-  #     - '8090:8090'       
-  #   environment:
-  #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    expose:
+      - '8090'
+    depends_on:
+      - discovery-service
+    ports:
+      - '8090:8090'       
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
 
 
 
@@ -69,7 +62,13 @@ services:
       - SA_PASSWORD=1234Strong!Password
     ports:
       - '1433:1433'
-
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "1234Strong!Password" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    
 
   event-service-db: 
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -79,7 +78,13 @@ services:
       - SA_PASSWORD=1234Strong!Password
     ports:
       - '1434:1433'
-   
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "1234Strong!Password" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
 
   authentication-service:
     container_name: authentication-service
@@ -91,7 +96,8 @@ services:
       - DB_NAME=Authentication
       - DB_SA_PASSWORD=1234Strong!Password
     depends_on:
-      - authentication-service-db
+      authentication-service-db:
+        condition: service_healthy
     ports:
       - '8085:8080'
       - '8086:8081'
@@ -107,7 +113,21 @@ services:
       - DB_NAME=Events
       - DB_SA_PASSWORD=1234Strong!Password
     depends_on:
-      - event-service-db
+      event-service-db:
+        condition: service_healthy
     ports:
       - '8080:8080'
       - '8081:8081'
+
+
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    expose:
+      - '8090'
+    depends_on:
+      - gateway-service
+    ports:
+      - '8090:8090'       
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka      
