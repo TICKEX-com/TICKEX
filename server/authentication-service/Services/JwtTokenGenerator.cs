@@ -27,7 +27,8 @@ namespace authentication_service.Services
                 new Claim(JwtRegisteredClaimNames.Email,user.Email),
                 new Claim("Id",user.Id),
                 new Claim(JwtRegisteredClaimNames.Name,user.UserName),
-                new Claim("PhoneNumber", user.PhoneNumber)
+                new Claim("PhoneNumber", user.PhoneNumber),
+                new Claim("IsActive", user.isActive.ToString())
             };
 
             claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
