@@ -53,6 +53,7 @@ namespace authentication_service.Controllers
             }
         }*/
         [HttpGet("Organizers")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetOrganizers()
         {
             try
@@ -85,10 +86,10 @@ namespace authentication_service.Controllers
         {
             try
             {
-                var organizer = _mapper.Map<OrganizerDto>(await _userService.GetOrganizerById(id));
+                var organizer = await _userService.GetOrganizerById(id);
                 if (organizer != null)
                 {
-                    await _producerService.publish("Tickex", organizer);
+                    // await _producerService.publish("Tickex", organizer);
                     _responseDto.Result = organizer;
                     _responseDto.Message = "Message send successfuly";
                     return Ok(_responseDto);
@@ -108,12 +109,19 @@ namespace authentication_service.Controllers
             }
         }
 
-        [HttpPost("Update/Organizer/{id}")]
-        [Authorize(Roles = "ORGANIZER")]
+        [HttpPut("Organizer/{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdateOrganizer([FromBody] UpdateReqOrganizerDto requestDto, string id)
         {
             try
-            {
+            { 
+                if (!await _userService.IsOrganizerExist(id))
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Organizer not found";
+                    return NotFound(_responseDto);
+                }
+
                 var errorMessage = await _userService.UpdateOrganizer(requestDto, id);
                 if (errorMessage != "success")
                 {
@@ -123,8 +131,68 @@ namespace authentication_service.Controllers
                 }
                 var organizer = _mapper.Map<OrganizerDto>(requestDto);
                 organizer.Id = id;
-                await _producerService.publish("Tickex", organizer);
+                if (organizer.isActive == true)
+                {
+                    await _producerService.publish("Tickex", organizer);
+                }
                 _responseDto.Result = organizer;
+                return Ok(_responseDto);
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
+        }
+
+        [HttpPut("Accept/Organizer/{id}")]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> AcceptOrganizer(string id)
+        {
+            try
+            {
+                if ( ! await _userService.IsOrganizerExist(id))
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Organizer not found";
+                    return NotFound(_responseDto);
+                }
+
+                var isAccepted = await _userService.AcceptOrganizer(id);
+                if (!isAccepted)
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Organizer not accepted";
+                    return BadRequest(_responseDto);
+                }
+                var organizer = await _userService.GetOrganizerById(id);
+                await _producerService.publish("Tickex", organizer);
+                _responseDto.Message = "Organizer is accepted";
+                _responseDto.Result = organizer;
+                return Ok(_responseDto);
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
+        }
+        [HttpDelete("Organizer/{id}")]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> DeleteOrganizer(string id)
+        {
+            try
+            {
+                var isdeleted = await _userService.DeleteOrganizer(id);
+                if (!isdeleted)
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Organizer not deleted";
+                    return BadRequest(_responseDto);
+                }
+                _responseDto.Message = "Organizer is deleted";
                 return Ok(_responseDto);
             }
             catch (Exception ex)

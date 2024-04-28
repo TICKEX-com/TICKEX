@@ -47,6 +47,7 @@ namespace authentication_service.Services
 
         public async Task<LoginResponseDto> Login(HttpContext httpContext, LoginRequestDto requestDto)
         {
+            try { 
             var user = _db.Users.FirstOrDefault(u => u.UserName.ToLower() == requestDto.UserName.ToLower());
             bool isValid = await _userManager.CheckPasswordAsync(user, requestDto.Password);
 
@@ -84,6 +85,11 @@ namespace authentication_service.Services
             };
 
             return loginResponseDto;
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         // Register a Client
@@ -182,7 +188,10 @@ namespace authentication_service.Services
                 lastname = requestDto.lastname,
                 OrganizationName = requestDto.OrganizationName,
                 PhoneNumber = requestDto.PhoneNumber,
-                certificat = requestDto.Certificat
+                certificate = requestDto.Certificat,
+                profileImage = requestDto.profileImage,
+                currency = requestDto.currency,
+                ville = requestDto.ville
             };
             try
             {

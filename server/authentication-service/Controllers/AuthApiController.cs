@@ -65,7 +65,6 @@ namespace authentication_service.Controllers
                 var organizer = _mapper.Map<OrganizerDto>(requestDto);
                 organizer.Id = await _userService.GetOrganizerIdByUsername(requestDto.Username);
                 _response.Result = organizer;
-                await _producerService.publish("Tickex", organizer);
                 return Ok(_response);
             }
             catch (Exception ex)
