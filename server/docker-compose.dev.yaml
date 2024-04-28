@@ -40,15 +40,13 @@ services:
       - '8761:8761' 
 
 
-  payment-service:
-    build: ./payment-service
-    container_name: payment-service
-    expose:
-      - '8090'
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - '8888:8888'
     depends_on:
       - discovery-service
-    ports:
-      - '8090:8090'       
     environment:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
 
