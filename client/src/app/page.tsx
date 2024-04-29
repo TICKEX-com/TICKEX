@@ -9,11 +9,12 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 
+
 export default function Home() {
   return (
     <main className="flex justify-center" >
-      <Carousel className="w-full max-w-xs">
-      <CarouselContent>
+      <Carousel className="w-full max-w-xs ">
+      <CarouselContent >
         {Array.from({ length: 5 }).map((_, index) => (
           <CarouselItem key={index}>
             <div className="p-1">

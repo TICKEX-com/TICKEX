@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿namespace event_service.Entities
 {
     public class Organizer
@@ -10,3 +11,11 @@
         public string PhoneNumber { get; set; }
     }
 }
+=======
+﻿namespace event_service.Entities
+{
+    public class Organizer
+    {
+    }
+}
+>>>>>>> authentication
