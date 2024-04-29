@@ -12,7 +12,7 @@ using authentication_service.Data;
 namespace authentication_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240426174821_final")]
+    [Migration("20240428164202_final")]
     partial class final
     {
         /// <inheritdoc />
@@ -50,6 +50,14 @@ namespace authentication_service.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
+                            Name = "ADMIN",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -137,6 +145,13 @@ namespace authentication_service.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                            RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -214,7 +229,10 @@ namespace authentication_service.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("certificat")
+                    b.Property<string>("certificate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("currency")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("date_naissance")
@@ -223,7 +241,13 @@ namespace authentication_service.Migrations
                     b.Property<string>("firstname")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("lastname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("profileImage")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ville")
@@ -240,6 +264,33 @@ namespace authentication_service.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "9cac2bf2-6186-48b6-b50f-219bd7b114f7",
+                            Email = "Admin@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "ADMIN",
+                            OrganizationName = "AAAA",
+                            PasswordHash = "AQAAAAIAAYagAAAAEM5N3o/jG8p8i45uyLjrgP6c6nKdMZbURXDSBUBb1SxZqqnKeC1fuXJji3EkdcCzRw==",
+                            PhoneNumber = "0674110011",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "716b67d6-f53b-4384-8a63-7db1e16e5a52",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin",
+                            certificate = "",
+                            currency = "MAD",
+                            date_naissance = "13-02-2001",
+                            firstname = "Admin",
+                            isActive = false,
+                            lastname = "Admin",
+                            profileImage = "",
+                            ville = "Casablanca"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

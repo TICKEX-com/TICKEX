@@ -32,10 +32,13 @@ namespace authentication_service.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     firstname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     lastname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    profileImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    currency = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ville = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrganizationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     date_naissance = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    certificat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    certificate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -161,6 +164,21 @@ namespace authentication_service.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "2c5e174e-3b0e-446f-86af-483d56fd7210", null, "ADMIN", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "OrganizationName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "certificate", "currency", "date_naissance", "firstname", "isActive", "lastname", "profileImage", "ville" },
+                values: new object[] { "8e445865-a24d-4543-a6c6-9443d048cdb9", 0, "9cac2bf2-6186-48b6-b50f-219bd7b114f7", "Admin@gmail.com", true, false, null, null, "ADMIN", "AAAA", "AQAAAAIAAYagAAAAEM5N3o/jG8p8i45uyLjrgP6c6nKdMZbURXDSBUBb1SxZqqnKeC1fuXJji3EkdcCzRw==", "0674110011", false, "716b67d6-f53b-4384-8a63-7db1e16e5a52", false, "Admin", "", "MAD", "13-02-2001", "Admin", false, "Admin", "", "Casablanca" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "2c5e174e-3b0e-446f-86af-483d56fd7210", "8e445865-a24d-4543-a6c6-9443d048cdb9" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
