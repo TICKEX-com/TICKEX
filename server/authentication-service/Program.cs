@@ -15,9 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-/*var dbHost = "127.0.0.1,1433";
-var dbName = "Authentication";
-var dbPassword = "1234Strong!Password";*/
+//var dbHost = "127.0.0.1,1433";
+//var dbName = "Authentication";
+//var dbPassword = "1234Strong!Password";
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
@@ -125,10 +125,11 @@ void ApplyMigration()
                 _db.Database.EnsureDeleted();
                 _db.Database.Migrate();
             }
-        } catch(Exception ex) 
+        }
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
-        
+
     }
 }

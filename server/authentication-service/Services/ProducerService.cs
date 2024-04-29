@@ -21,9 +21,21 @@ namespace authentication_service.Services
             {
                 try
                 {
-                    await producer.ProduceAsync(topic, new Message<Null, OrganizerDto> { Value = organizerDto });
-                    producer.Flush(TimeSpan.FromSeconds(10));
-                    return true;
+                    var produceTask = producer.ProduceAsync(topic, new Message<Null, OrganizerDto> { Value = organizerDto });
+
+                    // Wait for either the produce task to complete or 10 seconds timeout
+                    var completedTask = await Task.WhenAny(produceTask, Task.Delay(TimeSpan.FromSeconds(5)));
+
+                    if (completedTask == produceTask)
+                    {
+                        producer.Flush(TimeSpan.FromSeconds(5));
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Publish operation timed out after 5 seconds.");
+                        return false;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -31,8 +43,6 @@ namespace authentication_service.Services
                     return false;
                 }
             }
-
-
         }
     }
 }

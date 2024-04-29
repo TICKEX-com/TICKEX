@@ -15,7 +15,7 @@ namespace authentication_service.Services
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public UserService(DataContext dataContext, IMapper mapper, UserManager<User> userManager) 
+        public UserService(DataContext dataContext, IMapper mapper, UserManager<User> userManager)
         {
             _mapper = mapper;
             _dataContext = dataContext;
@@ -43,13 +43,13 @@ namespace authentication_service.Services
                 firstname = user.firstname,
                 lastname = user.lastname,
                 PhoneNumber = user.PhoneNumber,
-                Role = roles.FirstOrDefault() // Prend le premier rôle trouvé, à adapter selon votre logique
+                Role = roles.FirstOrDefault()
             };
 
             return userDto;
         }
 
-        public async Task<ICollection<UserDto>> GetOrganizers()
+        public async Task<ICollection<OrganizerDto>> GetOrganizers()
         {
             // Get all users
             var users = await _dataContext.Users.ToListAsync();
@@ -58,7 +58,7 @@ namespace authentication_service.Services
             var organizerUsers = users.Where(u => _userManager.IsInRoleAsync(u, "ORGANIZER").Result).ToList();
 
             // Map filtered users to UserDto
-            var organizerDtos = _mapper.Map<ICollection<UserDto>>(organizerUsers);
+            var organizerDtos = _mapper.Map<ICollection<OrganizerDto>>(organizerUsers);
 
             return organizerDtos;
         }
@@ -70,18 +70,16 @@ namespace authentication_service.Services
             {
                 // Récupérer le rôle de l'utilisateur
                 var roles = await _userManager.GetRolesAsync(user);
-                if (roles.FirstOrDefault() == "CLIENT")
+                if (roles.FirstOrDefault() == "CLIENT" || roles.FirstOrDefault() == "ADMIN")
                 {
                     return null;
                 }
                 // Création de l'objet UserDto à partir de l'utilisateur
-                var userDto = _mapper.Map<UserDto>(user);
-                var organizerDto = _mapper.Map<OrganizerDto>(userDto);
+                var organizerDto = _mapper.Map<OrganizerDto>(user);
 
                 return organizerDto;
             }
             return null;
-            
         }
 
         public async Task<User> GetOrganizerById2(string id)
@@ -173,7 +171,10 @@ namespace authentication_service.Services
             existingOrganizer.lastname = requestDto.lastname;
             existingOrganizer.OrganizationName = requestDto.OrganizationName;
             existingOrganizer.PhoneNumber = requestDto.PhoneNumber;
- 
+            existingOrganizer.profileImage = requestDto.profileImage;
+            existingOrganizer.currency = requestDto.currency;
+            existingOrganizer.ville = requestDto.ville;
+
             try
             {
                 // Update user in the database
@@ -191,6 +192,78 @@ namespace authentication_service.Services
             {
                 return ex.Message;
             }
+        }
+
+        public async Task<bool> AcceptOrganizer(string id)
+        {
+            var organizer = await GetOrganizerById2(id);
+            if (organizer == null)
+            {
+                return false;
+            }
+            organizer.isActive = true;
+            var result = await _userManager.UpdateAsync(organizer);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteOrganizer(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                // Failed to delete user
+                return false;
+            }
+
+            return true; // User deleted successfully
+
+        }
+
+        public async Task<bool> IsOrganizerExist(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.FirstOrDefault() == "CLIENT" || roles.FirstOrDefault() == "ADMIN")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public async Task<bool> IsOrganizerAccepted(string id)
+        {
+            if( await IsOrganizerExist(id))
+            {
+                var organizer = await _userManager.FindByIdAsync(id);
+                if (organizer.isActive)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
