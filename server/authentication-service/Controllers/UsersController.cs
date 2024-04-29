@@ -122,21 +122,36 @@ namespace authentication_service.Controllers
                     return NotFound(_responseDto);
                 }
 
-                var errorMessage = await _userService.UpdateOrganizer(requestDto, id);
-                if (errorMessage != "success")
-                {
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = errorMessage;
-                    return BadRequest(_responseDto);
-                }
                 var organizer = _mapper.Map<OrganizerDto>(requestDto);
                 organizer.Id = id;
-                if (organizer.isActive == true)
+                organizer.isActive = await _userService.IsOrganizerAccepted(id);
+                if (organizer.isActive)
                 {
-                    await _producerService.publish("Tickex", organizer);
+                    var response = await _producerService.publish("Tickex", organizer);
+                    if (response)
+                    {
+                        Console.WriteLine("the organizer is published");
+                        var errorMessage = await _userService.UpdateOrganizer(requestDto, id);
+                        if (errorMessage != "success")
+                        {
+                            _responseDto.IsSuccess = false;
+                            _responseDto.Message = errorMessage;
+                            return BadRequest(_responseDto);
+                        }
+                        _responseDto.Message = "the organizer is published and it is updated in DB";
+                        _responseDto.Result = organizer;
+                        return Ok(_responseDto);
+                    }
+                    else
+                    {
+                        _responseDto.Message = "the organizer isn't updated in DB due to connection failure to Kafka";
+                        _responseDto.IsSuccess = false;
+                        return BadRequest(_responseDto);
+                    }
                 }
-                _responseDto.Result = organizer;
-                return Ok(_responseDto);
+                _responseDto.Message = "the organizer isn't accepted";
+                _responseDto.IsSuccess = false;
+                return BadRequest(_responseDto);
             }
             catch (Exception ex)
             {
@@ -159,18 +174,35 @@ namespace authentication_service.Controllers
                     return NotFound(_responseDto);
                 }
 
-                var isAccepted = await _userService.AcceptOrganizer(id);
-                if (!isAccepted)
-                {
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Organizer not accepted";
-                    return BadRequest(_responseDto);
-                }
                 var organizer = await _userService.GetOrganizerById(id);
-                await _producerService.publish("Tickex", organizer);
-                _responseDto.Message = "Organizer is accepted";
+
+                if ( organizer.isActive ) {
+                    _responseDto.Message = "Organizer is already accepted";
+                    _responseDto.Result = organizer;
+                    return Ok(_responseDto);
+                }
+
+                organizer.isActive = true;
+                var response = await _producerService.publish("Tickex", organizer);
+                if (response)
+                {
+                    var isAccepted = await _userService.AcceptOrganizer(id);
+                    if (!isAccepted)
+                    {
+                        _responseDto.IsSuccess = false;
+                        _responseDto.Message = "Organizer not accepted";
+                        return BadRequest(_responseDto);
+                    }
+                    else
+                    {
+                        _responseDto.Message = "Organizer is accepted";
+                        _responseDto.Result = organizer;
+                        return Ok(_responseDto);
+                    }
+                }
+                _responseDto.Message = "the organizer isn't accepted in DB due to connection failure to Kafka";
                 _responseDto.Result = organizer;
-                return Ok(_responseDto);
+                return BadRequest(_responseDto);
             }
             catch (Exception ex)
             {

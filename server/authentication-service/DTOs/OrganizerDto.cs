@@ -12,6 +12,6 @@
         public string currency { get; set; }
         public string PhoneNumber { get; set; }
         public string OrganizationName { get; set; }
-        public bool isActive { get; set; } = false;
+        public bool isActive { get; set; }
     }
 }

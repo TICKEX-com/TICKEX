@@ -15,7 +15,7 @@ namespace authentication_service.Services
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public UserService(DataContext dataContext, IMapper mapper, UserManager<User> userManager) 
+        public UserService(DataContext dataContext, IMapper mapper, UserManager<User> userManager)
         {
             _mapper = mapper;
             _dataContext = dataContext;
@@ -174,7 +174,7 @@ namespace authentication_service.Services
             existingOrganizer.profileImage = requestDto.profileImage;
             existingOrganizer.currency = requestDto.currency;
             existingOrganizer.ville = requestDto.ville;
- 
+
             try
             {
                 // Update user in the database
@@ -197,9 +197,9 @@ namespace authentication_service.Services
         public async Task<bool> AcceptOrganizer(string id)
         {
             var organizer = await GetOrganizerById2(id);
-            if ( organizer == null  ) 
-            { 
-                return false; 
+            if (organizer == null)
+            {
+                return false;
             }
             organizer.isActive = true;
             var result = await _userManager.UpdateAsync(organizer);
@@ -237,9 +237,13 @@ namespace authentication_service.Services
         public async Task<bool> IsOrganizerExist(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            var roles = await _userManager.GetRolesAsync(user);
+            if (user == null)
+            {
+                return false;
+            }
 
-            if (user == null || roles.FirstOrDefault() == "CLIENT" || roles.FirstOrDefault() == "ADMIN")
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.FirstOrDefault() == "CLIENT" || roles.FirstOrDefault() == "ADMIN")
             {
                 return false;
             }
@@ -247,6 +251,19 @@ namespace authentication_service.Services
             {
                 return true;
             }
+        }
+
+        public async Task<bool> IsOrganizerAccepted(string id)
+        {
+            if( await IsOrganizerExist(id))
+            {
+                var organizer = await _userManager.FindByIdAsync(id);
+                if (organizer.isActive)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

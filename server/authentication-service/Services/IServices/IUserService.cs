@@ -15,5 +15,6 @@ namespace authentication_service.Services.IServices
         public Task<string> UpdateOrganizer(UpdateReqOrganizerDto requestDto, string id);
         public Task<bool> AcceptOrganizer(string id);
         public Task<bool> DeleteOrganizer(string id);
+        public Task<bool> IsOrganizerAccepted(string id);
     }
 }

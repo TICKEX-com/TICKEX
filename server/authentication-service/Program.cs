@@ -125,10 +125,11 @@ void ApplyMigration()
                 _db.Database.EnsureDeleted();
                 _db.Database.Migrate();
             }
-        } catch(Exception ex) 
+        }
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
-        
+
     }
 }
