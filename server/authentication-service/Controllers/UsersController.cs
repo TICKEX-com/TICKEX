@@ -1,4 +1,4 @@
-﻿using authentication_service.DTOs;
+using authentication_service.DTOs;
 using authentication_service.Entities;
 using authentication_service.Extensions;
 using authentication_service.Services;
