@@ -15,9 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//var dbHost = "127.0.0.1,1433";
-//var dbName = "Authentication";
-//var dbPassword = "1234Strong!Password";
+/*var dbHost = "127.0.0.1,1433";
+var dbName = "Authentication";
+var dbPassword = "1234Strong!Password";*/
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
@@ -87,7 +87,7 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-builder.AddAppAuthetication();
+builder.AddAppAuthentication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

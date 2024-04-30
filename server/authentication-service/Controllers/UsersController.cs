@@ -31,6 +31,32 @@ namespace authentication_service.Controllers
             _configuration = configuration;
         }
 
+        private bool Authorize(string role)
+        {
+            // Retrieve JWT token from the request headers
+            var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+            if (string.IsNullOrEmpty(jwtToken))
+            {
+                return false;
+            }
+
+            // Initialize JwtTokenValidator with the issuer, audience, and secret key
+            var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+
+            // Validate JWT token and extract user roles
+            var roles = tokenValidator.ValidateToken(jwtToken);
+
+            if (roles.Contains(role))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
         /*[HttpGet("organizer/{topic}/{username}")]
         public async Task<IActionResult> GetOrganizerByUsername(string topic, string username)
@@ -63,22 +89,8 @@ namespace authentication_service.Controllers
         {
             try
             {
-                // Retrieve JWT token from the request headers
-                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
-                if (string.IsNullOrEmpty(jwtToken))
-                {
-                    return Unauthorized("JWT token is missing");
-                }
-
-                // Initialize JwtTokenValidator with the issuer, audience, and secret key
-                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
-
-                // Validate JWT token and extract user roles
-                var roles = tokenValidator.ValidateToken(jwtToken);
-
                 // Check if the user has the required role ("ADMIN")
-                if (roles.Contains("ADMIN"))
+                if (Authorize("ADMIN"))
                 {
                     // User is authorized, proceed with fetching organizers
                     var organizers = await _userService.GetOrganizers();
@@ -117,21 +129,8 @@ namespace authentication_service.Controllers
         {
             try
             {
-                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
-                if (string.IsNullOrEmpty(jwtToken))
-                {
-                    return Unauthorized("JWT token is missing");
-                }
-
-                // Initialize JwtTokenValidator with the issuer, audience, and secret key
-                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
-
-                // Validate JWT token and extract user roles
-                var roles = tokenValidator.ValidateToken(jwtToken);
-
                 // Check if the user has the required role ("ADMIN")
-                if (roles.Contains("ADMIN"))
+                if (Authorize("ADMIN"))
                 {
                     var organizer = await _userService.GetOrganizerById(id);
                     if (organizer != null)
@@ -170,21 +169,8 @@ namespace authentication_service.Controllers
         {
             try
             {
-                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
-                if (string.IsNullOrEmpty(jwtToken))
-                {
-                    return Unauthorized("JWT token is missing");
-                }
-
-                // Initialize JwtTokenValidator with the issuer, audience, and secret key
-                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
-
-                // Validate JWT token and extract user roles
-                var roles = tokenValidator.ValidateToken(jwtToken);
-
                 // Check if the user has the required role ("ADMIN")
-                if (roles.Contains("ADMIN"))
+                if (Authorize("ADMIN"))
                 {
                     if (!await _userService.IsOrganizerExist(id))
                     {
@@ -245,21 +231,8 @@ namespace authentication_service.Controllers
         {
             try
             {
-                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
-                if (string.IsNullOrEmpty(jwtToken))
-                {
-                    return Unauthorized("JWT token is missing");
-                }
-
-                // Initialize JwtTokenValidator with the issuer, audience, and secret key
-                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
-
-                // Validate JWT token and extract user roles
-                var roles = tokenValidator.ValidateToken(jwtToken);
-
                 // Check if the user has the required role ("ADMIN")
-                if (roles.Contains("ADMIN"))
+                if (Authorize("ADMIN"))
                 {
                     if (!await _userService.IsOrganizerExist(id))
                     {
@@ -319,24 +292,11 @@ namespace authentication_service.Controllers
         {
             try
             {
-                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
-                if (string.IsNullOrEmpty(jwtToken))
-                {
-                    return Unauthorized("JWT token is missing");
-                }
-
-                // Initialize JwtTokenValidator with the issuer, audience, and secret key
-                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
-
-                // Validate JWT token and extract user roles
-                var roles = tokenValidator.ValidateToken(jwtToken);
-
                 // Check if the user has the required role ("ADMIN")
-                if (roles.Contains("ADMIN"))
+                if (Authorize("ADMIN"))
                 {
-                    var isdeleted = await _userService.DeleteOrganizer(id);
-                    if (!isdeleted)
+                    var isDeleted = await _userService.DeleteOrganizer(id);
+                    if (!isDeleted)
                     {
                         _responseDto.IsSuccess = false;
                         _responseDto.Message = "Organizer not deleted";

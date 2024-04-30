@@ -76,7 +76,7 @@ namespace authentication_service.Services
                 var cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
-                    Expires = DateTime.UtcNow.AddDays(7),
+                    Expires = DateTime.UtcNow.AddHours(3),
                 };
 
                 httpContext.Response.Cookies.Append("jwtToken", token, cookieOptions);

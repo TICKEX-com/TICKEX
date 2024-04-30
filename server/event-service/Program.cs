@@ -94,7 +94,7 @@ IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.AddAppAuthetication();
+builder.AddAppAuthentication();
 builder.Services.AddAuthorization();
 
 var consumerConfig = new ConsumerConfig();

@@ -6,7 +6,7 @@ namespace authentication_service.Extensions
 {
     public static class Auth
     {
-        public static WebApplicationBuilder AddAppAuthetication(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddAppAuthentication(this WebApplicationBuilder builder)
         {
             var settingsSection = builder.Configuration.GetSection("ApiSettings");
             var jwtOptions = settingsSection.GetSection("JwtOptions");

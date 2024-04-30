@@ -12,6 +12,7 @@ namespace event_service.DTOs
         public string Time { get; set; }
         public string EventType { get; set; }
         public string Poster { get; set; }
+        public string Currency { get; set; }
         public List<CategoryDto> Categories { get; set; }
         public List<ImageDto>? Images { get; set; } = null;
     }
