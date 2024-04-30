@@ -12,7 +12,7 @@ namespace event_service.Entities
         [Required]
         public int Seats { get; set;}
         [Required]
-        public float Prize { get; set;}
+        public float Price { get; set;}
         public string Color { get; set; }
         public int EventId { get; set;}
         public Event Event { get; set;}

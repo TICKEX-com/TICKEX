@@ -92,7 +92,6 @@ namespace authentication_service.Controllers
             {
                 return StatusCode(500, $"{ex.Message}");
             }
-
         }
 
         [HttpPost("Logout")]

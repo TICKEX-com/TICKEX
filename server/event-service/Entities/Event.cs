@@ -20,6 +20,8 @@ namespace event_service.Entities
         [Required]
         public string City { get; set; }
         [Required]
+        public string Currency { get; set; } = "MAD";
+        [Required]
         public string Address { get; set; }
         public float Duration { get; set; }
         [NotMapped]

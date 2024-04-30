@@ -35,11 +35,11 @@ namespace event_service.Controllers
         // }
 
         [HttpGet("Events")]
-        public async Task<IActionResult> GetEvents()
+        public async Task<IActionResult> GetEvents(int pageNumber = 1)
         {
             try
             {
-                var events = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEvents());
+                var events = await _eventService.GetEvents(pageNumber);
 
                 if (events.IsNullOrEmpty())
                     return NotFound();
@@ -77,15 +77,16 @@ namespace event_service.Controllers
             }
         }
 
-        [HttpGet("Events/Type/{name}")]
-        public async Task<IActionResult> GetEventsByType(string name)
+        /*[HttpGet("Events/Type/{type}")]
+        public async Task<IActionResult> GetEventsByType(string type)
         {
             try
             {
-                if (!await _eventService.IsTypeExist(name))
-                    return NotFound();
 
-                var _events = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEventsByType(name));
+                var _events = await _eventService.GetEventsByType(type);
+
+                if (_events.IsNullOrEmpty())
+                    return NotFound();
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
@@ -96,14 +97,14 @@ namespace event_service.Controllers
             {
                 return StatusCode(500, $"{ex.Message}");
             }
-        }
+        }*/
 
-        [HttpGet("Events/Date/{Date}")]
+        /*[HttpGet("Events/Date/{Date}")]
         public async Task<IActionResult> GetEventsByDate(string Date)
         {
             try
             {
-                var events = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEventsByDate(Date));
+                var events = await _eventService.GetEventsByDate(Date);
 
                 if (events.IsNullOrEmpty())
                     return NotFound();
@@ -117,14 +118,14 @@ namespace event_service.Controllers
             {
                 return StatusCode(500, $"{ex.Message}");
             }
-        }
+        }*/
 
         [HttpGet("Events/Title/{title}")]
         public async Task<IActionResult> GetEventsByTitle(string title)
         {
             try
             {
-                var events = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEventsByTitle(title));
+                var events = await _eventService.GetEventsByTitle(title);
 
                 if (events.IsNullOrEmpty())
                     return NotFound();
@@ -139,6 +140,28 @@ namespace event_service.Controllers
                 return StatusCode(500, $"{ex.Message}");
             }
         }
+
+        [HttpGet("Events/Filter")]
+        public async Task<IActionResult> FilterEvents(string Date = null, string City = null, string EventType = null, float MinPrice = 0, float MaxPrice = 0, int pageNumber = 1)
+        {
+            try
+            {
+                var filteredEvents = await _eventService.FilterEvents(Date, City, EventType, MinPrice, MaxPrice, pageNumber);
+
+                if (filteredEvents.IsNullOrEmpty())
+                    return NotFound();
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                return Ok(filteredEvents);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{ex.Message}");
+            }
+        }
+
 
         [HttpGet("Events/{id}/Categories")]
         public async Task<IActionResult> GetCategoriesByEventId(int id)

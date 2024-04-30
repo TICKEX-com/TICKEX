@@ -53,11 +53,12 @@ namespace event_service.Data
                     Date = DateTime.Now,
                     City = "Tangier",
                     Address = "address",
-                    Time = "1.5",
+                    Time = "13h00",
                     DesignId = 1,
                     OrganizerId = "1",
                     EventType = "Sports",
-                    Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5"
+                    Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
+                    Currency = "€"
                 }
                 );
 
@@ -71,10 +72,11 @@ namespace event_service.Data
                     City = "Tangier",
                     Address = "address",
                     DesignId = 1,
-                    Time = "2",
+                    Time = "00h00",
                     OrganizerId = "2",
                     EventType = "Cinema",
-                    Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995"
+                    Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995",
+                    Currency = "$"
                 }
                 );
                 
@@ -84,7 +86,7 @@ namespace event_service.Data
                     Id = 1,
                     Name = "VIP",
                     Seats = 100,
-                    Prize = 500,
+                    Price = 500,
                     Color = "#ff0000",
                     EventId = 1
                 }
@@ -95,13 +97,37 @@ namespace event_service.Data
                 {
                     Id = 2,
                     Name = "Normal",
+                    Seats = 500,
+                    Price = 60,
+                    Color = "#ff0000",
+                    EventId = 1
+                }
+                );
+
+                modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 3,
+                    Name = "Normal",
                     Seats = 400,
-                    Prize = 50,
+                    Price = 50,
                     Color = "#ff0000",
                     EventId = 2
                 }
                 );
-                
+
+                modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 4,
+                    Name = "VIP",
+                    Seats = 100,
+                    Price = 700,
+                    Color = "#ff0000",
+                    EventId = 2
+                }
+                );
+
 
                 modelBuilder.Entity<Event>()
                             .HasMany(e => e.Clients)

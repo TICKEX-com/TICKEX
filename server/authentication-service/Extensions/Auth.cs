@@ -6,7 +6,7 @@ namespace authentication_service.Extensions
 {
     public static class Auth
     {
-        public static WebApplicationBuilder AddAppAuthetication(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddAppAuthentication(this WebApplicationBuilder builder)
         {
             var settingsSection = builder.Configuration.GetSection("ApiSettings");
             var jwtOptions = settingsSection.GetSection("JwtOptions");
@@ -18,6 +18,7 @@ namespace authentication_service.Extensions
 
             var key = Encoding.ASCII.GetBytes(secret);
 
+            builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // Inject IConfiguration
 
             builder.Services.AddAuthentication(x =>
             {

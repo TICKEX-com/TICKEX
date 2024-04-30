@@ -56,7 +56,7 @@ namespace event_service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Prize")
+                    b.Property<float>("Price")
                         .HasColumnType("real");
 
                     b.Property<int>("Seats")
@@ -75,17 +75,35 @@ namespace event_service.Migrations
                             Color = "#ff0000",
                             EventId = 1,
                             Name = "VIP",
-                            Prize = 500f,
+                            Price = 500f,
                             Seats = 100
                         },
                         new
                         {
                             Id = 2,
                             Color = "#ff0000",
+                            EventId = 1,
+                            Name = "Normal",
+                            Price = 60f,
+                            Seats = 500
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Color = "#ff0000",
                             EventId = 2,
                             Name = "Normal",
-                            Prize = 50f,
+                            Price = 50f,
                             Seats = 400
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Color = "#ff0000",
+                            EventId = 2,
+                            Name = "VIP",
+                            Price = 700f,
+                            Seats = 100
                         });
                 });
 
@@ -115,6 +133,10 @@ namespace event_service.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Currency")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -169,7 +191,8 @@ namespace event_service.Migrations
                             Id = 1,
                             Address = "address",
                             City = "Tangier",
-                            Date = new DateTime(2024, 4, 27, 19, 6, 12, 989, DateTimeKind.Local).AddTicks(6657),
+                            Currency = "€",
+                            Date = new DateTime(2024, 4, 30, 15, 1, 28, 755, DateTimeKind.Local).AddTicks(1397),
                             Description = "i am a football match",
                             DesignId = 1,
                             Duration = 0f,
@@ -178,7 +201,7 @@ namespace event_service.Migrations
                             On_sell = true,
                             OrganizerId = "1",
                             Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
-                            Time = "1.5",
+                            Time = "13h00",
                             Title = "Match"
                         },
                         new
@@ -186,7 +209,8 @@ namespace event_service.Migrations
                             Id = 2,
                             Address = "address",
                             City = "Tangier",
-                            Date = new DateTime(2024, 4, 27, 19, 6, 12, 989, DateTimeKind.Local).AddTicks(6719),
+                            Currency = "$",
+                            Date = new DateTime(2024, 4, 30, 15, 1, 28, 755, DateTimeKind.Local).AddTicks(1456),
                             Description = "i am a movie",
                             DesignId = 1,
                             Duration = 0f,
@@ -195,7 +219,7 @@ namespace event_service.Migrations
                             On_sell = true,
                             OrganizerId = "2",
                             Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995",
-                            Time = "2",
+                            Time = "00h00",
                             Title = "Match"
                         });
                 });

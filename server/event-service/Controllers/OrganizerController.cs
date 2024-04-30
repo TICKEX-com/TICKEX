@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using event_service.DTOs;
 using event_service.Entities;
+using event_service.Extensions;
 using event_service.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Management;
 
 namespace event_service.Controllers
 {
@@ -14,12 +17,41 @@ namespace event_service.Controllers
         private readonly IEventService _eventService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public OrganizerController(IEventService eventService, IMapper mapper, IUserService userService)
+
+        public OrganizerController(IEventService eventService, IMapper mapper, IUserService userService, IConfiguration configuration)
         {
             _eventService = eventService;
             _mapper = mapper;
             _userService = userService;
+            _configuration = configuration;
+        }
+
+        private bool Authorize(string role)
+        {
+            // Retrieve JWT token from the request headers
+            var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+            if (string.IsNullOrEmpty(jwtToken))
+            {
+                return false;
+            }
+
+            // Initialize JwtTokenValidator with the issuer, audience, and secret key
+            var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+
+            // Validate JWT token and extract user roles
+            var roles = tokenValidator.ValidateToken(jwtToken);
+
+            if (roles.Contains(role))
+            {
+                return true;
+            } 
+            else
+            {
+                return false;
+            }
         }
 
         [HttpGet("Organizers")]
@@ -45,19 +77,27 @@ namespace event_service.Controllers
 
 
         [HttpPost("Organizer/{OrganizerId}/Events")]
-        [Authorize(Roles = "ORGANIZER")]
         public async Task<IActionResult> CreateEvent([FromBody] EventReqDto ev, string OrganizerId)
         {
             try
             {
-                if (await _eventService.CreateEvent(ev, OrganizerId))
+                if (Authorize("ORGANIZER"))
                 {
-                    return Ok(ev);
+                    if (await _eventService.CreateEvent(ev, OrganizerId))
+                    {
+                        return Ok(ev);
+                    }
+                    else
+                    {
+                        return BadRequest("Failed to create event.");
+                    }
                 }
                 else
                 {
-                    return BadRequest("Failed to create event.");
+                    // User does not have the required role
+                    return Unauthorized();
                 }
+
             }
             catch (Exception ex)
             {
@@ -66,20 +106,27 @@ namespace event_service.Controllers
         }
 
         [HttpGet("Organizer/{OrganizerId}/Events")]
-        [Authorize(Roles = "ORGANIZER")]
-        public async Task<IActionResult> GetAllEvents(string OrganizerId)
+        public async Task<IActionResult> GetAllEvents(string OrganizerId, int pageNumber = 1)
         {
             try
             {
-                if (!await _eventService.OrganizerHasEvents(OrganizerId))
-                    return NotFound();
+                if (Authorize("ORGANIZER"))
+                {
+                    if (!await _eventService.OrganizerHasEvents(OrganizerId))
+                        return NotFound();
 
-                var events = _mapper.Map<ICollection<EventsDto>>(await _eventService.GetEventsByOrganizer(OrganizerId));
+                    var events = await _eventService.GetEventsByOrganizer(OrganizerId, pageNumber);
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                    if (!ModelState.IsValid)
+                        return BadRequest(ModelState);
 
-                return Ok(events);
+                    return Ok(events);
+                }
+                else
+                {
+                    // User does not have the required role
+                    return Unauthorized();
+                }
             }
             catch (Exception ex)
             {
@@ -88,20 +135,27 @@ namespace event_service.Controllers
         }
 
         [HttpGet("Organizer/{OrganizerId}/Events/{EventId}")]
-        [Authorize(Roles = "ORGANIZER")]
         public async Task<IActionResult> GetEventById(string OrganizerId, int EventId)
         {
             try
             {
-                if (!await _eventService.IsEventExist(EventId))
-                    return NotFound();
+                if (Authorize("ORGANIZER"))
+                {
+                    if (!await _eventService.IsEventExist(EventId))
+                        return NotFound();
 
-                var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(OrganizerId, EventId));
+                    var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(OrganizerId, EventId));
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                    if (!ModelState.IsValid)
+                        return BadRequest(ModelState);
 
-                return Ok(_event);
+                    return Ok(_event);
+                }
+                else
+                {
+                    // User does not have the required role
+                    return Unauthorized();
+                } 
             }
             catch (Exception ex)
             {
@@ -110,23 +164,30 @@ namespace event_service.Controllers
         }
 
         [HttpDelete("Organizer/{OrganizerId}/Events/{EventId}")]
-        [Authorize(Roles = "ORGANIZER")]
         public async Task<IActionResult> DeleteEvent(string OrganizerId, int EventId)
         {
             try
             {
-                if (!await _eventService.IsEventExist(EventId))
-                    return NotFound();
+                if (Authorize("ORGANIZER"))
+                {
+                    if (!await _eventService.IsEventExist(EventId))
+                        return NotFound();
 
-                var temp = await _eventService.DeleteEvent(OrganizerId, EventId);
+                    var temp = await _eventService.DeleteEvent(OrganizerId, EventId);
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                    if (!ModelState.IsValid)
+                        return BadRequest(ModelState);
 
-                if (temp)
-                    return Ok(temp);
-                else 
-                    return BadRequest("Failed to delete event.");
+                    if (temp)
+                        return Ok(temp);
+                    else
+                        return BadRequest("Failed to delete event.");
+                }
+                else
+                {
+                    // User does not have the required role
+                    return Unauthorized();
+                }            
             }
             catch (Exception ex)
             {
@@ -135,23 +196,30 @@ namespace event_service.Controllers
         }
         
         [HttpPut("Organizer/{OrganizerId}/Events/{EventId}")]
-        [Authorize(Roles = "ORGANIZER")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventReqDto ev, string OrganizerId, int EventId)
         {
             try
             {
-                if (!await _eventService.IsEventExist(EventId))
-                    return NotFound();
+                if (Authorize("ORGANIZER"))
+                {
+                    if (!await _eventService.IsEventExist(EventId))
+                        return NotFound();
 
-                var temp = await _eventService.UpdateEvent(ev, OrganizerId, EventId);
+                    var temp = await _eventService.UpdateEvent(ev, OrganizerId, EventId);
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                    if (!ModelState.IsValid)
+                        return BadRequest(ModelState);
 
-                if (temp)
-                    return Ok(temp);
+                    if (temp)
+                        return Ok(temp);
+                    else
+                        return BadRequest("Failed to update event.");
+                }
                 else
-                    return BadRequest("Failed to update event.");
+                {
+                    // User does not have the required role
+                    return Unauthorized();
+                }
             }
             catch (Exception ex)
             {

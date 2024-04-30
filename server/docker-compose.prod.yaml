@@ -112,14 +112,14 @@ services:
       - '8081:8081'
 
 
-  # payment-service:
-  #   image: 'madockerhub/tickex-payment-service'
-  #   container_name: payment-service
-  #   expose:
-  #     - '8090'
-  #   depends_on:
-  #     - gateway-service
-  #   ports:
-  #     - '8090:8090'    
-  #   environment:
-  #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+  payment-service:
+    image: 'madockerhub/tickex-payment-service'
+    container_name: payment-service
+    expose:
+      - '8090'
+    depends_on:
+      - gateway-service
+    ports:
+      - '8090:8090'    
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
