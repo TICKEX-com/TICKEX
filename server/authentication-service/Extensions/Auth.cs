@@ -18,6 +18,7 @@ namespace authentication_service.Extensions
 
             var key = Encoding.ASCII.GetBytes(secret);
 
+            builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // Inject IConfiguration
 
             builder.Services.AddAuthentication(x =>
             {

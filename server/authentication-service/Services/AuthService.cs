@@ -1,4 +1,4 @@
-﻿using authentication_service.Data;
+using authentication_service.Data;
 using authentication_service.DTOs;
 using authentication_service.Entities;
 using authentication_service.Services.IServices;
@@ -47,45 +47,48 @@ namespace authentication_service.Services
 
         public async Task<LoginResponseDto> Login(HttpContext httpContext, LoginRequestDto requestDto)
         {
-            try { 
-            var user = _db.Users.FirstOrDefault(u => u.UserName.ToLower() == requestDto.UserName.ToLower());
-            bool isValid = await _userManager.CheckPasswordAsync(user, requestDto.Password);
-
-            if (user == null || isValid == false)
+            try
             {
-                return new LoginResponseDto() { User = null };
+                var user = _db.Users.FirstOrDefault(u => u.UserName.ToLower() == requestDto.UserName.ToLower());
+                bool isValid = await _userManager.CheckPasswordAsync(user, requestDto.Password);
+
+                if (user == null || isValid == false)
+                {
+                    return new LoginResponseDto() { User = null };
+                }
+
+                //if user was found , Generate JWT Token and add roles 
+                var roles = await _userManager.GetRolesAsync(user);
+                // var firstRole = roles.FirstOrDefault(); // Get the first role
+                var token = _jwtTokenGenerator.GenerateToken(user, roles);
+
+                UserDto userDto = new()
+                {
+                    Id = user.Id,
+                    Username = requestDto.UserName,
+                    Email = user.Email,
+                    firstname = user.firstname,
+                    lastname = user.lastname,
+                    PhoneNumber = user.PhoneNumber,
+                    Role = roles.FirstOrDefault()
+                };
+
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Expires = DateTime.UtcNow.AddDays(7),
+                };
+
+                httpContext.Response.Cookies.Append("jwtToken", token, cookieOptions);
+
+                LoginResponseDto loginResponseDto = new LoginResponseDto()
+                {
+                    User = userDto
+                };
+
+                return loginResponseDto;
             }
-
-            //if user was found , Generate JWT Token and add roles 
-            var roles = await _userManager.GetRolesAsync(user);
-            var token = _jwtTokenGenerator.GenerateToken(user, roles);
-
-            UserDto userDto = new()
-            {
-                Id = user.Id,
-                Username = requestDto.UserName,
-                Email = user.Email,
-                firstname = user.firstname,
-                lastname = user.lastname,
-                PhoneNumber = user.PhoneNumber,
-                Role = roles.FirstOrDefault()
-            };
-
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7), 
-            };
-
-            httpContext.Response.Cookies.Append("jwtToken", token, cookieOptions);
-
-            LoginResponseDto loginResponseDto = new LoginResponseDto()
-            {
-                User = userDto
-            };
-
-            return loginResponseDto;
-            } catch (Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return null;
@@ -207,7 +210,7 @@ namespace authentication_service.Services
                     }
                     // Add role to user
                     await _userManager.AddToRoleAsync(user, roleName);
-                    
+
                     return "success";
                 }
                 else
@@ -227,7 +230,8 @@ namespace authentication_service.Services
             {
                 httpContext.Response.Cookies.Delete("jwtToken");
                 return true;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return false;
