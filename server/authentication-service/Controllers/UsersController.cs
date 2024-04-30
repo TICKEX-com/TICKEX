@@ -1,10 +1,13 @@
 ﻿using authentication_service.DTOs;
+using authentication_service.Entities;
+using authentication_service.Extensions;
 using authentication_service.Services;
 using authentication_service.Services.IServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace authentication_service.Controllers
@@ -16,14 +19,16 @@ namespace authentication_service.Controllers
         private readonly ResponseDto _responseDto;
         private readonly IUserService _userService;
         private readonly IProducerService _producerService;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, IProducerService producerService, IMapper mapper)
+        public UsersController(IUserService userService, IProducerService producerService, IMapper mapper, IConfiguration configuration)
         {
             _userService = userService;
             _producerService = producerService;
             _responseDto = new ResponseDto();
             _mapper = mapper;
+            _configuration = configuration;
         }
 
 
@@ -52,25 +57,51 @@ namespace authentication_service.Controllers
                 return BadRequest(_responseDto);
             }
         }*/
+
         [HttpGet("Organizers")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetOrganizers()
         {
             try
             {
-                var organizers = await _userService.GetOrganizers();
-                if (!organizers.IsNullOrEmpty())
+                // Retrieve JWT token from the request headers
+                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+                if (string.IsNullOrEmpty(jwtToken))
                 {
-                    // await _producerService.publish("Tickex", organizer);
-                    _responseDto.Result = organizers;
-                    _responseDto.Message = "Success";
-                    return Ok(_responseDto);
+                    return Unauthorized("JWT token is missing");
+                }
+
+                // Initialize JwtTokenValidator with the issuer, audience, and secret key
+                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+
+                // Validate JWT token and extract user roles
+                var roles = tokenValidator.ValidateToken(jwtToken);
+
+                // Check if the user has the required role ("ADMIN")
+                if (roles.Contains("ADMIN"))
+                {
+                    // User is authorized, proceed with fetching organizers
+                    var organizers = await _userService.GetOrganizers();
+
+                    if (organizers.Any())
+                    {
+                        _responseDto.Result = organizers;
+                        _responseDto.Message = "Success";
+                        return Ok(_responseDto);
+                    }
+                    else
+                    {
+                        _responseDto.Message = "Organizers table is empty";
+                        _responseDto.IsSuccess = false;
+                        return BadRequest(_responseDto);
+                    }
                 }
                 else
                 {
-                    _responseDto.Message = "Organizers table is empty";
+                    // User does not have the required role
                     _responseDto.IsSuccess = false;
-                    return BadRequest(_responseDto);
+                    _responseDto.Message = "Unauthorized";
+                    return Unauthorized(_responseDto);
                 }
             }
             catch (Exception ex)
@@ -86,19 +117,44 @@ namespace authentication_service.Controllers
         {
             try
             {
-                var organizer = await _userService.GetOrganizerById(id);
-                if (organizer != null)
+                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+                if (string.IsNullOrEmpty(jwtToken))
                 {
-                    // await _producerService.publish("Tickex", organizer);
-                    _responseDto.Result = organizer;
-                    _responseDto.Message = "Message send successfuly";
-                    return Ok(_responseDto);
+                    return Unauthorized("JWT token is missing");
+                }
+
+                // Initialize JwtTokenValidator with the issuer, audience, and secret key
+                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+
+                // Validate JWT token and extract user roles
+                var roles = tokenValidator.ValidateToken(jwtToken);
+
+                // Check if the user has the required role ("ADMIN")
+                if (roles.Contains("ADMIN"))
+                {
+                    var organizer = await _userService.GetOrganizerById(id);
+                    if (organizer != null)
+                    {
+                        // await _producerService.publish("Tickex", organizer);
+                        _responseDto.Result = organizer;
+                        _responseDto.Message = "Organizer found successfully";
+                        return Ok(_responseDto);
+                    }
+                    else
+                    {
+                        _responseDto.Message = "Organizer doesn't exist";
+                        _responseDto.IsSuccess = false;
+
+                    }
+                    return BadRequest(_responseDto);
                 }
                 else
                 {
-                    _responseDto.Message = "Organizer doesn't exist";
+                    // User does not have the required role
                     _responseDto.IsSuccess = false;
-                    return BadRequest(_responseDto);
+                    _responseDto.Message = "Unauthorized";
+                    return Unauthorized(_responseDto);
                 }
             }
             catch (Exception ex)
@@ -110,48 +166,71 @@ namespace authentication_service.Controllers
         }
 
         [HttpPut("Organizer/{id}")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdateOrganizer([FromBody] UpdateReqOrganizerDto requestDto, string id)
         {
             try
-            { 
-                if (!await _userService.IsOrganizerExist(id))
+            {
+                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+                if (string.IsNullOrEmpty(jwtToken))
                 {
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Organizer not found";
-                    return NotFound(_responseDto);
+                    return Unauthorized("JWT token is missing");
                 }
 
-                var organizer = _mapper.Map<OrganizerDto>(requestDto);
-                organizer.Id = id;
-                organizer.isActive = await _userService.IsOrganizerAccepted(id);
-                if (organizer.isActive)
+                // Initialize JwtTokenValidator with the issuer, audience, and secret key
+                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+
+                // Validate JWT token and extract user roles
+                var roles = tokenValidator.ValidateToken(jwtToken);
+
+                // Check if the user has the required role ("ADMIN")
+                if (roles.Contains("ADMIN"))
                 {
-                    var response = await _producerService.publish("Tickex", organizer);
-                    if (response)
+                    if (!await _userService.IsOrganizerExist(id))
                     {
-                        Console.WriteLine("the organizer is published");
-                        var errorMessage = await _userService.UpdateOrganizer(requestDto, id);
-                        if (errorMessage != "success")
+                        _responseDto.IsSuccess = false;
+                        _responseDto.Message = "Organizer not found";
+                        return NotFound(_responseDto);
+                    }
+
+                    var organizer = _mapper.Map<OrganizerDto>(requestDto);
+                    organizer.Id = id;
+                    organizer.isActive = await _userService.IsOrganizerAccepted(id);
+                    if (organizer.isActive)
+                    {
+                        var response = await _producerService.publish("Tickex", organizer);
+                        if (response)
                         {
+                            Console.WriteLine("the organizer is published");
+                            var errorMessage = await _userService.UpdateOrganizer(requestDto, id);
+                            if (errorMessage != "success")
+                            {
+                                _responseDto.IsSuccess = false;
+                                _responseDto.Message = errorMessage;
+                                return BadRequest(_responseDto);
+                            }
+                            _responseDto.Message = "the organizer is published and it is updated in DB";
+                            _responseDto.Result = organizer;
+                            return Ok(_responseDto);
+                        }
+                        else
+                        {
+                            _responseDto.Message = "the organizer isn't updated in DB due to connection failure to Kafka";
                             _responseDto.IsSuccess = false;
-                            _responseDto.Message = errorMessage;
                             return BadRequest(_responseDto);
                         }
-                        _responseDto.Message = "the organizer is published and it is updated in DB";
-                        _responseDto.Result = organizer;
-                        return Ok(_responseDto);
                     }
-                    else
-                    {
-                        _responseDto.Message = "the organizer isn't updated in DB due to connection failure to Kafka";
-                        _responseDto.IsSuccess = false;
-                        return BadRequest(_responseDto);
-                    }
+                    _responseDto.Message = "the organizer isn't accepted";
+                    _responseDto.IsSuccess = false;
+                    return BadRequest(_responseDto);
                 }
-                _responseDto.Message = "the organizer isn't accepted";
-                _responseDto.IsSuccess = false;
-                return BadRequest(_responseDto);
+                else
+                {
+                    // User does not have the required role
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Unauthorized";
+                    return Unauthorized(_responseDto);
+                }
             }
             catch (Exception ex)
             {
@@ -162,47 +241,71 @@ namespace authentication_service.Controllers
         }
 
         [HttpPut("Accept/Organizer/{id}")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> AcceptOrganizer(string id)
         {
             try
             {
-                if ( ! await _userService.IsOrganizerExist(id))
+                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+                if (string.IsNullOrEmpty(jwtToken))
                 {
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Organizer not found";
-                    return NotFound(_responseDto);
+                    return Unauthorized("JWT token is missing");
                 }
 
-                var organizer = await _userService.GetOrganizerById(id);
+                // Initialize JwtTokenValidator with the issuer, audience, and secret key
+                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
 
-                if ( organizer.isActive ) {
-                    _responseDto.Message = "Organizer is already accepted";
-                    _responseDto.Result = organizer;
-                    return Ok(_responseDto);
-                }
+                // Validate JWT token and extract user roles
+                var roles = tokenValidator.ValidateToken(jwtToken);
 
-                organizer.isActive = true;
-                var response = await _producerService.publish("Tickex", organizer);
-                if (response)
+                // Check if the user has the required role ("ADMIN")
+                if (roles.Contains("ADMIN"))
                 {
-                    var isAccepted = await _userService.AcceptOrganizer(id);
-                    if (!isAccepted)
+                    if (!await _userService.IsOrganizerExist(id))
                     {
                         _responseDto.IsSuccess = false;
-                        _responseDto.Message = "Organizer not accepted";
-                        return BadRequest(_responseDto);
+                        _responseDto.Message = "Organizer not found";
+                        return NotFound(_responseDto);
                     }
-                    else
+
+                    var organizer = await _userService.GetOrganizerById(id);
+
+                    if (organizer.isActive)
                     {
-                        _responseDto.Message = "Organizer is accepted";
+                        _responseDto.Message = "Organizer is already accepted";
                         _responseDto.Result = organizer;
                         return Ok(_responseDto);
                     }
+
+                    organizer.isActive = true;
+                    var response = await _producerService.publish("Tickex", organizer);
+                    if (response)
+                    {
+                        var isAccepted = await _userService.AcceptOrganizer(id);
+                        if (!isAccepted)
+                        {
+                            _responseDto.IsSuccess = false;
+                            _responseDto.Message = "Organizer not accepted";
+                            return BadRequest(_responseDto);
+                        }
+                        else
+                        {
+                            _responseDto.Message = "Organizer is accepted";
+                            _responseDto.Result = organizer;
+                            return Ok(_responseDto);
+                        }
+                    }
+                    _responseDto.Message = "the organizer isn't accepted in DB due to connection failure to Kafka";
+                    _responseDto.IsSuccess = false;
+                    return BadRequest(_responseDto);
                 }
-                _responseDto.Message = "the organizer isn't accepted in DB due to connection failure to Kafka";
-                _responseDto.Result = organizer;
-                return BadRequest(_responseDto);
+                else
+                {
+                    // User does not have the required role
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Unauthorized";
+                    return Unauthorized(_responseDto);
+                }
             }
             catch (Exception ex)
             {
@@ -212,20 +315,43 @@ namespace authentication_service.Controllers
             }
         }
         [HttpDelete("Organizer/{id}")]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeleteOrganizer(string id)
         {
             try
             {
-                var isdeleted = await _userService.DeleteOrganizer(id);
-                if (!isdeleted)
+                var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+                if (string.IsNullOrEmpty(jwtToken))
                 {
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Organizer not deleted";
-                    return BadRequest(_responseDto);
+                    return Unauthorized("JWT token is missing");
                 }
-                _responseDto.Message = "Organizer is deleted";
-                return Ok(_responseDto);
+
+                // Initialize JwtTokenValidator with the issuer, audience, and secret key
+                var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+                var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+
+                // Validate JWT token and extract user roles
+                var roles = tokenValidator.ValidateToken(jwtToken);
+
+                // Check if the user has the required role ("ADMIN")
+                if (roles.Contains("ADMIN"))
+                {
+                    var isdeleted = await _userService.DeleteOrganizer(id);
+                    if (!isdeleted)
+                    {
+                        _responseDto.IsSuccess = false;
+                        _responseDto.Message = "Organizer not deleted";
+                        return BadRequest(_responseDto);
+                    }
+                    _responseDto.Message = "Organizer is deleted";
+                    return Ok(_responseDto);
+                }
+                else
+                {
+                    // User does not have the required role
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Unauthorized";
+                    return Unauthorized(_responseDto);
+                }
             }
             catch (Exception ex)
             {
