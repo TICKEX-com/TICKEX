@@ -9,11 +9,11 @@ namespace event_service.DTOs
         public string City { get; set; }
         public string Address { get; set; }
         public float Duration { get; set; }
+        public string EventDate { get; set; }
         public string Time { get; set; }
         public string EventType { get; set; }
         public string Poster { get; set; }
-        public string Currency { get; set; }
         public List<CategoryDto> Categories { get; set; }
-        public List<ImageDto>? Images { get; set; } = null;
+        // public List<ImageDto>? Images { get; set; } = null;
     }
 }

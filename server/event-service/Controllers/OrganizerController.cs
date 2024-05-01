@@ -83,6 +83,9 @@ namespace event_service.Controllers
             {
                 if (Authorize("ORGANIZER"))
                 {
+                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                        return NotFound("Organizer not found");
+
                     if (await _eventService.CreateEvent(ev, OrganizerId))
                     {
                         return Ok(ev);
@@ -141,8 +144,11 @@ namespace event_service.Controllers
             {
                 if (Authorize("ORGANIZER"))
                 {
+                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                        return NotFound("Organizer not found");
+
                     if (!await _eventService.IsEventExist(EventId))
-                        return NotFound();
+                        return NotFound("Event not found");
 
                     var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(OrganizerId, EventId));
 
@@ -170,8 +176,11 @@ namespace event_service.Controllers
             {
                 if (Authorize("ORGANIZER"))
                 {
+                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                        return NotFound("Organizer not found");
+
                     if (!await _eventService.IsEventExist(EventId))
-                        return NotFound();
+                        return NotFound("Event not found");
 
                     var temp = await _eventService.DeleteEvent(OrganizerId, EventId);
 
@@ -202,8 +211,11 @@ namespace event_service.Controllers
             {
                 if (Authorize("ORGANIZER"))
                 {
+                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                        return NotFound("Organizer not found");
+
                     if (!await _eventService.IsEventExist(EventId))
-                        return NotFound();
+                        return NotFound("Event not found");
 
                     var temp = await _eventService.UpdateEvent(ev, OrganizerId, EventId);
 

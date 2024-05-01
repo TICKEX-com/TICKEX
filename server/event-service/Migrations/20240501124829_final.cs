@@ -49,10 +49,10 @@ namespace event_service.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EventDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<float>(type: "real", nullable: false),
                     DesignId = table.Column<int>(type: "int", nullable: true),
@@ -149,11 +149,11 @@ namespace event_service.Migrations
 
             migrationBuilder.InsertData(
                 table: "Events",
-                columns: new[] { "Id", "Address", "City", "Currency", "Date", "Description", "DesignId", "Duration", "EventType", "Is_finished", "On_sell", "OrganizerId", "Poster", "Time", "Title" },
+                columns: new[] { "Id", "Address", "City", "CreationDate", "Description", "DesignId", "Duration", "EventDate", "EventType", "Is_finished", "On_sell", "OrganizerId", "Poster", "Time", "Title" },
                 values: new object[,]
                 {
-                    { 1, "address", "Tangier", "€", new DateTime(2024, 4, 30, 15, 1, 28, 755, DateTimeKind.Local).AddTicks(1397), "i am a football match", 1, 0f, "Sports", false, true, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "13h00", "Match" },
-                    { 2, "address", "Tangier", "$", new DateTime(2024, 4, 30, 15, 1, 28, 755, DateTimeKind.Local).AddTicks(1456), "i am a movie", 1, 0f, "Cinema", false, true, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "00h00", "Match" }
+                    { 1, "address", "Tangier", new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9778), "i am a football match", 1, 0f, new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9769), "Sports", false, true, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "13h00", "Match" },
+                    { 2, "address", "Tangier", new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9919), "i am a movie", 1, 0f, new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9918), "Cinema", false, true, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "00h00", "Match" }
                 });
 
             migrationBuilder.InsertData(

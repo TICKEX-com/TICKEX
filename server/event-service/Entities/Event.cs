@@ -14,13 +14,13 @@ namespace event_service.Entities
         [Required]
         public string Description { get; set; }
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime EventDate { get; set; }
+        [Required]
+        public DateTime CreationDate { get; set; } = DateTime.Now;
         [Required]
         public string Time { get; set; }
         [Required]
         public string City { get; set; }
-        [Required]
-        public string Currency { get; set; } = "MAD";
         [Required]
         public string Address { get; set; }
         public float Duration { get; set; }
