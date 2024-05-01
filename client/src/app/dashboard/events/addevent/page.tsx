@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,8 +9,25 @@ import EventDetailsCard from "@/components/EventDetailsCard";
 import EventCat from "@/components/EventCat";
 import TicketCat from "@/components/TicketCat";
 import Link from "next/link";
+import { uploadFile } from "@/lib/fileUpload";
+import { eventType } from "@/core/types/event";
 
 function page() {
+  const [profileUpload, setProfileUpload] = useState<FileList | null>(null);
+  const [profileUrl, setProfileUrl] = useState<string>();
+  const [eventData, setEventData] = useState<eventType>({
+    title: "",
+    desc: "",
+    address: "",
+    city: "",
+    currency: "",
+    date: "",
+    time: "",
+    type: "",
+    cats: [],
+    image: ""
+  });
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
@@ -22,7 +41,6 @@ function page() {
           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
             Add Event
           </h1>
-
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
             <Button size="sm">Save Event</Button>
           </div>
@@ -32,9 +50,10 @@ function page() {
             <EventDetailsCard
               title="Event Details"
               description="Please Add Your Next Event"
+             
             />
-            <EventCat />
-            <TicketCat />
+            <EventCat  />
+            <TicketCat  />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
             <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
@@ -47,12 +66,32 @@ function page() {
                     alt="Product image"
                     className="aspect-square w-full rounded-md object-cover"
                     height="300"
-                    src="/placeholder.svg"
+                    src={profileUrl ? profileUrl : "/placeholder.svg"}
                     width="300"
                   />
-                  <button className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
-                    <Upload className="h-4 w-4 text-muted-foreground" />
-                    <span className="sr-only">Upload</span>
+                  <input
+                    type="file"
+                    onChange={(event) => {
+                      setProfileUpload(event.target.files);
+                    }}
+                    className="block w-full text-sm text-slate-500 mt-2
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-full file:border-0
+                                  file:text-sm file:font-semibold
+                              file:bg-violet-50 file:text-violet-700
+                              hover:file:bg-violet-100"
+                  />
+                  <span className="sr-only">Upload</span>
+                  <button
+                    className="bg-purple-600 text-sm rounded-full flex justify-center "
+                    onClick={() => uploadFile(profileUpload, setProfileUrl)}
+                  >
+                    <Image
+                      src="/svg/upload.svg"
+                      width={30}
+                      height={30}
+                      alt="upload"
+                    />
                   </button>
                 </div>
               </CardContent>

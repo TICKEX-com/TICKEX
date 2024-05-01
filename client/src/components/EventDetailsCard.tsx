@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-
+import { useDispatch } from "react-redux";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -21,6 +21,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import SelectBox from "./SelectBox";
+import { cities } from "@/core/constantes/Event.const";
+import { eventType } from "@/core/types/event";
+import { setEventInfo } from "@/lib/features/events/eventSlice";
 
 function EventDetailsCard({
   title,
@@ -29,7 +33,31 @@ function EventDetailsCard({
   title: string;
   description: string;
 }) {
-  const [date, setDate] = useState<Date>();
+  const dispatch = useDispatch();
+  const [fdate, setFdate] = useState<Date>();
+  const [Data, setData] = useState({
+    title: "",
+    desc: "",
+    address: "",
+    city: "",
+    time: "",
+  });
+  const date =fdate?.toISOString()?.split("T")[0]
+  useEffect(() => {
+    const eventDetails = { ...Data, date };
+    dispatch(setEventInfo(eventDetails));
+  }, [Data, fdate, dispatch]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <>
       <Card x-chunk="dashboard-07-chunk-0">
@@ -40,25 +68,45 @@ function EventDetailsCard({
         <CardContent>
           <div className="grid gap-6">
             <div className="grid gap-3">
-              <Label htmlFor="name">Title</Label>
-              <Input id="name" type="text" className="w-full" defaultValue="" />
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                name="title"
+                type="text"
+                className="w-full"
+                onChange={handleChange}
+              />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>
-              <Textarea id="description" defaultValue="" className="min-h-32" />
+              <Textarea
+                id="description"
+                name="desc"
+                className="min-h-32"
+                onChange={handleChange}
+              />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="address">Address</Label>
               <Input
                 id="address"
                 type="text"
+                name="address"
                 className="w-full"
-                defaultValue=""
+                onChange={handleChange}
               />
             </div>
-            <div className="grid gap-3">
-              <Label htmlFor="city">City</Label>
-              <Input id="city" type="text" className="w-full" defaultValue="" />
+            <div className="grid grid-cols-2 gap-3">
+              <div className="grid gap-3">
+                <Label htmlFor="city">City</Label>
+                <SelectBox
+                  items={cities}
+                  element="city"
+                  title="Select a city"
+                  setDataValue={setData}
+                  value={Data.city}
+                />
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-3">
@@ -69,18 +117,18 @@ function EventDetailsCard({
                       variant={"outline"}
                       className={cn(
                         "w-[280px] justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
+                        !fdate && "text-muted-foreground"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      {fdate ? format(fdate, "PPP") : <span>Pick a date</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
-                      selected={date}
-                      onSelect={setDate}
+                      selected={fdate}
+                      onSelect={setFdate}
                       initialFocus
                     />
                   </PopoverContent>
@@ -91,7 +139,10 @@ function EventDetailsCard({
                 <input
                   id="time"
                   type="time"
+                  name="time"
                   className="p-1.5 rounded-md border border-gray-200 text-gray-400 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#8444ec]"
+                  onChange={handleChange}
+                  value={Data.time}
                 />
               </div>
             </div>

@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useAppSelector } from "@/lib/hooks";
-import { log } from "console";
+
 
 function page() {
   const router = useRouter();
@@ -31,7 +31,7 @@ function page() {
     console.log(userData);
     
     if (userData) {
-      const role = userData.role;
+      const role = userData?.role;
       console.log(role);
       
       if (role === "CLIENT") {

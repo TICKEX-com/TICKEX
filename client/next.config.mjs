@@ -7,7 +7,18 @@ const nextConfig = {
               destination: 'http://localhost:8888/:path*',
           },
         ];
-      }
+      },
+      images: {
+        remotePatterns: [
+          {
+            protocol: 'https',
+            hostname: 'firebasestorage.googleapis.com',
+            port: '',
+          },
+        ],
+    
+    }
 };
+
 
 export default nextConfig;

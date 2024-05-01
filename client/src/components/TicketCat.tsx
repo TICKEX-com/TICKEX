@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -33,19 +33,58 @@ import { TicketCategories } from "@/core/constantes/Event.const";
 import { Button } from "./ui/button";
 import { PlusCircle } from "lucide-react";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { setEventInfo } from "@/lib/features/events/eventSlice";
+
+interface Category {
+  name: string;
+  stock: number;
+  price: number;
+}
 
 function TicketCat() {
+  const dispatch = useDispatch();
   const [category, setCategory] = useState<string>("");
-  const [categories, setCategories] = useState<string[]>(TicketCategories);
-  const handleDeletCat = (unwantedCat: string) => {
-    setCategories(categories.filter((cat) => cat !== unwantedCat));
+  const [categories, setCategories] = useState<Category[]>(TicketCategories.map(cat => ({ name: cat, stock: 100, price: 99.99 })));
+
+  const handleDeleteCat = (index: number) => {
+    const newCategories = [...categories];
+    newCategories.splice(index, 1);
+    setCategories(newCategories);
   };
+
+  const handleStockChange = (index: number, value: string) => {
+    setCategories(prevCategories => {
+      const newCategories = [...prevCategories];
+      newCategories[index] = {
+        ...newCategories[index],
+        stock: parseInt(value)
+      };
+      return newCategories;
+    });
+  };
+  
+  const handlePriceChange = (index: number, value: string) => {
+    setCategories(prevCategories => {
+      const newCategories = [...prevCategories];
+      newCategories[index] = {
+        ...newCategories[index],
+        price: parseFloat(value)
+      };
+      return newCategories;
+    });
+  };
+
+  useEffect(() => {
+    dispatch(setEventInfo(categories));
+  }, [categories, dispatch]);
+
   return (
     <div>
       <Card x-chunk="dashboard-07-chunk-1">
         <CardHeader>
           <CardTitle>Stock</CardTitle>
-          <CardDescription>Please Spicify each Ticket Category</CardDescription>
+          <CardDescription>Please Specify each Ticket Category</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -60,23 +99,36 @@ function TicketCat() {
             <TableBody>
               {categories.map((cat, index) => (
                 <TableRow key={index}>
-                  <TableCell className="font-semibold">{cat}</TableCell>
+                  <TableCell className="font-semibold">{cat.name}</TableCell>
                   <TableCell>
-                    <Label htmlFor={cat} className="sr-only">
+                    <Label htmlFor={`${cat.name}-stock`} className="sr-only">
                       Stock
                     </Label>
-                    <Input id={cat} type="number" defaultValue="100" />
+                    <Input
+                      id={`${cat.name}-stock`}
+                      type="number"
+                      name="categories"
+                      defaultValue={cat.stock.toString()}
+                      onChange={(e) => handleStockChange(index, e.target.value)}
+                    />
                   </TableCell>
                   <TableCell>
-                    <Label htmlFor={cat} className="sr-only">
+                    <Label htmlFor={`${cat.name}-price`} className="sr-only">
                       Price
                     </Label>
-                    <Input id={cat} type="number" defaultValue="99.99" />
+                    <Input
+                      id={`${cat.name}-price`}
+                      type="number"
+                      step="0.01"
+                      name="categories"
+                      defaultValue={cat.price.toString()}
+                      onChange={(e) => handlePriceChange(index, e.target.value)}
+                    />
                   </TableCell>
                   <TableCell>
                     <div
                       className="cursor-pointer"
-                      onClick={() => handleDeletCat(cat)}
+                      onClick={() => handleDeleteCat(index)}
                     >
                       <Image
                         width={45}
@@ -125,7 +177,8 @@ function TicketCat() {
                 <Button
                   type="submit"
                   onClick={() => {
-                    setCategories([...categories, category]);
+                    const newCategory = { name: category, stock: 100, price: 99.99 };
+                    setCategories(prevCategories => [...prevCategories, newCategory]);
                     setCategory("");
                   }}
                 >

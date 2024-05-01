@@ -1,38 +1,40 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Label } from "./ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 import { categories } from "@/core/constantes/Event.const";
+import SelectBox from "./SelectBox";
+import { setEventInfo } from "@/lib/features/events/eventSlice";
+import { useDispatch } from "react-redux";
+
+
+
 
 function EventCat() {
+  const dispatch= useDispatch()
+  const [type,setType]=useState({
+    type:""
+  });
+  useEffect(() => {
+    dispatch(setEventInfo( type ));
+  }, [type, dispatch]);
   return (
     <>
       <Card x-chunk="dashboard-07-chunk-2">
         <CardHeader>
-          <CardTitle>Event Category</CardTitle>
+          <CardTitle>Event Type</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 sm:grid-cols-3">
             <div className="grid gap-3">
               <Label htmlFor="category">Category</Label>
-              <Select>
-                <SelectTrigger id="category" aria-label="Select category">
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat, index) => (
-                    <SelectItem key={index} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SelectBox
+                items={categories}
+                element="type"
+                title="select your category"
+                setDataValue={setType}
+              />
             </div>
           </div>
         </CardContent>
@@ -41,4 +43,4 @@ function EventCat() {
   );
 }
 
-export default EventCat;
+export default EventCat
