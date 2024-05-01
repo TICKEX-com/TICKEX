@@ -48,11 +48,10 @@ namespace event_service.Services
                     Id = ev.Id,
                     Title = ev.Title,
                     EventType = ev.EventType,
-                    Date = ev.Date,
+                    EventDate = ev.EventDate,
                     City = ev.City,
                     Poster = ev.Poster,
                     MinPrice = category != null ? category.Price : 0,
-                    Currency = ev.Currency
                 };
 
                 _events.Add(eve);
@@ -65,7 +64,7 @@ namespace event_service.Services
         {
             var events = await _context.Events
                 .Include(ev => ev.Categories.OrderBy(cat => cat.Price))
-                .OrderBy(ev => ev.Date)
+                .OrderBy(ev => ev.EventDate)
                 .Skip((pageNumber - 1) * 6)
                 .Take(6)
                 .ToListAsync();
@@ -97,7 +96,7 @@ namespace event_service.Services
             var events = await _context.Events
                                  .Where(ev => ev.OrganizerId == id)
                                  .Include(ev => ev.Categories.OrderBy(cat => cat.Price))
-                                 .OrderBy(ev => ev.Date)
+                                 .OrderBy(ev => ev.EventDate)
                                  .Skip((pageNumber - 1) * 6)
                                  .Take(6)
                                  .ToListAsync();
@@ -113,16 +112,19 @@ namespace event_service.Services
         }
 
         public async Task<bool> CreateEvent(EventReqDto Event, string OrganizerId)
-        {  
+        {
+            var parsedDate = DateTime.ParseExact(Event.EventDate, "MM-dd-yyyy", CultureInfo.InvariantCulture);
+
+
             Event ev = new()
             {
                 Title = Event.Title,
                 Description = Event.Description,
                 Duration = Event.Duration,
                 Time = Event.Time,
-                Date = DateTime.Now,
+                CreationDate = DateTime.Now,
+                EventDate = parsedDate,
                 City = Event.City,
-                Currency = Event.Currency,
                 Address = Event.Address,
                 EventType = Event.EventType,
                 OrganizerId = OrganizerId
@@ -137,7 +139,7 @@ namespace event_service.Services
             _context.Events.Add(ev);
 
             // Handle images
-            if (Event.Images != null && Event.Images.Any())
+            /*if (Event.Images != null && Event.Images.Any())
             {
                 foreach (var image in Event.Images)
                 {
@@ -145,7 +147,7 @@ namespace event_service.Services
                     var img = new Image { url = image.url, Event = ev };
                     _context.Images.Add(img);
                 }
-            }
+            }*/
 
             if (Event.Categories != null && Event.Categories.Any())
             {
@@ -190,6 +192,7 @@ namespace event_service.Services
         public async Task<bool> UpdateEvent(EventReqDto ev, string OrganizerId, int EventId)
         {
             var existingEvent = await GetEventById(OrganizerId, EventId);
+            var parsedDate = DateTime.ParseExact(ev.EventDate, "MM-dd-yyyy", CultureInfo.InvariantCulture);
 
             if (existingEvent == null)
                 return false; // Event not found
@@ -199,8 +202,7 @@ namespace event_service.Services
             existingEvent.Description = ev.Description;
             existingEvent.Duration = ev.Duration;
             existingEvent.Time = ev.Time;
-            existingEvent.Date = DateTime.Now;
-            existingEvent.Currency = ev.Currency;
+            existingEvent.EventDate = parsedDate;
             existingEvent.City = ev.City;
             existingEvent.Address = ev.Address;
             existingEvent.EventType = ev.EventType;
@@ -212,14 +214,14 @@ namespace event_service.Services
             }
 
             // Update more images
-            if (ev.Images != null && ev.Images.Any())
+            /*if (ev.Images != null && ev.Images.Any())
             {
                 // Add new images
                 foreach (var image in ev.Images)
                 {
                     _context.Images.Add(new Image { url = image.url, Event = existingEvent });
                 }
-            }
+            }*/
 
             var result = await _context.SaveChangesAsync();
             return result > 0;
@@ -231,7 +233,7 @@ namespace event_service.Services
             var parsedDate = DateTime.ParseExact(Date, "MM-dd-yyyy", CultureInfo.InvariantCulture);
 
             var events = await _context.Events
-                 .Where(ev => ev.Date >= parsedDate)
+                 .Where(ev => ev.EventDate >= parsedDate)
                 .Include(ev => ev.Categories)
                 .OrderBy(ev => ev.Id)
                 .ToListAsync();
@@ -283,12 +285,12 @@ namespace event_service.Services
             {
                 // Assuming Date is a string in a specific format, you need to parse it to DateTime
                 var parsedDate = DateTime.ParseExact(Date, "MM-dd-yyyy", CultureInfo.InvariantCulture);
-                query = query.Where(ev => ev.Date >= parsedDate);
+                query = query.Where(ev => ev.EventDate >= parsedDate);
             }
 
             if (!string.IsNullOrEmpty(City))
             {
-                query = query.Where(ev => ev.City == City);
+                query = query.Where(ev => ev.City.Contains(City));
             }
 
             if (!string.IsNullOrEmpty(EventType))
@@ -310,8 +312,13 @@ namespace event_service.Services
                 }
             }
 
+            if (string.IsNullOrEmpty(Date) && string.IsNullOrEmpty(City) && string.IsNullOrEmpty(EventType) && MinPrice == 0 && MaxPrice == 0)
+            {
+                return null;
+            }
+
             // Execute the query and retrieve the filtered events
-            var filteredEvents = await query.OrderBy(ev => ev.Date).Skip((pageNumber - 1) * 6).Take(6).ToListAsync();
+            var filteredEvents = await query.OrderBy(ev => ev.EventDate).Skip((pageNumber - 1) * 6).Take(6).ToListAsync();
 
             // Convert the filtered events to DTOs
             var eventsDto = await AddMinPrice(filteredEvents);

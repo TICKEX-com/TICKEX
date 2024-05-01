@@ -50,7 +50,8 @@ namespace event_service.Data
                     Id = 1,
                     Title = "Match",
                     Description = "i am a football match",
-                    Date = DateTime.Now,
+                    EventDate = DateTime.Now,
+                    CreationDate = DateTime.Now,
                     City = "Tangier",
                     Address = "address",
                     Time = "13h00",
@@ -58,7 +59,6 @@ namespace event_service.Data
                     OrganizerId = "1",
                     EventType = "Sports",
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
-                    Currency = "€"
                 }
                 );
 
@@ -68,7 +68,8 @@ namespace event_service.Data
                     Id = 2,
                     Title = "Match",
                     Description = "i am a movie",
-                    Date = DateTime.Now,
+                    EventDate = DateTime.Now,
+                    CreationDate = DateTime.Now,
                     City = "Tangier",
                     Address = "address",
                     DesignId = 1,
@@ -76,7 +77,6 @@ namespace event_service.Data
                     OrganizerId = "2",
                     EventType = "Cinema",
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995",
-                    Currency = "$"
                 }
                 );
                 

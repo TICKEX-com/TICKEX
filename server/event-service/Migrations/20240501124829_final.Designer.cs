@@ -12,7 +12,7 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240430140128_final")]
+    [Migration("20240501124829_final")]
     partial class final
     {
         /// <inheritdoc />
@@ -139,11 +139,7 @@ namespace event_service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -155,6 +151,9 @@ namespace event_service.Migrations
 
                     b.Property<float>("Duration")
                         .HasColumnType("real");
+
+                    b.Property<DateTime>("EventDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("EventType")
                         .IsRequired()
@@ -194,11 +193,11 @@ namespace event_service.Migrations
                             Id = 1,
                             Address = "address",
                             City = "Tangier",
-                            Currency = "€",
-                            Date = new DateTime(2024, 4, 30, 15, 1, 28, 755, DateTimeKind.Local).AddTicks(1397),
+                            CreationDate = new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9778),
                             Description = "i am a football match",
                             DesignId = 1,
                             Duration = 0f,
+                            EventDate = new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9769),
                             EventType = "Sports",
                             Is_finished = false,
                             On_sell = true,
@@ -212,11 +211,11 @@ namespace event_service.Migrations
                             Id = 2,
                             Address = "address",
                             City = "Tangier",
-                            Currency = "$",
-                            Date = new DateTime(2024, 4, 30, 15, 1, 28, 755, DateTimeKind.Local).AddTicks(1456),
+                            CreationDate = new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9919),
                             Description = "i am a movie",
                             DesignId = 1,
                             Duration = 0f,
+                            EventDate = new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9918),
                             EventType = "Cinema",
                             Is_finished = false,
                             On_sell = true,
