@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,23 +10,18 @@ import EventCat from "@/components/EventCat";
 import TicketCat from "@/components/TicketCat";
 import Link from "next/link";
 import { uploadFile } from "@/lib/fileUpload";
-import { eventType } from "@/core/types/event";
+import { useDispatch } from "react-redux";
+import { setImage} from "@/lib/features/events/eventSlice";
 
 function page() {
-  const [profileUpload, setProfileUpload] = useState<FileList | null>(null);
-  const [profileUrl, setProfileUrl] = useState<string>();
-  const [eventData, setEventData] = useState<eventType>({
-    title: "",
-    desc: "",
-    address: "",
-    city: "",
-    currency: "",
-    date: "",
-    time: "",
-    type: "",
-    cats: [],
-    image: ""
-  });
+
+  const dispatch = useDispatch();
+  const [imageUpload, setImageUpload] = useState<FileList | null>(null);
+  const [poster, setPoster] = useState<string>("");
+  useEffect(()=>{
+    const payload: Partial<string> =poster
+    dispatch(setImage(payload))
+  },[dispatch,poster])
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -66,13 +61,13 @@ function page() {
                     alt="Product image"
                     className="aspect-square w-full rounded-md object-cover"
                     height="300"
-                    src={profileUrl ? profileUrl : "/placeholder.svg"}
+                    src={poster ? poster : "/svg/placeholder.svg"}
                     width="300"
                   />
                   <input
                     type="file"
                     onChange={(event) => {
-                      setProfileUpload(event.target.files);
+                      setImageUpload(event.target.files);
                     }}
                     className="block w-full text-sm text-slate-500 mt-2
                                   file:mr-4 file:py-2 file:px-4
@@ -84,7 +79,7 @@ function page() {
                   <span className="sr-only">Upload</span>
                   <button
                     className="bg-purple-600 text-sm rounded-full flex justify-center "
-                    onClick={() => uploadFile(profileUpload, setProfileUrl)}
+                    onClick={() => uploadFile(imageUpload, setPoster)}
                   >
                     <Image
                       src="/svg/upload.svg"

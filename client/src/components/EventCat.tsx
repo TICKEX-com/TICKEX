@@ -13,12 +13,12 @@ import { useDispatch } from "react-redux";
 
 function EventCat() {
   const dispatch= useDispatch()
-  const [type,setType]=useState({
-    type:""
+  const [eventType,setEventType]=useState({
+    eventType:""
   });
   useEffect(() => {
-    dispatch(setEventInfo( type ));
-  }, [type, dispatch]);
+    dispatch(setEventInfo( eventType ));
+  }, [eventType, dispatch]);
   return (
     <>
       <Card x-chunk="dashboard-07-chunk-2">
@@ -31,9 +31,9 @@ function EventCat() {
               <Label htmlFor="category">Category</Label>
               <SelectBox
                 items={categories}
-                element="type"
+                element="eventType"
                 title="select your category"
-                setDataValue={setType}
+                setDataValue={setEventType}
               />
             </div>
           </div>

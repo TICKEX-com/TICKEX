@@ -1,18 +1,21 @@
 import { categories } from "@/core/constantes/Event.const";
 import { EventState } from "@/core/types/event";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
+
 
 const initialState: EventState = {
   eventInfo: {
     title: "",
-    desc: "",
+    description: "",
     address: "",
+    duration: 0,
     city: "",
-    date: "",
+    eventDate: "",
     time: "",
-    type: "",
+    eventType: "",
     categories: [],
-    image: "",
+    poster: "",
   },
 };
 
@@ -21,15 +24,24 @@ const eventSlice = createSlice({
   initialState,
   reducers: {
     setType: (state, action: PayloadAction<string>) => {
-      state.eventInfo.type = action.payload;
+      state.eventInfo.eventType = action.payload;
     },
     setCategoriesInfo: (state, action: PayloadAction<string[]>) => {
-      state.eventInfo.categories.push(...action.payload.map(name => ({ name, stock: 100, price: 99.99 })));
+      const newCategories = action.payload.map((name) => ({
+        id: uuidv4(),
+        name,
+        seats: 0,
+        price: 99.99
+      }));
+      state.eventInfo.categories.push(...newCategories);
     },
     setImage: (state, action: PayloadAction<string>) => {
-      state.eventInfo.image = action.payload;
+      state.eventInfo.poster = action.payload;
     },
-    setEventInfo: (state, action: PayloadAction<Partial<EventState["eventInfo"]>>) => {
+    setEventInfo: (
+      state,
+      action: PayloadAction<Partial<EventState["eventInfo"]>>
+    ) => {
       state.eventInfo = { ...state.eventInfo, ...action.payload };
     },
     clearEventInfo: (state) => {

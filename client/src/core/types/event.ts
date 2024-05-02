@@ -15,19 +15,26 @@ export type Category = {
   name: string;
   stock: number;
   price: number;
-}
-export type eventInfoType ={  
+};
+export type eventInfoType = {
   title: string;
-  desc: string;
+  description: string;
   address: string;
+  duration: number;
   city: string;
-  date: string;
+  eventDate: string;
   time: string;
-  type: string;
-  categories: Category[];
-  image: string;
+  eventType: string;
+  categories: {
+    id?: string;
+    name: string;
+    seats: number;
+    price: number;
+    color?: string;
+  }[];
+  poster: string;
 };
 
 export type EventState = {
-  eventInfo: eventInfoType
-}
+  eventInfo: eventInfoType;
+};

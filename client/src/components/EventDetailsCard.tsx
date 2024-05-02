@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/popover";
 import SelectBox from "./SelectBox";
 import { cities } from "@/core/constantes/Event.const";
-import { eventType } from "@/core/types/event";
 import { setEventInfo } from "@/lib/features/events/eventSlice";
 
 function EventDetailsCard({
@@ -37,14 +36,14 @@ function EventDetailsCard({
   const [fdate, setFdate] = useState<Date>();
   const [Data, setData] = useState({
     title: "",
-    desc: "",
+    description: "",
     address: "",
     city: "",
     time: "",
   });
-  const date =fdate?.toISOString()?.split("T")[0]
+  const eventDate =fdate?.toISOString()?.split("T")[0]
   useEffect(() => {
-    const eventDetails = { ...Data, date };
+    const eventDetails = { ...Data, eventDate };
     dispatch(setEventInfo(eventDetails));
   }, [Data, fdate, dispatch]);
 
@@ -81,7 +80,7 @@ function EventDetailsCard({
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
-                name="desc"
+                name="description"
                 className="min-h-32"
                 onChange={handleChange}
               />
@@ -107,6 +106,16 @@ function EventDetailsCard({
                   value={Data.city}
                 />
               </div>
+              <div className="grid gap-3">
+              <Label htmlFor="duration">Duration</Label>
+              <Input
+                id="duration"
+                type="number"
+                name="duration"
+                className="w-full"
+                onChange={handleChange}
+              />
+            </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-3">
