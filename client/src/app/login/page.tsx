@@ -61,7 +61,7 @@ function page() {
 
   return (
     <div className="flex justify-center h-screen items-center">
-      <Card className="w-1/4">
+      <Card className="w-1/4 p-6 ">
         <form action={onSubmit}>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl">

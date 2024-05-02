@@ -1,3 +1,15 @@
+type event_card = {
+	city: String|null;
+	date: Date;
+	eventType: String|null;
+	id: Number;
+	poster: String|null;
+	title: String|null;
+};
+
+type events_list = Array<event_card>
+
+
 export type eventType = {
   title: string;
   desc: string;
