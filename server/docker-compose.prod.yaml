@@ -29,6 +29,14 @@ services:
   #   depends_on:
   #     - zookeeper
       
+  client:
+    image: 'madockerhub/tickex-client'
+    container_name: client
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'    
+            
   gateway-service:
     image: 'madockerhub/tickex-gateway-service'
     container_name: gateway-service
@@ -124,12 +132,6 @@ services:
     environment:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
 
-  client:
-    image: 'madockerhub/tickex-client'
-    container_name: client
-    expose:
-      - '3000'
-    ports:
-      - '3000:3000'    
 
-##      
+
+      
