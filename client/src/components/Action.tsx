@@ -8,8 +8,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import ConfirmationModel from "./ConfirmationModel";
 
-function Action({ id }: { id: string }) {
+function Action({ id, admin }: { id: string; admin?: boolean }) {
+  const handelDelete = () => {
+    console.log("has been deleted");
+  };
   return (
     <div>
       <DropdownMenu>
@@ -21,7 +26,20 @@ function Action({ id }: { id: string }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          {admin ? (
+            <ConfirmationModel
+              title="Are you sure To remove This Organiser"
+              desc="this operation will delete this Organiser from your waitlist "
+              onConfirm={()=>handelDelete}
+            >
+              <DropdownMenuItem>Accept</DropdownMenuItem>
+            </ConfirmationModel>
+          ) : (
+            <Link href={`./events/${id}`}>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+            </Link>
+          )}
+
           <DropdownMenuItem>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

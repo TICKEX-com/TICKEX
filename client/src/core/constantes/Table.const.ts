@@ -66,3 +66,19 @@ export const eventData: eventDataType[] = [
     createdAt: "2024-04-23 07:30 PM",
   },
 ];
+export const userColumns = [
+  { key: "id", label: "ID" },
+  { key: "name", label: "Name" },
+  { key: "email", label: "Email" },
+  { key: "role", label: "Role" },
+
+];
+
+export const userData = [
+  { id: 1, name: "John Doe", email: "john@example.com", role: "Admin" },
+  { id: 2, name: "Jane Smith", email: "jane@example.com", role: "User" },
+  { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "User" },
+  { id: 4, name: "Bob Brown", email: "bob@example.com", role: "User" },
+  { id: 5, name: "Emily Davis", email: "emily@example.com", role: "Admin" },
+  // Add more user data objects as needed
+];

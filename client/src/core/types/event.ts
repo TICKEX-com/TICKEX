@@ -38,7 +38,7 @@ export type eventInfoType = {
   time: string;
   eventType: string;
   categories: {
-    id?: string;
+    id: string;
     name: string;
     seats: number;
     price: number;
