@@ -12,7 +12,7 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240501124829_final")]
+    [Migration("20240503115504_final")]
     partial class final
     {
         /// <inheritdoc />
@@ -146,7 +146,7 @@ namespace event_service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DesignId")
+                    b.Property<int>("DesignId")
                         .HasColumnType("int");
 
                     b.Property<float>("Duration")
@@ -193,11 +193,11 @@ namespace event_service.Migrations
                             Id = 1,
                             Address = "address",
                             City = "Tangier",
-                            CreationDate = new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9778),
+                            CreationDate = new DateTime(2024, 5, 3, 12, 55, 4, 118, DateTimeKind.Local).AddTicks(7095),
                             Description = "i am a football match",
-                            DesignId = 1,
+                            DesignId = 0,
                             Duration = 0f,
-                            EventDate = new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9769),
+                            EventDate = new DateTime(2024, 5, 3, 12, 55, 4, 118, DateTimeKind.Local).AddTicks(7093),
                             EventType = "Sports",
                             Is_finished = false,
                             On_sell = true,
@@ -211,11 +211,11 @@ namespace event_service.Migrations
                             Id = 2,
                             Address = "address",
                             City = "Tangier",
-                            CreationDate = new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9919),
+                            CreationDate = new DateTime(2024, 5, 3, 12, 55, 4, 118, DateTimeKind.Local).AddTicks(7113),
                             Description = "i am a movie",
-                            DesignId = 1,
+                            DesignId = 0,
                             Duration = 0f,
-                            EventDate = new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9918),
+                            EventDate = new DateTime(2024, 5, 3, 12, 55, 4, 118, DateTimeKind.Local).AddTicks(7112),
                             EventType = "Cinema",
                             Is_finished = false,
                             On_sell = true,
@@ -312,8 +312,7 @@ namespace event_service.Migrations
                     b.HasOne("event_service.Entities.Event", "Event")
                         .WithMany("Categories")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Event");
                 });

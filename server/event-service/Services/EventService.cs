@@ -127,14 +127,14 @@ namespace event_service.Services
                 City = Event.City,
                 Address = Event.Address,
                 EventType = Event.EventType,
-                OrganizerId = OrganizerId
+                Poster = Event.Poster,
+                OrganizerId = OrganizerId,
+                DesignId = Event.DesignId
             };
 
 
-            if (!string.IsNullOrEmpty(Event.Poster))
-            {
-                ev.Poster = Event.Poster;
-            }
+            
+            
 
             _context.Events.Add(ev);
 
@@ -206,12 +206,9 @@ namespace event_service.Services
             existingEvent.City = ev.City;
             existingEvent.Address = ev.Address;
             existingEvent.EventType = ev.EventType;
-
-            // Update poster if provided
-            if (!string.IsNullOrEmpty(ev.Poster))
-            {
-                existingEvent.Poster = ev.Poster;
-            }
+            existingEvent.DesignId = ev.DesignId;
+            existingEvent.Poster = ev.Poster;
+            
 
             // Update more images
             /*if (ev.Images != null && ev.Images.Any())
