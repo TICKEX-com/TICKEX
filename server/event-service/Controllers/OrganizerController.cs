@@ -28,7 +28,7 @@ namespace event_service.Controllers
             _configuration = configuration;
         }
 
-        private bool Authorize(string role)
+        private bool AuthorizeRole(string role)
         {
             // Retrieve JWT token from the request headers
             var jwtToken = HttpContext.Request.Cookies["jwtToken"];
@@ -38,16 +38,55 @@ namespace event_service.Controllers
             }
 
             // Initialize JwtTokenValidator with the issuer, audience, and secret key
-            var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+            var Secret = Environment.GetEnvironmentVariable("SECRET");
+            var Issuer = Environment.GetEnvironmentVariable("ISSUER");
+            var Audience = Environment.GetEnvironmentVariable("AUDIENCE");
+            var tokenValidator = new JwtTokenValidator(Issuer, Audience, Secret);
+
+
+            /*var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);*/
+
 
             // Validate JWT token and extract user roles
-            var roles = tokenValidator.ValidateToken(jwtToken);
+            var roles = tokenValidator.ValidateTokenRole(jwtToken);
 
             if (roles.Contains(role))
             {
                 return true;
             } 
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool AuthorizeID(string ID)
+        {
+            // Retrieve JWT token from the request headers
+            var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+            if (string.IsNullOrEmpty(jwtToken))
+            {
+                return false;
+            }
+
+            // Initialize JwtTokenValidator with the issuer, audience, and secret key
+            var Secret = Environment.GetEnvironmentVariable("SECRET");
+            var Issuer = Environment.GetEnvironmentVariable("ISSUER");
+            var Audience = Environment.GetEnvironmentVariable("AUDIENCE");
+            var tokenValidator = new JwtTokenValidator(Issuer, Audience, Secret);
+
+
+            /*var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);*/
+
+            // Validate JWT token and extract user roles
+            var IDs = tokenValidator.ValidateTokenID(jwtToken);
+
+            if (IDs.Contains(ID))
+            {
+                return true;
+            }
             else
             {
                 return false;
@@ -81,7 +120,7 @@ namespace event_service.Controllers
         {
             try
             {
-                if (Authorize("ORGANIZER"))
+                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
                     if (!await _userService.IsOrganizerExists(OrganizerId))
                         return NotFound("Organizer not found");
@@ -113,7 +152,7 @@ namespace event_service.Controllers
         {
             try
             {
-                if (Authorize("ORGANIZER"))
+                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
                     if (!await _eventService.OrganizerHasEvents(OrganizerId))
                         return NotFound();
@@ -142,7 +181,7 @@ namespace event_service.Controllers
         {
             try
             {
-                if (Authorize("ORGANIZER"))
+                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
                     if (!await _userService.IsOrganizerExists(OrganizerId))
                         return NotFound("Organizer not found");
@@ -174,7 +213,7 @@ namespace event_service.Controllers
         {
             try
             {
-                if (Authorize("ORGANIZER"))
+                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
                     if (!await _userService.IsOrganizerExists(OrganizerId))
                         return NotFound("Organizer not found");
@@ -209,7 +248,7 @@ namespace event_service.Controllers
         {
             try
             {
-                if (Authorize("ORGANIZER"))
+                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
                     if (!await _userService.IsOrganizerExists(OrganizerId))
                         return NotFound("Organizer not found");

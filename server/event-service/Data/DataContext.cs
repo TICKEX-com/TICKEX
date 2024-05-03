@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using event_service.Entities;
-using Google.Api.Gax.ResourceNames;
+﻿using event_service.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace event_service.Data
 {
@@ -55,7 +54,7 @@ namespace event_service.Data
                     City = "Tangier",
                     Address = "address",
                     Time = "13h00",
-                    DesignId = 1,
+                    DesignId = 0,
                     OrganizerId = "1",
                     EventType = "Sports",
                     Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
@@ -72,7 +71,7 @@ namespace event_service.Data
                     CreationDate = DateTime.Now,
                     City = "Tangier",
                     Address = "address",
-                    DesignId = 1,
+                    DesignId = 0,
                     Time = "00h00",
                     OrganizerId = "2",
                     EventType = "Cinema",
@@ -141,6 +140,13 @@ namespace event_service.Data
 
                 modelBuilder.Entity<Event>()
                             .HasMany(e => e.Images)
+                            .WithOne(e => e.Event)
+                            .HasForeignKey("EventId")
+                            .IsRequired(false)
+                            .OnDelete(DeleteBehavior.Cascade);
+
+                modelBuilder.Entity<Event>()
+                            .HasMany(e => e.Categories)
                             .WithOne(e => e.Event)
                             .HasForeignKey("EventId")
                             .IsRequired(false)

@@ -55,7 +55,7 @@ namespace event_service.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<float>(type: "real", nullable: false),
-                    DesignId = table.Column<int>(type: "int", nullable: true),
+                    DesignId = table.Column<int>(type: "int", nullable: false),
                     EventType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrganizerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Poster = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -152,8 +152,8 @@ namespace event_service.Migrations
                 columns: new[] { "Id", "Address", "City", "CreationDate", "Description", "DesignId", "Duration", "EventDate", "EventType", "Is_finished", "On_sell", "OrganizerId", "Poster", "Time", "Title" },
                 values: new object[,]
                 {
-                    { 1, "address", "Tangier", new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9778), "i am a football match", 1, 0f, new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9769), "Sports", false, true, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "13h00", "Match" },
-                    { 2, "address", "Tangier", new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9919), "i am a movie", 1, 0f, new DateTime(2024, 5, 1, 13, 48, 29, 384, DateTimeKind.Local).AddTicks(9918), "Cinema", false, true, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "00h00", "Match" }
+                    { 1, "address", "Tangier", new DateTime(2024, 5, 3, 12, 55, 4, 118, DateTimeKind.Local).AddTicks(7095), "i am a football match", 0, 0f, new DateTime(2024, 5, 3, 12, 55, 4, 118, DateTimeKind.Local).AddTicks(7093), "Sports", false, true, "1", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5", "13h00", "Match" },
+                    { 2, "address", "Tangier", new DateTime(2024, 5, 3, 12, 55, 4, 118, DateTimeKind.Local).AddTicks(7113), "i am a movie", 0, 0f, new DateTime(2024, 5, 3, 12, 55, 4, 118, DateTimeKind.Local).AddTicks(7112), "Cinema", false, true, "2", "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995", "00h00", "Match" }
                 });
 
             migrationBuilder.InsertData(

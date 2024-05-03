@@ -24,9 +24,7 @@ namespace event_service.Entities
         [Required]
         public string Address { get; set; }
         public float Duration { get; set; }
-        [NotMapped]
-        public Design? Design { get; set; } = null;
-        public int? DesignId { get; set; } = null;
+        public int DesignId { get; set; } = 0;
         [Required]
         public string EventType { get; set; }
         [NotMapped]

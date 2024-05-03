@@ -2,10 +2,8 @@ using AutoMapper;
 using Confluent.Kafka;
 using event_service.Data;
 using event_service.Extensions;
-using event_service.Protos;
 using event_service.Services;
 using event_service.Services.IServices;
-using Grpc.Net.Client.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -13,21 +11,6 @@ using Steeltoe.Discovery.Client;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-/*builder.Services
-    .AddScoped<IGreeterService, GreeterService>()
-    .AddGrpcClient<Greeter.GreeterClient>((services, options) =>
-    {
-        options.Address = new Uri("http://localhost:5263");
-    })
-    .ConfigurePrimaryHttpMessageHandler(() =>
-    {
-        var handler = new HttpClientHandler();
-        handler.ServerCertificateCustomValidationCallback =
-            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-
-        return handler;
-    });*/
 
 // Add Database
 
@@ -40,11 +23,16 @@ var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
 var connectionString = $"Data Source={dbHost};Database={dbName};User ID=sa;Password={dbPassword};Connect Timeout=10;Encrypt=False;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
-
 builder.Services.AddDbContext<DataContext>(options =>
 {
+    //options.UseNpgsql(connectionString);
     options.UseSqlServer(connectionString);
 });
+
+
+// var connectionString = $"Host=localhost;Database=events-db;Username=postgres;Password=Anas@2002";
+//AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 
 builder.Services.AddControllers();
 

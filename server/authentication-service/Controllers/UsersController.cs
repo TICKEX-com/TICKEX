@@ -41,8 +41,15 @@ namespace authentication_service.Controllers
             }
 
             // Initialize JwtTokenValidator with the issuer, audience, and secret key
-            var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+            var Secret = Environment.GetEnvironmentVariable("SECRET");
+            var Issuer = Environment.GetEnvironmentVariable("ISSUER");
+            var Audience = Environment.GetEnvironmentVariable("AUDIENCE");
+            var tokenValidator = new JwtTokenValidator(Issuer, Audience, Secret);
+
+
+            /*var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);*/
+
 
             // Validate JWT token and extract user roles
             var roles = tokenValidator.ValidateToken(jwtToken);

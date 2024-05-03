@@ -32,7 +32,15 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddControllers();
 
 
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
+//builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
+
+builder.Services.Configure<JwtOptions>(options =>
+{
+    options.Issuer = Environment.GetEnvironmentVariable("ISSUER") ?? string.Empty;
+    options.Audience = Environment.GetEnvironmentVariable("AUDIENCE") ?? string.Empty;
+    options.Secret = Environment.GetEnvironmentVariable("SECRET") ?? string.Empty;
+});
+
 builder.Services.AddDiscoveryClient();
 
 // Auto Mapper
