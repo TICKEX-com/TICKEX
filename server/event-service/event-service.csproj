@@ -32,6 +32,7 @@
 	  <PackageReference Include="Google.Apis.Core" Version="1.67.0" />
 	  <PackageReference Include="Google.Apis.Drive.v3" Version="1.67.0.3373" />
 	  <PackageReference Include="Google.Cloud.Storage.V1" Version="4.9.0" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
     <PackageReference Include="Steeltoe.Discovery.ClientBase" Version="3.2.6" />
     <PackageReference Include="Steeltoe.Discovery.ClientCore" Version="3.2.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />

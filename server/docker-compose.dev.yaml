@@ -117,13 +117,13 @@ services:
       context: ./authentication-service/
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=User ID =postgres;Password=postgres;Server=authentication-service-db;Port=5432;Database=Authentication; Integrated Security=true;Pooling=true;
+      - DefaultConnection=Host=authentication-service-db;Database=Authentication;Username=postgres;Password=postgres;Pooling=true
       - SECRET=THIS IS OUR PROJECT, HERE IS OUR SECRET
       - ISSUER=auth-api
       - AUDIENCE=client
-    depends_on:
-      authentication-service-db:
-        condition: service_healthy
+    # depends_on:
+    #   authentication-service-db:
+    #     condition: service_healthy
     ports:
       - '8085:8080'
       - '8086:8081'
@@ -135,13 +135,13 @@ services:
       context: ./event-service/
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=User ID =postgres;Password=postgres;Server=event-service-db;Port=5432;Database=Events; Integrated Security=true;Pooling=true;
+      - DefaultConnection=Host=event-service-db;Database=Events;Username=postgres;Password=postgres;Pooling=true
       - SECRET=THIS IS OUR PROJECT, HERE IS OUR SECRET
       - ISSUER=auth-api
       - AUDIENCE=client
-    depends_on:
-      event-service-db:
-        condition: service_healthy
+    # depends_on:
+    #   event-service-db:
+    #     condition: service_healthy
     ports:
       - '8080:8080'
       - '8081:8081'
