@@ -53,36 +53,62 @@ services:
 
 
 
+  # authentication-service-db: 
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   container_name: authentication-service-db
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=1234Strong!Password
+  #   ports:
+  #     - '1433:1433'
+  #   healthcheck:
+  #     test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "1234Strong!Password" -Q "SELECT 1" || exit 1
+  #     interval: 10s
+  #     timeout: 3s
+  #     retries: 10
+  #     start_period: 10s
+      
+    
+  # event-service-db: 
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   container_name: event-service-db
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=1234Strong!Password
+  #   ports:
+  #     - '1434:1433'
+  #   healthcheck:
+  #     test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "1234Strong!Password" -Q "SELECT 1" || exit 1
+  #     interval: 10s
+  #     timeout: 3s
+  #     retries: 10
+  #     start_period: 10s
+
+
+
   authentication-service-db: 
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: postgres:latest
     container_name: authentication-service-db
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=1234Strong!Password
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Authentication
     ports:
-      - '1433:1433'
-    healthcheck:
-      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "1234Strong!Password" -Q "SELECT 1" || exit 1
-      interval: 10s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
+      - "5433:5432"
+    restart: always
+      
     
-
   event-service-db: 
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: postgres:latest
     container_name: event-service-db
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=1234Strong!Password
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Events
     ports:
-      - '1434:1433'
-    healthcheck:
-      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "1234Strong!Password" -Q "SELECT 1" || exit 1
-      interval: 10s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
+      - "5434:5432"
+    restart: always
+
 
 
   authentication-service:
@@ -91,9 +117,7 @@ services:
       context: ./authentication-service/
       dockerfile: Dockerfile
     environment:
-      - DB_HOST=authentication-service-db
-      - DB_NAME=Authentication
-      - DB_SA_PASSWORD=1234Strong!Password
+      - ConnectionStrings__DefaultConnection=User ID =postgres;Password=postgres;Server=authentication-service-db;Port=5432;Database=Authentication; Integrated Security=true;Pooling=true;
       - SECRET=THIS IS OUR PROJECT, HERE IS OUR SECRET
       - ISSUER=auth-api
       - AUDIENCE=client
@@ -111,9 +135,7 @@ services:
       context: ./event-service/
       dockerfile: Dockerfile
     environment:
-      - DB_HOST=event-service-db
-      - DB_NAME=Events
-      - DB_SA_PASSWORD=1234Strong!Password
+      - ConnectionStrings__DefaultConnection=User ID =postgres;Password=postgres;Server=event-service-db;Port=5432;Database=Events; Integrated Security=true;Pooling=true;
       - SECRET=THIS IS OUR PROJECT, HERE IS OUR SECRET
       - ISSUER=auth-api
       - AUDIENCE=client
