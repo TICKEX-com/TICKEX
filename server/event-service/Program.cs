@@ -12,26 +12,18 @@ using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Database
 
-/*var dbHost = "127.0.0.1,1434";
-var dbName = "Events";
-var dbPassword = "1234Strong!Password";*/
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
-var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
-var connectionString = $"Data Source={dbHost};Database={dbName};User ID=sa;Password={dbPassword};Connect Timeout=10;Encrypt=False;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    //options.UseNpgsql(connectionString);
-    options.UseSqlServer(connectionString);
+    options.UseNpgsql(connectionString);
 });
 
 
-// var connectionString = $"Host=localhost;Database=events-db;Username=postgres;Password=Anas@2002";
-//AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 
 builder.Services.AddControllers();
