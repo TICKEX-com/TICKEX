@@ -12,7 +12,7 @@ using event_service.Data;
 namespace event_service.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240507144629_final")]
+    [Migration("20240507172211_final")]
     partial class final
     {
         /// <inheritdoc />
@@ -42,11 +42,9 @@ namespace event_service.Migrations
 
             modelBuilder.Entity("event_service.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("text");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -74,7 +72,7 @@ namespace event_service.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = "1-1",
                             Color = "#FFD700",
                             EventId = 1,
                             Name = "Gold",
@@ -83,7 +81,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            Id = "1-2",
                             Color = "#C0C0C0",
                             EventId = 1,
                             Name = "Silver",
@@ -92,7 +90,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = "1-3",
                             Color = "#CD7F32",
                             EventId = 1,
                             Name = "Bronze",
@@ -101,7 +99,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 4,
+                            Id = "2-1",
                             Color = "#FFD700",
                             EventId = 2,
                             Name = "Gold",
@@ -110,7 +108,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 5,
+                            Id = "2-2",
                             Color = "#C0C0C0",
                             EventId = 2,
                             Name = "Silver",
@@ -119,7 +117,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 6,
+                            Id = "2-3",
                             Color = "#CD7F32",
                             EventId = 2,
                             Name = "Bronze",
@@ -128,7 +126,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 7,
+                            Id = "3-1",
                             Color = "#FFD700",
                             EventId = 3,
                             Name = "Gold",
@@ -137,7 +135,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 8,
+                            Id = "3-2",
                             Color = "#C0C0C0",
                             EventId = 3,
                             Name = "Silver",
@@ -146,7 +144,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 9,
+                            Id = "3-3",
                             Color = "#CD7F32",
                             EventId = 3,
                             Name = "Bronze",
@@ -155,7 +153,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 10,
+                            Id = "4-1",
                             Color = "#FFD700",
                             EventId = 4,
                             Name = "Gold",
@@ -164,7 +162,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 11,
+                            Id = "4-2",
                             Color = "#C0C0C0",
                             EventId = 4,
                             Name = "Silver",
@@ -173,7 +171,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 12,
+                            Id = "4-3",
                             Color = "#CD7F32",
                             EventId = 4,
                             Name = "Bronze",
@@ -182,7 +180,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 13,
+                            Id = "5-1",
                             Color = "#FFD700",
                             EventId = 5,
                             Name = "Gold",
@@ -191,7 +189,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 14,
+                            Id = "5-2",
                             Color = "#C0C0C0",
                             EventId = 5,
                             Name = "Silver",
@@ -200,7 +198,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 15,
+                            Id = "5-3",
                             Color = "#CD7F32",
                             EventId = 5,
                             Name = "Bronze",
@@ -209,7 +207,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 16,
+                            Id = "6-1",
                             Color = "#FFD700",
                             EventId = 6,
                             Name = "Gold",
@@ -218,7 +216,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 17,
+                            Id = "6-2",
                             Color = "#C0C0C0",
                             EventId = 6,
                             Name = "Silver",
@@ -227,7 +225,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 18,
+                            Id = "6-3",
                             Color = "#CD7F32",
                             EventId = 6,
                             Name = "Bronze",
@@ -236,7 +234,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 19,
+                            Id = "7-1",
                             Color = "#FFD700",
                             EventId = 7,
                             Name = "Gold",
@@ -245,7 +243,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 20,
+                            Id = "7-2",
                             Color = "#C0C0C0",
                             EventId = 7,
                             Name = "Silver",
@@ -254,7 +252,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 21,
+                            Id = "7-3",
                             Color = "#CD7F32",
                             EventId = 7,
                             Name = "Bronze",
@@ -263,7 +261,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 22,
+                            Id = "8-1",
                             Color = "#FFD700",
                             EventId = 8,
                             Name = "Gold",
@@ -272,7 +270,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 23,
+                            Id = "8-2",
                             Color = "#C0C0C0",
                             EventId = 8,
                             Name = "Silver",
@@ -281,7 +279,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 24,
+                            Id = "8-3",
                             Color = "#CD7F32",
                             EventId = 8,
                             Name = "Bronze",
@@ -290,7 +288,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 25,
+                            Id = "9-1",
                             Color = "#FFD700",
                             EventId = 9,
                             Name = "Gold",
@@ -299,7 +297,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 26,
+                            Id = "9-2",
                             Color = "#C0C0C0",
                             EventId = 9,
                             Name = "Silver",
@@ -308,7 +306,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 27,
+                            Id = "9-3",
                             Color = "#CD7F32",
                             EventId = 9,
                             Name = "Bronze",
@@ -317,7 +315,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 28,
+                            Id = "10-1",
                             Color = "#FFD700",
                             EventId = 10,
                             Name = "Gold",
@@ -326,7 +324,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 29,
+                            Id = "10-2",
                             Color = "#C0C0C0",
                             EventId = 10,
                             Name = "Silver",
@@ -335,7 +333,7 @@ namespace event_service.Migrations
                         },
                         new
                         {
-                            Id = 30,
+                            Id = "10-3",
                             Color = "#CD7F32",
                             EventId = 10,
                             Name = "Bronze",
@@ -427,11 +425,11 @@ namespace event_service.Migrations
                             Id = 1,
                             Address = "Santiago Bernabéu",
                             City = "Madrid",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4443),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8486),
                             Description = "Champions league semi finals",
                             DesignId = 0,
                             Duration = 2f,
-                            EventDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4442),
+                            EventDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8483),
                             EventType = "Sports",
                             Is_finished = false,
                             On_sell = true,
@@ -445,11 +443,11 @@ namespace event_service.Migrations
                             Id = 2,
                             Address = "Royal Theater Rabat",
                             City = "Rabat",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4467),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8524),
                             Description = "Exclusive fashion show showcasing latest trends",
                             DesignId = 0,
                             Duration = 3f,
-                            EventDate = new DateTime(2024, 9, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4463),
+                            EventDate = new DateTime(2024, 9, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8519),
                             EventType = "Fashion",
                             Is_finished = false,
                             On_sell = true,
@@ -463,11 +461,11 @@ namespace event_service.Migrations
                             Id = 3,
                             Address = "Casablanca International Convention Center",
                             City = "Casablanca",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4482),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8552),
                             Description = "Cutting-edge technology conference",
                             DesignId = 0,
                             Duration = 4f,
-                            EventDate = new DateTime(2024, 6, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4481),
+                            EventDate = new DateTime(2024, 6, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8550),
                             EventType = "Technology",
                             Is_finished = false,
                             On_sell = true,
@@ -481,11 +479,11 @@ namespace event_service.Migrations
                             Id = 4,
                             Address = "Palmeraie Marrakech",
                             City = "Marrakech",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4497),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8578),
                             Description = "Annual music festival featuring top artists",
                             DesignId = 0,
                             Duration = 2f,
-                            EventDate = new DateTime(2024, 7, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4496),
+                            EventDate = new DateTime(2024, 7, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8576),
                             EventType = "Music",
                             Is_finished = false,
                             On_sell = true,
@@ -499,11 +497,11 @@ namespace event_service.Migrations
                             Id = 5,
                             Address = "Tangier Art Gallery",
                             City = "Tangier",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4511),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8605),
                             Description = "Contemporary art exhibition",
                             DesignId = 0,
                             Duration = 2.5f,
-                            EventDate = new DateTime(2024, 8, 5, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4510),
+                            EventDate = new DateTime(2024, 8, 5, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8603),
                             EventType = "Art",
                             Is_finished = false,
                             On_sell = true,
@@ -517,11 +515,11 @@ namespace event_service.Migrations
                             Id = 6,
                             Address = "ENSA Agadir",
                             City = "Agadir",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4561),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8638),
                             Description = "Annual career fair organized by ENSA",
                             DesignId = 0,
                             Duration = 4f,
-                            EventDate = new DateTime(2024, 6, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4560),
+                            EventDate = new DateTime(2024, 6, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8636),
                             EventType = "Career",
                             Is_finished = false,
                             On_sell = true,
@@ -535,11 +533,11 @@ namespace event_service.Migrations
                             Id = 7,
                             Address = "Casablanca International Convention Center",
                             City = "Casablanca",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4577),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8664),
                             Description = "Cutting-edge technology conference",
                             DesignId = 0,
                             Duration = 5f,
-                            EventDate = new DateTime(2024, 7, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4576),
+                            EventDate = new DateTime(2024, 7, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8662),
                             EventType = "Technology",
                             Is_finished = false,
                             On_sell = true,
@@ -553,11 +551,11 @@ namespace event_service.Migrations
                             Id = 8,
                             Address = "Palmeraie Marrakech",
                             City = "Marrakech",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4591),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8690),
                             Description = "Annual music festival featuring top artists",
                             DesignId = 0,
                             Duration = 8f,
-                            EventDate = new DateTime(2024, 8, 5, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4590),
+                            EventDate = new DateTime(2024, 8, 5, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8688),
                             EventType = "Music",
                             Is_finished = false,
                             On_sell = true,
@@ -571,11 +569,11 @@ namespace event_service.Migrations
                             Id = 9,
                             Address = "Marrakech Conference Center",
                             City = "Marrakech",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4605),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8715),
                             Description = "Annual startup summit bringing together entrepreneurs and investors",
                             DesignId = 0,
                             Duration = 7f,
-                            EventDate = new DateTime(2024, 9, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4604),
+                            EventDate = new DateTime(2024, 9, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8713),
                             EventType = "Startup",
                             Is_finished = false,
                             On_sell = true,
@@ -589,11 +587,11 @@ namespace event_service.Migrations
                             Id = 10,
                             Address = "Casablanca Food Park",
                             City = "Casablanca",
-                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4621),
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8742),
                             Description = "Celebration of culinary delights with food stalls and cooking demonstrations",
                             DesignId = 0,
                             Duration = 6f,
-                            EventDate = new DateTime(2024, 10, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4620),
+                            EventDate = new DateTime(2024, 10, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8740),
                             EventType = "Food",
                             Is_finished = false,
                             On_sell = true,

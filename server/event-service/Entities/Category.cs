@@ -7,10 +7,9 @@ namespace event_service.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set;}
+        public string Id { get; set;}
         public string Name { get; set;}
-        [Required]
-        public int Seats { get; set;}
+        public int Seats { get; set; } = 0;
         [Required]
         public float Price { get; set;}
         public string Color { get; set; } = string.Empty;

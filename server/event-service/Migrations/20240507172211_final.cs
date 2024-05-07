@@ -78,8 +78,7 @@ namespace event_service.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Seats = table.Column<int>(type: "integer", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
@@ -153,16 +152,16 @@ namespace event_service.Migrations
                 columns: new[] { "Id", "Address", "City", "CreationDate", "Description", "DesignId", "Duration", "EventDate", "EventType", "Is_finished", "On_sell", "OrganizerId", "Poster", "Time", "Title" },
                 values: new object[,]
                 {
-                    { 1, "Santiago Bernabéu", "Madrid", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4443), "Champions league semi finals", 0, 2f, new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4442), "Sports", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "20h00", "REAL MADRID VS BAYERN MUNICH" },
-                    { 2, "Royal Theater Rabat", "Rabat", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4467), "Exclusive fashion show showcasing latest trends", 0, 3f, new DateTime(2024, 9, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4463), "Fashion", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "19h00", "Fashion Show" },
-                    { 3, "Casablanca International Convention Center", "Casablanca", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4482), "Cutting-edge technology conference", 0, 4f, new DateTime(2024, 6, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4481), "Technology", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "10h00", "Tech Conference" },
-                    { 4, "Palmeraie Marrakech", "Marrakech", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4497), "Annual music festival featuring top artists", 0, 2f, new DateTime(2024, 7, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4496), "Music", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "18h00", "Music Festival" },
-                    { 5, "Tangier Art Gallery", "Tangier", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4511), "Contemporary art exhibition", 0, 2.5f, new DateTime(2024, 8, 5, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4510), "Art", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "15h00", "Art Exhibition" },
-                    { 6, "ENSA Agadir", "Agadir", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4561), "Annual career fair organized by ENSA", 0, 4f, new DateTime(2024, 6, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4560), "Career", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "09h00", "ENSA Career Fair" },
-                    { 7, "Casablanca International Convention Center", "Casablanca", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4577), "Cutting-edge technology conference", 0, 5f, new DateTime(2024, 7, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4576), "Technology", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "10h00", "Tech Conference 2024" },
-                    { 8, "Palmeraie Marrakech", "Marrakech", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4591), "Annual music festival featuring top artists", 0, 8f, new DateTime(2024, 8, 5, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4590), "Music", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "18h00", "Music Festival" },
-                    { 9, "Marrakech Conference Center", "Marrakech", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4605), "Annual startup summit bringing together entrepreneurs and investors", 0, 7f, new DateTime(2024, 9, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4604), "Startup", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "09h00", "Startup Summit" },
-                    { 10, "Casablanca Food Park", "Casablanca", new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4621), "Celebration of culinary delights with food stalls and cooking demonstrations", 0, 6f, new DateTime(2024, 10, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4620), "Food", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "12h00", "Food Festival" }
+                    { 1, "Santiago Bernabéu", "Madrid", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8486), "Champions league semi finals", 0, 2f, new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8483), "Sports", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "20h00", "REAL MADRID VS BAYERN MUNICH" },
+                    { 2, "Royal Theater Rabat", "Rabat", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8524), "Exclusive fashion show showcasing latest trends", 0, 3f, new DateTime(2024, 9, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8519), "Fashion", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "19h00", "Fashion Show" },
+                    { 3, "Casablanca International Convention Center", "Casablanca", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8552), "Cutting-edge technology conference", 0, 4f, new DateTime(2024, 6, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8550), "Technology", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "10h00", "Tech Conference" },
+                    { 4, "Palmeraie Marrakech", "Marrakech", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8578), "Annual music festival featuring top artists", 0, 2f, new DateTime(2024, 7, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8576), "Music", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "18h00", "Music Festival" },
+                    { 5, "Tangier Art Gallery", "Tangier", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8605), "Contemporary art exhibition", 0, 2.5f, new DateTime(2024, 8, 5, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8603), "Art", false, true, "1", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "15h00", "Art Exhibition" },
+                    { 6, "ENSA Agadir", "Agadir", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8638), "Annual career fair organized by ENSA", 0, 4f, new DateTime(2024, 6, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8636), "Career", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "09h00", "ENSA Career Fair" },
+                    { 7, "Casablanca International Convention Center", "Casablanca", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8664), "Cutting-edge technology conference", 0, 5f, new DateTime(2024, 7, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8662), "Technology", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "10h00", "Tech Conference 2024" },
+                    { 8, "Palmeraie Marrakech", "Marrakech", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8690), "Annual music festival featuring top artists", 0, 8f, new DateTime(2024, 8, 5, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8688), "Music", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "18h00", "Music Festival" },
+                    { 9, "Marrakech Conference Center", "Marrakech", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8715), "Annual startup summit bringing together entrepreneurs and investors", 0, 7f, new DateTime(2024, 9, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8713), "Startup", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "09h00", "Startup Summit" },
+                    { 10, "Casablanca Food Park", "Casablanca", new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8742), "Celebration of culinary delights with food stalls and cooking demonstrations", 0, 6f, new DateTime(2024, 10, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8740), "Food", false, true, "2", "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521", "12h00", "Food Festival" }
                 });
 
             migrationBuilder.InsertData(
@@ -170,36 +169,36 @@ namespace event_service.Migrations
                 columns: new[] { "Id", "Color", "EventId", "Name", "Price", "Seats" },
                 values: new object[,]
                 {
-                    { 1, "#FFD700", 1, "Gold", 1000f, 100 },
-                    { 2, "#C0C0C0", 1, "Silver", 500f, 200 },
-                    { 3, "#CD7F32", 1, "Bronze", 300f, 300 },
-                    { 4, "#FFD700", 2, "Gold", 1000f, 100 },
-                    { 5, "#C0C0C0", 2, "Silver", 500f, 200 },
-                    { 6, "#CD7F32", 2, "Bronze", 300f, 300 },
-                    { 7, "#FFD700", 3, "Gold", 1000f, 100 },
-                    { 8, "#C0C0C0", 3, "Silver", 500f, 200 },
-                    { 9, "#CD7F32", 3, "Bronze", 300f, 300 },
-                    { 10, "#FFD700", 4, "Gold", 1000f, 100 },
-                    { 11, "#C0C0C0", 4, "Silver", 500f, 200 },
-                    { 12, "#CD7F32", 4, "Bronze", 300f, 300 },
-                    { 13, "#FFD700", 5, "Gold", 1000f, 100 },
-                    { 14, "#C0C0C0", 5, "Silver", 500f, 200 },
-                    { 15, "#CD7F32", 5, "Bronze", 300f, 300 },
-                    { 16, "#FFD700", 6, "Gold", 1000f, 100 },
-                    { 17, "#C0C0C0", 6, "Silver", 500f, 200 },
-                    { 18, "#CD7F32", 6, "Bronze", 300f, 300 },
-                    { 19, "#FFD700", 7, "Gold", 1000f, 100 },
-                    { 20, "#C0C0C0", 7, "Silver", 500f, 200 },
-                    { 21, "#CD7F32", 7, "Bronze", 300f, 300 },
-                    { 22, "#FFD700", 8, "Gold", 1000f, 100 },
-                    { 23, "#C0C0C0", 8, "Silver", 500f, 200 },
-                    { 24, "#CD7F32", 8, "Bronze", 300f, 300 },
-                    { 25, "#FFD700", 9, "Gold", 1000f, 100 },
-                    { 26, "#C0C0C0", 9, "Silver", 500f, 200 },
-                    { 27, "#CD7F32", 9, "Bronze", 300f, 300 },
-                    { 28, "#FFD700", 10, "Gold", 1000f, 100 },
-                    { 29, "#C0C0C0", 10, "Silver", 500f, 200 },
-                    { 30, "#CD7F32", 10, "Bronze", 300f, 300 }
+                    { "1-1", "#FFD700", 1, "Gold", 1000f, 100 },
+                    { "1-2", "#C0C0C0", 1, "Silver", 500f, 200 },
+                    { "1-3", "#CD7F32", 1, "Bronze", 300f, 300 },
+                    { "10-1", "#FFD700", 10, "Gold", 1000f, 100 },
+                    { "10-2", "#C0C0C0", 10, "Silver", 500f, 200 },
+                    { "10-3", "#CD7F32", 10, "Bronze", 300f, 300 },
+                    { "2-1", "#FFD700", 2, "Gold", 1000f, 100 },
+                    { "2-2", "#C0C0C0", 2, "Silver", 500f, 200 },
+                    { "2-3", "#CD7F32", 2, "Bronze", 300f, 300 },
+                    { "3-1", "#FFD700", 3, "Gold", 1000f, 100 },
+                    { "3-2", "#C0C0C0", 3, "Silver", 500f, 200 },
+                    { "3-3", "#CD7F32", 3, "Bronze", 300f, 300 },
+                    { "4-1", "#FFD700", 4, "Gold", 1000f, 100 },
+                    { "4-2", "#C0C0C0", 4, "Silver", 500f, 200 },
+                    { "4-3", "#CD7F32", 4, "Bronze", 300f, 300 },
+                    { "5-1", "#FFD700", 5, "Gold", 1000f, 100 },
+                    { "5-2", "#C0C0C0", 5, "Silver", 500f, 200 },
+                    { "5-3", "#CD7F32", 5, "Bronze", 300f, 300 },
+                    { "6-1", "#FFD700", 6, "Gold", 1000f, 100 },
+                    { "6-2", "#C0C0C0", 6, "Silver", 500f, 200 },
+                    { "6-3", "#CD7F32", 6, "Bronze", 300f, 300 },
+                    { "7-1", "#FFD700", 7, "Gold", 1000f, 100 },
+                    { "7-2", "#C0C0C0", 7, "Silver", 500f, 200 },
+                    { "7-3", "#CD7F32", 7, "Bronze", 300f, 300 },
+                    { "8-1", "#FFD700", 8, "Gold", 1000f, 100 },
+                    { "8-2", "#C0C0C0", 8, "Silver", 500f, 200 },
+                    { "8-3", "#CD7F32", 8, "Bronze", 300f, 300 },
+                    { "9-1", "#FFD700", 9, "Gold", 1000f, 100 },
+                    { "9-2", "#C0C0C0", 9, "Silver", 500f, 200 },
+                    { "9-3", "#CD7F32", 9, "Bronze", 300f, 300 }
                 });
 
             migrationBuilder.CreateIndex(
