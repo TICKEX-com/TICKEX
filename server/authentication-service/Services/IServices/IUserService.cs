@@ -11,6 +11,7 @@ namespace authentication_service.Services.IServices
         public Task<User> GetOrganizerById2(string id);
         public Task<ICollection<OrganizerDto>> GetOrganizers();
         public Task<string> GetOrganizerIdByUsername(string username);
+        public Task<string> GetClientIdByUsername(string username);
         public Task<bool> IsOrganizerExist(string id);
         public Task<string> UpdateOrganizer(UpdateReqOrganizerDto requestDto, string id);
         public Task<bool> AcceptOrganizer(string id);

@@ -106,13 +106,13 @@ namespace authentication_service.Controllers
                     {
                         _responseDto.Result = organizers;
                         _responseDto.Message = "Success";
-                        return Ok(_responseDto);
+                        return Ok(organizers);
                     }
                     else
                     {
                         _responseDto.Message = "Organizers table is empty";
                         _responseDto.IsSuccess = false;
-                        return BadRequest(_responseDto);
+                        return BadRequest("Organizers table is empty");
                     }
                 }
                 else
@@ -120,14 +120,14 @@ namespace authentication_service.Controllers
                     // User does not have the required role
                     _responseDto.IsSuccess = false;
                     _responseDto.Message = "Unauthorized";
-                    return Unauthorized(_responseDto);
+                    return Unauthorized("Unauthorized");
                 }
             }
             catch (Exception ex)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = ex.Message;
-                return BadRequest(_responseDto);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -140,12 +140,13 @@ namespace authentication_service.Controllers
                 if (Authorize("ADMIN"))
                 {
                     var organizer = await _userService.GetOrganizerById(id);
+                    organizer.Role = "ORGANIZER";
                     if (organizer != null)
                     {
                         // await _producerService.publish("Tickex", organizer);
                         _responseDto.Result = organizer;
                         _responseDto.Message = "Organizer found successfully";
-                        return Ok(_responseDto);
+                        return Ok(organizer);
                     }
                     else
                     {
@@ -153,21 +154,21 @@ namespace authentication_service.Controllers
                         _responseDto.IsSuccess = false;
 
                     }
-                    return BadRequest(_responseDto);
+                    return BadRequest("Organizer doesn't exist");
                 }
                 else
                 {
                     // User does not have the required role
                     _responseDto.IsSuccess = false;
                     _responseDto.Message = "Unauthorized";
-                    return Unauthorized(_responseDto);
+                    return Unauthorized("Unauthorized");
                 }
             }
             catch (Exception ex)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = ex.Message;
-                return BadRequest(_responseDto);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -183,7 +184,7 @@ namespace authentication_service.Controllers
                     {
                         _responseDto.IsSuccess = false;
                         _responseDto.Message = "Organizer not found";
-                        return NotFound(_responseDto);
+                        return NotFound("Organizer not found");
                     }
 
                     var organizer = _mapper.Map<OrganizerDto>(requestDto);
@@ -194,35 +195,37 @@ namespace authentication_service.Controllers
                         var response = await _producerService.publish("Tickex", organizer);
                         if (response)
                         {
-                            Console.WriteLine("the organizer is published");
+                            // Console.WriteLine("the organizer is published");
                             var errorMessage = await _userService.UpdateOrganizer(requestDto, id);
+                            var organizer2 = await _userService.GetOrganizerById(id);
                             if (errorMessage != "success")
                             {
                                 _responseDto.IsSuccess = false;
                                 _responseDto.Message = errorMessage;
-                                return BadRequest(_responseDto);
+                                return BadRequest(errorMessage);
                             }
                             _responseDto.Message = "the organizer is published and it is updated in DB";
-                            _responseDto.Result = organizer;
-                            return Ok(_responseDto);
+                            _responseDto.Result = organizer2;
+                            Console.WriteLine("the organizer is published and it is updated in DB");
+                            return Ok(organizer2);
                         }
                         else
                         {
                             _responseDto.Message = "the organizer isn't updated in DB due to connection failure to Kafka";
                             _responseDto.IsSuccess = false;
-                            return BadRequest(_responseDto);
+                            return BadRequest("the organizer isn't updated in DB due to connection failure to Kafka");
                         }
                     }
                     _responseDto.Message = "the organizer isn't accepted";
                     _responseDto.IsSuccess = false;
-                    return BadRequest(_responseDto);
+                    return BadRequest("the organizer isn't accepted");
                 }
                 else
                 {
                     // User does not have the required role
                     _responseDto.IsSuccess = false;
                     _responseDto.Message = "Unauthorized";
-                    return Unauthorized(_responseDto);
+                    return Unauthorized("Unauthorized");
                 }
             }
             catch (Exception ex)
@@ -245,7 +248,7 @@ namespace authentication_service.Controllers
                     {
                         _responseDto.IsSuccess = false;
                         _responseDto.Message = "Organizer not found";
-                        return NotFound(_responseDto);
+                        return NotFound("Organizer not found");
                     }
 
                     var organizer = await _userService.GetOrganizerById(id);
@@ -254,7 +257,7 @@ namespace authentication_service.Controllers
                     {
                         _responseDto.Message = "Organizer is already accepted";
                         _responseDto.Result = organizer;
-                        return Ok(_responseDto);
+                        return Ok("Organizer is already accepted");
                     }
 
                     organizer.isActive = true;
@@ -266,32 +269,32 @@ namespace authentication_service.Controllers
                         {
                             _responseDto.IsSuccess = false;
                             _responseDto.Message = "Organizer not accepted";
-                            return BadRequest(_responseDto);
+                            return BadRequest("Organizer not accepted");
                         }
                         else
                         {
                             _responseDto.Message = "Organizer is accepted";
                             _responseDto.Result = organizer;
-                            return Ok(_responseDto);
+                            return Ok("Organizer is accepted");
                         }
                     }
                     _responseDto.Message = "the organizer isn't accepted in DB due to connection failure to Kafka";
                     _responseDto.IsSuccess = false;
-                    return BadRequest(_responseDto);
+                    return BadRequest("the organizer isn't accepted in DB due to connection failure to Kafka");
                 }
                 else
                 {
                     // User does not have the required role
                     _responseDto.IsSuccess = false;
                     _responseDto.Message = "Unauthorized";
-                    return Unauthorized(_responseDto);
+                    return Unauthorized("Unauthorized");
                 }
             }
             catch (Exception ex)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = ex.Message;
-                return BadRequest(_responseDto);
+                return BadRequest(ex.Message);
             }
         }
         [HttpDelete("Organizer/{id}")]
@@ -307,24 +310,24 @@ namespace authentication_service.Controllers
                     {
                         _responseDto.IsSuccess = false;
                         _responseDto.Message = "Organizer not deleted";
-                        return BadRequest(_responseDto);
+                        return BadRequest("Organizer not deleted");
                     }
                     _responseDto.Message = "Organizer is deleted";
-                    return Ok(_responseDto);
+                    return Ok("Organizer is deleted");
                 }
                 else
                 {
                     // User does not have the required role
                     _responseDto.IsSuccess = false;
                     _responseDto.Message = "Unauthorized";
-                    return Unauthorized(_responseDto);
+                    return Unauthorized("Unauthorized");
                 }
             }
             catch (Exception ex)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = ex.Message;
-                return BadRequest(_responseDto);
+                return BadRequest(ex.Message);
             }
         }
     }

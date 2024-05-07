@@ -16,7 +16,7 @@ namespace authentication_service.Extensions
                 cfg.CreateMap<User, UpdateReqOrganizerDto>().ReverseMap();
                 cfg.CreateMap<RegisterReqOrganizerDto, OrganizerDto>().ReverseMap();
                 cfg.CreateMap<UpdateReqOrganizerDto, OrganizerDto>().ReverseMap();
-
+                cfg.CreateMap<RegisterReqClientDto, ClientDto>().ReverseMap();
             });
             return mappingConfig;
         }

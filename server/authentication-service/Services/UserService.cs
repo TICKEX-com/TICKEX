@@ -49,6 +49,20 @@ namespace authentication_service.Services
             return userDto;
         }
 
+        public async Task<string> GetClientIdByUsername(string username)
+        {
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            // Récupérer le rôle de l'utilisateur
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (user == null || roles.FirstOrDefault() == "ORGANIZER")
+            {
+                return null;
+            }
+
+            return user.Id;
+        }
+
         public async Task<ICollection<OrganizerDto>> GetOrganizers()
         {
             // Get all users
@@ -76,7 +90,7 @@ namespace authentication_service.Services
                 }
                 // Création de l'objet UserDto à partir de l'utilisateur
                 var organizerDto = _mapper.Map<OrganizerDto>(user);
-
+                organizerDto.Role = "ORGANIZER";
                 return organizerDto;
             }
             return null;
@@ -129,6 +143,7 @@ namespace authentication_service.Services
             return user.Id;
         }
 
+        
         private bool IsValidEmail(string email)
         {
             try

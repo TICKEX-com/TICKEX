@@ -40,9 +40,13 @@ namespace authentication_service.Controllers
                 {
                     _response.IsSuccess = false;
                     _response.Message = errorMessage;
-                    return BadRequest(_response);
+                    return BadRequest(errorMessage);
                 }
-                return Ok(_response);
+                var client = _mapper.Map<ClientDto>(requestDto);
+                client.Id = await _userService.GetClientIdByUsername(requestDto.Username);
+                client.Role = "CLIENT";
+                _response.Result = client;
+                return Ok(client);
             }
             catch (Exception ex)
             {
@@ -60,12 +64,13 @@ namespace authentication_service.Controllers
                 {
                     _response.IsSuccess = false;
                     _response.Message = errorMessage;
-                    return BadRequest(_response);
+                    return BadRequest(errorMessage);
                 }
                 var organizer = _mapper.Map<OrganizerDto>(requestDto);
                 organizer.Id = await _userService.GetOrganizerIdByUsername(requestDto.Username);
+                organizer.Role = "ORGANIZER";
                 _response.Result = organizer;
-                return Ok(_response);
+                return Ok(organizer);
             }
             catch (Exception ex)
             {
@@ -83,10 +88,11 @@ namespace authentication_service.Controllers
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Username or password is incorrect";
-                    return BadRequest(_response);
+                    return BadRequest("Username or password is incorrect");
                 }
                 _response.Result = loginResponse;
-                return Ok(_response);
+                var user = loginResponse.User;
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -99,7 +105,7 @@ namespace authentication_service.Controllers
         {
             if (await _authService.Logout(_httpContextAccessor.HttpContext))
             {
-                return Ok();
+                return Ok("You are logged out");
             }
             return BadRequest();
         }

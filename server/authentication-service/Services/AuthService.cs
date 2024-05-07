@@ -9,6 +9,7 @@ using System;
 using System.Net.Http;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Google.Api.Gax.ResourceNames;
 
 namespace authentication_service.Services
 {
@@ -62,7 +63,7 @@ namespace authentication_service.Services
                 // var firstRole = roles.FirstOrDefault(); // Get the first role
                 var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
-                UserDto userDto = new()
+                OrganizerDto organizerDto = new()
                 {
                     Id = user.Id,
                     Username = requestDto.UserName,
@@ -70,6 +71,12 @@ namespace authentication_service.Services
                     firstname = user.firstname,
                     lastname = user.lastname,
                     PhoneNumber = user.PhoneNumber,
+                    profileImage = user.profileImage,
+                    currency = user.currency,
+                    OrganizationName = user.OrganizationName,
+                    ville = user.ville,
+                    isActive = user.isActive,
+                    certificate = user.certificate,
                     Role = roles.FirstOrDefault()
                 };
 
@@ -83,7 +90,7 @@ namespace authentication_service.Services
 
                 LoginResponseDto loginResponseDto = new LoginResponseDto()
                 {
-                    User = userDto
+                    User = organizerDto
                 };
 
                 return loginResponseDto;
@@ -125,7 +132,8 @@ namespace authentication_service.Services
                 NormalizedEmail = requestDto.Email.ToUpper(),
                 firstname = requestDto.firstname,
                 lastname = requestDto.lastname,
-                PhoneNumber = requestDto.PhoneNumber
+                PhoneNumber = requestDto.PhoneNumber,
+                profileImage = requestDto.profileImage
             };
             try
             {
@@ -191,7 +199,7 @@ namespace authentication_service.Services
                 lastname = requestDto.lastname,
                 OrganizationName = requestDto.OrganizationName,
                 PhoneNumber = requestDto.PhoneNumber,
-                certificate = requestDto.Certificat,
+                certificate = requestDto.Certificate,
                 profileImage = requestDto.profileImage,
                 currency = requestDto.currency,
                 ville = requestDto.ville

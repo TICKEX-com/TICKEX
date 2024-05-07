@@ -15,6 +15,6 @@ namespace authentication_service.DTOs
         public string OrganizationName { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
-        public string Certificat {  get; set; }
+        public string Certificate {  get; set; }
     }
 }

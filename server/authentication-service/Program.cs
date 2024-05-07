@@ -13,9 +13,6 @@ using Steeltoe.Discovery.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-
 // var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); 
@@ -29,7 +26,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddControllers();
 
 
-//builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
+// builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 
 builder.Services.Configure<JwtOptions>(options =>
 {
