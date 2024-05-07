@@ -1,10 +1,25 @@
+"use client"
 import DataTable from "@/components/DataTable";
 import TopNav from "@/components/TopNav";
 import UsersTable from "@/components/UsersTable";
 import { userColumns, userData } from "@/core/constantes/Table.const";
+import api from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 export default function page() {
+  const fetchOrganiser = async ()=> {
+    try {
+      const res = await api.get("authentication-service/api/users/organizers")
+      console.log(res);
+      
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  const{data,error,isLoading}=useQuery({queryKey:["organisers"],queryFn: fetchOrganiser});
+
   return (
     <div>
       <TopNav />

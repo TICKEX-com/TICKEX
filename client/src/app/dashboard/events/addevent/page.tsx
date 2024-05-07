@@ -29,32 +29,35 @@ function page() {
   }, [dispatch, poster]);
 
   const organizerId = useAppSelector(
-    (state) => state.persistedReducer.auth?.id
+    (state) => state.persistedReducer.auth?.userInfo?.id
   );
   const eventData: eventInfoType = useAppSelector(
     (state) => state.event.eventInfo
   );
+const id = organizerId
+  const { mutate, isPending, isError, isSuccess, error } = useMutation({
+    mutationFn: async (event: eventInfoType) => {
+      try {
+      
+        console.log(id);
+        
+        const response = await api.post(
+          `event-service/Organizer/${id}/Events`,
+          eventData
+        );
+        toast.success("Your Event has been created successfully");
 
-  // const { mutate, isPending, isError, isSuccess, error } = useMutation({
-  //   mutationFn: async (event: eventInfoType) => {
-  //     try {
-  //       const response = await api.post(
-  //         `event-service/Organizer/${organizerId}/Events`,
-  //         eventData
-  //       );
-  //       toast.success("Your Event has been created successfully");
+      } catch (error) {
+        console.log(error);
+        toast.error("something went wrong:error")
+        throw error
+      }
+    },
+  });
 
-  //     } catch (error) {
-  //       console.log(error);
-  //       toast.error("something went wrong:error")
-  //       throw error
-  //     }
-  //   },
-  // });
-
-  // const handleSubmit = async () => {
-  //   mutate(eventData);
-  // };
+  const handleSubmit = async () => {
+    mutate(eventData);
+  };
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -70,7 +73,7 @@ function page() {
             Add Event
           </h1>
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
-            <Button size="sm" >
+            <Button size="sm" onClick={handleSubmit} >
               Save Event
             </Button>
           </div>

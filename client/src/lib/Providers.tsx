@@ -13,12 +13,12 @@ function Providers({ children }: { children: ReactNode }) {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={<div>{children}</div>} persistor={persistor}>
-        <QueryClientProvider client={queryClinet}>
+      <QueryClientProvider client={queryClinet}>
+        <PersistGate loading={<div>{children}</div>} persistor={persistor}>
           <ReactQueryDevtools initialIsOpen={false} />
           {children}
-        </QueryClientProvider>
-      </PersistGate>
+        </PersistGate>
+      </QueryClientProvider>
     </Provider>
   );
 }
