@@ -2,6 +2,6 @@
 {
     public class LoginResponseDto
     {
-        public UserDto User { get; set; }
+        public OrganizerDto User { get; set; }
     }
 }

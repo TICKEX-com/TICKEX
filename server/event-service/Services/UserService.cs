@@ -1,6 +1,7 @@
 ﻿using event_service.Data;
 using event_service.Entities;
 using event_service.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace event_service.Services
@@ -8,6 +9,7 @@ namespace event_service.Services
     public class UserService : IUserService
     {
         private readonly DataContext _context;
+
 
         public UserService(DataContext context)
         {

@@ -41,6 +41,7 @@ namespace authentication_service.Data
                     PhoneNumber = "0674110011",
                     certificate = "",
                     Email = "Admin@gmail.com",
+                    profileImage = "Here is my profile Image",
                     EmailConfirmed = true,
                     NormalizedUserName = "ADMIN",
                     PasswordHash = hasher.HashPassword(null, "Admin@123")

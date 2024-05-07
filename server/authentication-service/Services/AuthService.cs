@@ -1,4 +1,4 @@
-﻿using authentication_service.Data;
+using authentication_service.Data;
 using authentication_service.DTOs;
 using authentication_service.Entities;
 using authentication_service.Services.IServices;
@@ -9,6 +9,7 @@ using System;
 using System.Net.Http;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Google.Api.Gax.ResourceNames;
 
 namespace authentication_service.Services
 {
@@ -62,7 +63,7 @@ namespace authentication_service.Services
                 // var firstRole = roles.FirstOrDefault(); // Get the first role
                 var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
-                UserDto userDto = new()
+                OrganizerDto organizerDto = new()
                 {
                     Id = user.Id,
                     Username = requestDto.UserName,
@@ -70,20 +71,26 @@ namespace authentication_service.Services
                     firstname = user.firstname,
                     lastname = user.lastname,
                     PhoneNumber = user.PhoneNumber,
+                    profileImage = user.profileImage,
+                    currency = user.currency,
+                    OrganizationName = user.OrganizationName,
+                    ville = user.ville,
+                    isActive = user.isActive,
+                    certificate = user.certificate,
                     Role = roles.FirstOrDefault()
                 };
 
                 var cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
-                    Expires = DateTime.UtcNow.AddDays(7),
+                    Expires = DateTime.UtcNow.AddHours(3),
                 };
 
                 httpContext.Response.Cookies.Append("jwtToken", token, cookieOptions);
 
                 LoginResponseDto loginResponseDto = new LoginResponseDto()
                 {
-                    User = userDto
+                    User = organizerDto
                 };
 
                 return loginResponseDto;
@@ -125,7 +132,8 @@ namespace authentication_service.Services
                 NormalizedEmail = requestDto.Email.ToUpper(),
                 firstname = requestDto.firstname,
                 lastname = requestDto.lastname,
-                PhoneNumber = requestDto.PhoneNumber
+                PhoneNumber = requestDto.PhoneNumber,
+                profileImage = requestDto.profileImage
             };
             try
             {
@@ -191,7 +199,7 @@ namespace authentication_service.Services
                 lastname = requestDto.lastname,
                 OrganizationName = requestDto.OrganizationName,
                 PhoneNumber = requestDto.PhoneNumber,
-                certificate = requestDto.Certificat,
+                certificate = requestDto.Certificate,
                 profileImage = requestDto.profileImage,
                 currency = requestDto.currency,
                 ville = requestDto.ville

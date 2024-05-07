@@ -6,15 +6,19 @@ namespace authentication_service.Extensions
 {
     public static class Auth
     {
-        public static WebApplicationBuilder AddAppAuthetication(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddAppAuthentication(this WebApplicationBuilder builder)
         {
             var settingsSection = builder.Configuration.GetSection("ApiSettings");
             var jwtOptions = settingsSection.GetSection("JwtOptions");
 
-
             var secret = jwtOptions.GetValue<string>("Secret");
             var issuer = jwtOptions.GetValue<string>("Issuer");
             var audience = jwtOptions.GetValue<string>("Audience");
+
+
+            // var secret = Environment.GetEnvironmentVariable("SECRET");
+            // var issuer = Environment.GetEnvironmentVariable("ISSUER");
+            // var audience = Environment.GetEnvironmentVariable("AUDIENCE");
 
             var key = Encoding.ASCII.GetBytes(secret);
 

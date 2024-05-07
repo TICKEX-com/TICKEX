@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using event_service.Data;
 
 #nullable disable
@@ -18,17 +18,17 @@ namespace event_service.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Ticket", b =>
                 {
                     b.Property<int>("EventId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("EventId", "ClientId");
 
@@ -39,28 +39,26 @@ namespace event_service.Migrations
 
             modelBuilder.Entity("event_service.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("text");
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("EventId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<float>("Prize")
+                    b.Property<float>("Price")
                         .HasColumnType("real");
 
                     b.Property<int>("Seats")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -71,21 +69,273 @@ namespace event_service.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Color = "#ff0000",
+                            Id = "1-1",
+                            Color = "#FFD700",
                             EventId = 1,
-                            Name = "VIP",
-                            Prize = 500f,
+                            Name = "Gold",
+                            Price = 1000f,
                             Seats = 100
                         },
                         new
                         {
-                            Id = 2,
-                            Color = "#ff0000",
+                            Id = "1-2",
+                            Color = "#C0C0C0",
+                            EventId = 1,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "1-3",
+                            Color = "#CD7F32",
+                            EventId = 1,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "2-1",
+                            Color = "#FFD700",
                             EventId = 2,
-                            Name = "Normal",
-                            Prize = 50f,
-                            Seats = 400
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "2-2",
+                            Color = "#C0C0C0",
+                            EventId = 2,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "2-3",
+                            Color = "#CD7F32",
+                            EventId = 2,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "3-1",
+                            Color = "#FFD700",
+                            EventId = 3,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "3-2",
+                            Color = "#C0C0C0",
+                            EventId = 3,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "3-3",
+                            Color = "#CD7F32",
+                            EventId = 3,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "4-1",
+                            Color = "#FFD700",
+                            EventId = 4,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "4-2",
+                            Color = "#C0C0C0",
+                            EventId = 4,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "4-3",
+                            Color = "#CD7F32",
+                            EventId = 4,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "5-1",
+                            Color = "#FFD700",
+                            EventId = 5,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "5-2",
+                            Color = "#C0C0C0",
+                            EventId = 5,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "5-3",
+                            Color = "#CD7F32",
+                            EventId = 5,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "6-1",
+                            Color = "#FFD700",
+                            EventId = 6,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "6-2",
+                            Color = "#C0C0C0",
+                            EventId = 6,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "6-3",
+                            Color = "#CD7F32",
+                            EventId = 6,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "7-1",
+                            Color = "#FFD700",
+                            EventId = 7,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "7-2",
+                            Color = "#C0C0C0",
+                            EventId = 7,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "7-3",
+                            Color = "#CD7F32",
+                            EventId = 7,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "8-1",
+                            Color = "#FFD700",
+                            EventId = 8,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "8-2",
+                            Color = "#C0C0C0",
+                            EventId = 8,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "8-3",
+                            Color = "#CD7F32",
+                            EventId = 8,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "9-1",
+                            Color = "#FFD700",
+                            EventId = 9,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "9-2",
+                            Color = "#C0C0C0",
+                            EventId = 9,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "9-3",
+                            Color = "#CD7F32",
+                            EventId = 9,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = "10-1",
+                            Color = "#FFD700",
+                            EventId = 10,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = "10-2",
+                            Color = "#C0C0C0",
+                            EventId = 10,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = "10-3",
+                            Color = "#CD7F32",
+                            EventId = 10,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
                         });
                 });
 
@@ -93,9 +343,9 @@ namespace event_service.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.HasKey("Id");
 
@@ -106,56 +356,59 @@ namespace event_service.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("DesignId")
-                        .HasColumnType("int");
+                    b.Property<int>("DesignId")
+                        .HasColumnType("integer");
 
                     b.Property<float>("Duration")
                         .HasColumnType("real");
 
+                    b.Property<DateTime>("EventDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("EventType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("Is_finished")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("On_sell")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("OrganizerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Poster")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Time")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -167,36 +420,182 @@ namespace event_service.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "address",
-                            City = "Tangier",
-                            Date = new DateTime(2024, 4, 27, 19, 6, 12, 989, DateTimeKind.Local).AddTicks(6657),
-                            Description = "i am a football match",
-                            DesignId = 1,
-                            Duration = 0f,
+                            Address = "Santiago Bernabéu",
+                            City = "Madrid",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8486),
+                            Description = "Champions league semi finals",
+                            DesignId = 0,
+                            Duration = 2f,
+                            EventDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8483),
                             EventType = "Sports",
                             Is_finished = false,
                             On_sell = true,
                             OrganizerId = "1",
-                            Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
-                            Time = "1.5",
-                            Title = "Match"
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "20h00",
+                            Title = "REAL MADRID VS BAYERN MUNICH"
                         },
                         new
                         {
                             Id = 2,
-                            Address = "address",
+                            Address = "Royal Theater Rabat",
+                            City = "Rabat",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8524),
+                            Description = "Exclusive fashion show showcasing latest trends",
+                            DesignId = 0,
+                            Duration = 3f,
+                            EventDate = new DateTime(2024, 9, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8519),
+                            EventType = "Fashion",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "1",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "19h00",
+                            Title = "Fashion Show"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "Casablanca International Convention Center",
+                            City = "Casablanca",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8552),
+                            Description = "Cutting-edge technology conference",
+                            DesignId = 0,
+                            Duration = 4f,
+                            EventDate = new DateTime(2024, 6, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8550),
+                            EventType = "Technology",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "1",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "10h00",
+                            Title = "Tech Conference"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "Palmeraie Marrakech",
+                            City = "Marrakech",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8578),
+                            Description = "Annual music festival featuring top artists",
+                            DesignId = 0,
+                            Duration = 2f,
+                            EventDate = new DateTime(2024, 7, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8576),
+                            EventType = "Music",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "1",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "18h00",
+                            Title = "Music Festival"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Address = "Tangier Art Gallery",
                             City = "Tangier",
-                            Date = new DateTime(2024, 4, 27, 19, 6, 12, 989, DateTimeKind.Local).AddTicks(6719),
-                            Description = "i am a movie",
-                            DesignId = 1,
-                            Duration = 0f,
-                            EventType = "Cinema",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8605),
+                            Description = "Contemporary art exhibition",
+                            DesignId = 0,
+                            Duration = 2.5f,
+                            EventDate = new DateTime(2024, 8, 5, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8603),
+                            EventType = "Art",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "1",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "15h00",
+                            Title = "Art Exhibition"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Address = "ENSA Agadir",
+                            City = "Agadir",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8638),
+                            Description = "Annual career fair organized by ENSA",
+                            DesignId = 0,
+                            Duration = 4f,
+                            EventDate = new DateTime(2024, 6, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8636),
+                            EventType = "Career",
                             Is_finished = false,
                             On_sell = true,
                             OrganizerId = "2",
-                            Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995",
-                            Time = "2",
-                            Title = "Match"
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "09h00",
+                            Title = "ENSA Career Fair"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Address = "Casablanca International Convention Center",
+                            City = "Casablanca",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8664),
+                            Description = "Cutting-edge technology conference",
+                            DesignId = 0,
+                            Duration = 5f,
+                            EventDate = new DateTime(2024, 7, 6, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8662),
+                            EventType = "Technology",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "2",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "10h00",
+                            Title = "Tech Conference 2024"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Address = "Palmeraie Marrakech",
+                            City = "Marrakech",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8690),
+                            Description = "Annual music festival featuring top artists",
+                            DesignId = 0,
+                            Duration = 8f,
+                            EventDate = new DateTime(2024, 8, 5, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8688),
+                            EventType = "Music",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "2",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "18h00",
+                            Title = "Music Festival"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Address = "Marrakech Conference Center",
+                            City = "Marrakech",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8715),
+                            Description = "Annual startup summit bringing together entrepreneurs and investors",
+                            DesignId = 0,
+                            Duration = 7f,
+                            EventDate = new DateTime(2024, 9, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8713),
+                            EventType = "Startup",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "2",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "09h00",
+                            Title = "Startup Summit"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Address = "Casablanca Food Park",
+                            City = "Casablanca",
+                            CreationDate = new DateTime(2024, 5, 7, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8742),
+                            Description = "Celebration of culinary delights with food stalls and cooking demonstrations",
+                            DesignId = 0,
+                            Duration = 6f,
+                            EventDate = new DateTime(2024, 10, 4, 18, 22, 11, 202, DateTimeKind.Local).AddTicks(8740),
+                            EventType = "Food",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "2",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "12h00",
+                            Title = "Food Festival"
                         });
                 });
 
@@ -204,10 +603,10 @@ namespace event_service.Migrations
                 {
                     b.Property<string>("url")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("EventId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("url");
 
@@ -219,27 +618,27 @@ namespace event_service.Migrations
             modelBuilder.Entity("event_service.Entities.Organizer", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("OrganizationName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("firstname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("lastname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -250,7 +649,7 @@ namespace event_service.Migrations
                         {
                             Id = "1",
                             Email = "anas@gmail.com",
-                            OrganizationName = "ENSA",
+                            OrganizationName = "",
                             PhoneNumber = "1234567890",
                             firstname = "anas",
                             lastname = "chatt"
@@ -286,8 +685,7 @@ namespace event_service.Migrations
                     b.HasOne("event_service.Entities.Event", "Event")
                         .WithMany("Categories")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Event");
                 });
