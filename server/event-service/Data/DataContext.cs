@@ -247,7 +247,7 @@ namespace event_service.Data
                         modelBuilder.Entity<Category>().HasData(
                             new Category
                             {
-                                Id = (eventId - 1) * 3 + categoryId, // Unique ID for each category
+                                Id = $"{eventId}-{categoryId}", // Generate a string ID
                                 Name = categoryId == 1 ? "Gold" : (categoryId == 2 ? "Silver" : "Bronze"),
                                 Seats = categoryId == 1 ? 100 : (categoryId == 2 ? 200 : 300), // Adjust seats accordingly
                                 Price = categoryId == 1 ? 1000 : (categoryId == 2 ? 500 : 300), // Adjust prices accordingly
@@ -257,7 +257,6 @@ namespace event_service.Data
                         );
                     }
                 }
-
 
 
                 modelBuilder.Entity<Event>()

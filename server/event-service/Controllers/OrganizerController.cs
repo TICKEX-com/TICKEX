@@ -154,6 +154,9 @@ namespace event_service.Controllers
             {
                 if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
+                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                        return NotFound("Organizer not found");
+
                     if (!await _eventService.OrganizerHasEvents(OrganizerId))
                         return NotFound();
 
