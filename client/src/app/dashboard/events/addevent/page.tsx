@@ -11,17 +11,50 @@ import TicketCat from "@/components/TicketCat";
 import Link from "next/link";
 import { uploadFile } from "@/lib/fileUpload";
 import { useDispatch } from "react-redux";
-import { setImage} from "@/lib/features/events/eventSlice";
+import { setImage } from "@/lib/features/events/eventSlice";
+import { useAppSelector } from "@/lib/hooks";
+import { eventInfoType } from "@/core/types/event";
+import api from "@/lib/api";
+import { error } from "console";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 function page() {
-
   const dispatch = useDispatch();
   const [imageUpload, setImageUpload] = useState<FileList | null>(null);
   const [poster, setPoster] = useState<string>("");
-  useEffect(()=>{
-    const payload: Partial<string> =poster
-    dispatch(setImage(payload))
-  },[dispatch,poster])
+  useEffect(() => {
+    const payload: Partial<string> = poster;
+    dispatch(setImage(payload));
+  }, [dispatch, poster]);
+
+  const organizerId = useAppSelector(
+    (state) => state.persistedReducer.auth?.id
+  );
+  const eventData: eventInfoType = useAppSelector(
+    (state) => state.event.eventInfo
+  );
+
+  // const { mutate, isPending, isError, isSuccess, error } = useMutation({
+  //   mutationFn: async (event: eventInfoType) => {
+  //     try {
+  //       const response = await api.post(
+  //         `event-service/Organizer/${organizerId}/Events`,
+  //         eventData
+  //       );
+  //       toast.success("Your Event has been created successfully");
+
+  //     } catch (error) {
+  //       console.log(error);
+  //       toast.error("something went wrong:error")
+  //       throw error
+  //     }
+  //   },
+  // });
+
+  // const handleSubmit = async () => {
+  //   mutate(eventData);
+  // };
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -37,7 +70,9 @@ function page() {
             Add Event
           </h1>
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
-            <Button size="sm">Save Event</Button>
+            <Button size="sm" >
+              Save Event
+            </Button>
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
@@ -45,10 +80,9 @@ function page() {
             <EventDetailsCard
               title="Event Details"
               description="Please Add Your Next Event"
-             
             />
-            <EventCat  />
-            <TicketCat  />
+            <EventCat />
+            <TicketCat />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
             <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
@@ -58,10 +92,10 @@ function page() {
               <CardContent>
                 <div className="grid gap-2">
                   <Image
-                    alt="Product image"
+                    alt="Poster"
                     className="aspect-square w-full rounded-md object-cover"
                     height="300"
-                    src={poster ? poster : "/svg/placeholder.svg"}
+                    src={poster ? poster : "/svg/Image-upload-bro.svg"}
                     width="300"
                   />
                   <input

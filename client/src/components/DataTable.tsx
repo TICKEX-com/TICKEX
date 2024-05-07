@@ -26,14 +26,18 @@ import {
 import { eventData } from "@/core/constantes/Table.const";
 import Action from "./Action";
 import PaginationSection from "./PaginationSection";
+import { eventDataType } from "@/core/types/tableData";
+type Data = {
+  data: eventDataType[];
+};
 
-function DataTable() {
+function DataTable({ data }: Data) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(5);
 
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
-  const currentItems = eventData.slice(firstItemIndex, lastItemIndex);
+  const currentItems = data.slice(firstItemIndex, lastItemIndex);
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -41,9 +45,9 @@ function DataTable() {
         <TabsContent value="all">
           <Card x-chunk="dashboard-06-chunk-0">
             <CardHeader>
-              <CardTitle>Products</CardTitle>
+              <CardTitle>Events</CardTitle>
               <CardDescription>
-                Manage your products and view their sales performance.
+                Manage your Events and view their sales performance.
               </CardDescription>
             </CardHeader>
             <CardContent>

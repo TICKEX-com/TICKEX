@@ -6,6 +6,7 @@ import NextTopLoader from "nextjs-toploader";
 import Providers from "@/lib/Providers";
 import { Toaster } from "sonner";
 
+
 const robo = Roboto_Mono({
 	subsets: ["latin"],
 	weight: ["600"],

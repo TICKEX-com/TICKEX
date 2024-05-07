@@ -3,7 +3,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery(
     { 
-    baseUrl:'authentication-service/api/auth',
+    baseUrl:'api/authentication-service/api/auth',
 });
 
 export const apiSlice = createApi({
