@@ -72,38 +72,272 @@ namespace event_service.Migrations
                         new
                         {
                             Id = 1,
-                            Color = "#ff0000",
+                            Color = "#FFD700",
                             EventId = 1,
-                            Name = "VIP",
-                            Price = 500f,
+                            Name = "Gold",
+                            Price = 1000f,
                             Seats = 100
                         },
                         new
                         {
                             Id = 2,
-                            Color = "#ff0000",
+                            Color = "#C0C0C0",
                             EventId = 1,
-                            Name = "Normal",
-                            Price = 60f,
-                            Seats = 500
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
                         },
                         new
                         {
                             Id = 3,
-                            Color = "#ff0000",
-                            EventId = 2,
-                            Name = "Normal",
-                            Price = 50f,
-                            Seats = 400
+                            Color = "#CD7F32",
+                            EventId = 1,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
                         },
                         new
                         {
                             Id = 4,
-                            Color = "#ff0000",
+                            Color = "#FFD700",
                             EventId = 2,
-                            Name = "VIP",
-                            Price = 700f,
+                            Name = "Gold",
+                            Price = 1000f,
                             Seats = 100
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Color = "#C0C0C0",
+                            EventId = 2,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Color = "#CD7F32",
+                            EventId = 2,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Color = "#FFD700",
+                            EventId = 3,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Color = "#C0C0C0",
+                            EventId = 3,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Color = "#CD7F32",
+                            EventId = 3,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Color = "#FFD700",
+                            EventId = 4,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Color = "#C0C0C0",
+                            EventId = 4,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Color = "#CD7F32",
+                            EventId = 4,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Color = "#FFD700",
+                            EventId = 5,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Color = "#C0C0C0",
+                            EventId = 5,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Color = "#CD7F32",
+                            EventId = 5,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Color = "#FFD700",
+                            EventId = 6,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Color = "#C0C0C0",
+                            EventId = 6,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Color = "#CD7F32",
+                            EventId = 6,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Color = "#FFD700",
+                            EventId = 7,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Color = "#C0C0C0",
+                            EventId = 7,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Color = "#CD7F32",
+                            EventId = 7,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Color = "#FFD700",
+                            EventId = 8,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Color = "#C0C0C0",
+                            EventId = 8,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Color = "#CD7F32",
+                            EventId = 8,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Color = "#FFD700",
+                            EventId = 9,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Color = "#C0C0C0",
+                            EventId = 9,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Color = "#CD7F32",
+                            EventId = 9,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Color = "#FFD700",
+                            EventId = 10,
+                            Name = "Gold",
+                            Price = 1000f,
+                            Seats = 100
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Color = "#C0C0C0",
+                            EventId = 10,
+                            Name = "Silver",
+                            Price = 500f,
+                            Seats = 200
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Color = "#CD7F32",
+                            EventId = 10,
+                            Name = "Bronze",
+                            Price = 300f,
+                            Seats = 300
                         });
                 });
 
@@ -137,7 +371,7 @@ namespace event_service.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -150,7 +384,7 @@ namespace event_service.Migrations
                         .HasColumnType("real");
 
                     b.Property<DateTime>("EventDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EventType")
                         .IsRequired()
@@ -188,38 +422,182 @@ namespace event_service.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "address",
-                            City = "Tangier",
-                            CreationDate = new DateTime(2024, 5, 3, 16, 12, 4, 658, DateTimeKind.Local).AddTicks(1212),
-                            Description = "i am a football match",
+                            Address = "Santiago Bernabéu",
+                            City = "Madrid",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4443),
+                            Description = "Champions league semi finals",
                             DesignId = 0,
-                            Duration = 0f,
-                            EventDate = new DateTime(2024, 5, 3, 16, 12, 4, 658, DateTimeKind.Local).AddTicks(1210),
+                            Duration = 2f,
+                            EventDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4442),
                             EventType = "Sports",
                             Is_finished = false,
                             On_sell = true,
                             OrganizerId = "1",
-                            Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp5",
-                            Time = "13h00",
-                            Title = "Match"
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "20h00",
+                            Title = "REAL MADRID VS BAYERN MUNICH"
                         },
                         new
                         {
                             Id = 2,
-                            Address = "address",
-                            City = "Tangier",
-                            CreationDate = new DateTime(2024, 5, 3, 16, 12, 4, 658, DateTimeKind.Local).AddTicks(1231),
-                            Description = "i am a movie",
+                            Address = "Royal Theater Rabat",
+                            City = "Rabat",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4467),
+                            Description = "Exclusive fashion show showcasing latest trends",
                             DesignId = 0,
-                            Duration = 0f,
-                            EventDate = new DateTime(2024, 5, 3, 16, 12, 4, 658, DateTimeKind.Local).AddTicks(1230),
-                            EventType = "Cinema",
+                            Duration = 3f,
+                            EventDate = new DateTime(2024, 9, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4463),
+                            EventType = "Fashion",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "1",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "19h00",
+                            Title = "Fashion Show"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "Casablanca International Convention Center",
+                            City = "Casablanca",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4482),
+                            Description = "Cutting-edge technology conference",
+                            DesignId = 0,
+                            Duration = 4f,
+                            EventDate = new DateTime(2024, 6, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4481),
+                            EventType = "Technology",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "1",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "10h00",
+                            Title = "Tech Conference"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "Palmeraie Marrakech",
+                            City = "Marrakech",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4497),
+                            Description = "Annual music festival featuring top artists",
+                            DesignId = 0,
+                            Duration = 2f,
+                            EventDate = new DateTime(2024, 7, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4496),
+                            EventType = "Music",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "1",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "18h00",
+                            Title = "Music Festival"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Address = "Tangier Art Gallery",
+                            City = "Tangier",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4511),
+                            Description = "Contemporary art exhibition",
+                            DesignId = 0,
+                            Duration = 2.5f,
+                            EventDate = new DateTime(2024, 8, 5, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4510),
+                            EventType = "Art",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "1",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "15h00",
+                            Title = "Art Exhibition"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Address = "ENSA Agadir",
+                            City = "Agadir",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4561),
+                            Description = "Annual career fair organized by ENSA",
+                            DesignId = 0,
+                            Duration = 4f,
+                            EventDate = new DateTime(2024, 6, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4560),
+                            EventType = "Career",
                             Is_finished = false,
                             On_sell = true,
                             OrganizerId = "2",
-                            Poster = "1YwGlpSZ3wrNrUhF3sVxMaaC6iIz1hDp995",
-                            Time = "00h00",
-                            Title = "Match"
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "09h00",
+                            Title = "ENSA Career Fair"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Address = "Casablanca International Convention Center",
+                            City = "Casablanca",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4577),
+                            Description = "Cutting-edge technology conference",
+                            DesignId = 0,
+                            Duration = 5f,
+                            EventDate = new DateTime(2024, 7, 6, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4576),
+                            EventType = "Technology",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "2",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "10h00",
+                            Title = "Tech Conference 2024"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Address = "Palmeraie Marrakech",
+                            City = "Marrakech",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4591),
+                            Description = "Annual music festival featuring top artists",
+                            DesignId = 0,
+                            Duration = 8f,
+                            EventDate = new DateTime(2024, 8, 5, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4590),
+                            EventType = "Music",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "2",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "18h00",
+                            Title = "Music Festival"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Address = "Marrakech Conference Center",
+                            City = "Marrakech",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4605),
+                            Description = "Annual startup summit bringing together entrepreneurs and investors",
+                            DesignId = 0,
+                            Duration = 7f,
+                            EventDate = new DateTime(2024, 9, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4604),
+                            EventType = "Startup",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "2",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "09h00",
+                            Title = "Startup Summit"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Address = "Casablanca Food Park",
+                            City = "Casablanca",
+                            CreationDate = new DateTime(2024, 5, 7, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4621),
+                            Description = "Celebration of culinary delights with food stalls and cooking demonstrations",
+                            DesignId = 0,
+                            Duration = 6f,
+                            EventDate = new DateTime(2024, 10, 4, 15, 46, 28, 717, DateTimeKind.Local).AddTicks(4620),
+                            EventType = "Food",
+                            Is_finished = false,
+                            On_sell = true,
+                            OrganizerId = "2",
+                            Poster = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521",
+                            Time = "12h00",
+                            Title = "Food Festival"
                         });
                 });
 
@@ -273,7 +651,7 @@ namespace event_service.Migrations
                         {
                             Id = "1",
                             Email = "anas@gmail.com",
-                            OrganizationName = "ENSA",
+                            OrganizationName = "",
                             PhoneNumber = "1234567890",
                             firstname = "anas",
                             lastname = "chatt"

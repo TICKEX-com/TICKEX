@@ -243,7 +243,7 @@ namespace event_service.Services
         public async Task<ICollection<EventsDto>> GetEventsByTitle(string title)
         {
             var events = await _context.Events
-                .Where(ev => ev.Title.Contains(title))
+                .Where(ev => ev.Title.ToLower().Contains(title.ToLower()))
                 .Include(ev => ev.Categories)
                 .OrderBy(ev => ev.Id)
                 .ToListAsync();
@@ -287,12 +287,12 @@ namespace event_service.Services
 
             if (!string.IsNullOrEmpty(City))
             {
-                query = query.Where(ev => ev.City.Contains(City));
+                query = query.Where(ev => ev.City.ToLower().Contains(City.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(EventType))
             {
-                query = query.Where(ev => ev.EventType.Contains(EventType));
+                query = query.Where(ev => ev.EventType.ToLower().Contains(EventType.ToLower()));
             }
             if (MinPrice < MaxPrice)
             {
