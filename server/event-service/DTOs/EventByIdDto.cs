@@ -14,6 +14,7 @@ namespace event_service.DTOs
         public string Poster { get; set; }
         public float Duration { get; set; }
         public string EventType { get; set; }
+        public int DesignId { get; set; }
         public List<CategoryDto> Categories { get; set; }
         public OrganizerDto Organizer { get; set; }
         // public List<ImageDto> Images { get; set; }
