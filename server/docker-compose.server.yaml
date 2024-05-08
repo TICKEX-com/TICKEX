@@ -132,5 +132,3 @@ services:
       - '8090:8090'       
     environment:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka      
-
-
