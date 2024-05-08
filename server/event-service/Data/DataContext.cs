@@ -28,7 +28,8 @@ namespace event_service.Data
                     firstname = "anas",
                     lastname = "chatt",
                     PhoneNumber = "1234567890",
-                    OrganizationName = ""
+                    OrganizationName = "",
+                    profileImage = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521"
                 }
                 );
                 modelBuilder.Entity<Organizer>().HasData(
@@ -39,7 +40,8 @@ namespace event_service.Data
                     firstname = "aimane",
                     lastname = "chanaa",
                     PhoneNumber = "1234567890",
-                    OrganizationName = "ENSA"
+                    OrganizationName = "ENSA",
+                    profileImage = "https://firebasestorage.googleapis.com/v0/b/tickex-20fa7.appspot.com/o/images%2FScreenshot%20from%202024-04-15%2017-01-42.png-7abac09f-7c7d-4101-ac2b-703ba7a55fb6?alt=media&token=70fad095-672c-4226-b0af-8670422be521"
                 }
                 );
 

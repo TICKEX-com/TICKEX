@@ -30,27 +30,27 @@ services:
       - zookeeper
 
       
-  gateway-service:
-    image: 'madockerhub/tickex-gateway-service'
-    container_name: gateway-service
-    ports:
-      - '8888:8888'
-    depends_on:
-      - discovery-service
-    environment:
-      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+  # gateway-service:
+  #   image: 'madockerhub/tickex-gateway-service'
+  #   container_name: gateway-service
+  #   ports:
+  #     - '8888:8888'
+  #   depends_on:
+  #     - discovery-service
+  #   environment:
+  #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
 
 
-  discovery-service:
-    image: 'madockerhub/tickex-discovery-service'
-    container_name: discovery-service
-    depends_on:
-      - event-service
-      - authentication-service    
-    ports:
-      - '8761:8761'
-    expose:
-      - '8761'
+  # discovery-service:
+  #   image: 'madockerhub/tickex-discovery-service'
+  #   container_name: discovery-service
+  #   depends_on:
+  #     - event-service
+  #     - authentication-service    
+  #   ports:
+  #     - '8761:8761'
+  #   expose:
+  #     - '8761'
 
   authentication-service-db: 
     image: postgres:latest
@@ -121,16 +121,16 @@ services:
       - '8081:8081'
 
 
-  payment-service:
-    build: ./payment-service
-    container_name: payment-service
-    expose:
-      - '8090'
-    depends_on:
-      - gateway-service
-    ports:
-      - '8090:8090'       
-    environment:
-      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka      
+  # payment-service:
+  #   build: ./payment-service
+  #   container_name: payment-service
+  #   expose:
+  #     - '8090'
+  #   depends_on:
+  #     - gateway-service
+  #   ports:
+  #     - '8090:8090'       
+  #   environment:
+  #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka      
 
 

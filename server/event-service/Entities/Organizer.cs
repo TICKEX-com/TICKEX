@@ -7,6 +7,7 @@
         public string firstname { get; set; }
         public string lastname { get; set; }
         public string OrganizationName { get; set; } = string.Empty;
+        public string profileImage { get; set; } = string.Empty;
         public string PhoneNumber { get; set; }
     }
 }
