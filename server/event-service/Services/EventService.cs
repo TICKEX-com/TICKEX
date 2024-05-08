@@ -113,7 +113,7 @@ namespace event_service.Services
 
         public async Task<bool> CreateEvent(EventReqDto Event, string OrganizerId)
         {
-            var parsedDate = DateTime.ParseExact(Event.EventDate, "MM-dd-yyyy", CultureInfo.InvariantCulture);
+            var parsedDate = DateTime.ParseExact(Event.EventDate, "yyyy-mm-dd", CultureInfo.InvariantCulture);
 
 
             Event ev = new()
@@ -192,7 +192,7 @@ namespace event_service.Services
         public async Task<bool> UpdateEvent(EventReqDto ev, string OrganizerId, int EventId)
         {
             var existingEvent = await GetEventById(OrganizerId, EventId);
-            var parsedDate = DateTime.ParseExact(ev.EventDate, "MM-dd-yyyy", CultureInfo.InvariantCulture);
+            var parsedDate = DateTime.ParseExact(ev.EventDate, "yyyy-mm-dd", CultureInfo.InvariantCulture);
 
             if (existingEvent == null)
                 return false; // Event not found
@@ -227,7 +227,7 @@ namespace event_service.Services
 
         public async Task<ICollection<EventsDto>> GetEventsByDate(string Date)
         {
-            var parsedDate = DateTime.ParseExact(Date, "MM-dd-yyyy", CultureInfo.InvariantCulture);
+            var parsedDate = DateTime.ParseExact(Date, "yyyy-mm-dd", CultureInfo.InvariantCulture);
 
             var events = await _context.Events
                  .Where(ev => ev.EventDate >= parsedDate)
@@ -281,7 +281,7 @@ namespace event_service.Services
             if (!string.IsNullOrEmpty(Date))
             {
                 // Assuming Date is a string in a specific format, you need to parse it to DateTime
-                var parsedDate = DateTime.ParseExact(Date, "MM-dd-yyyy", CultureInfo.InvariantCulture);
+                var parsedDate = DateTime.ParseExact(Date, "yyyy-mm-dd", CultureInfo.InvariantCulture);
                 query = query.Where(ev => ev.EventDate >= parsedDate);
             }
 
