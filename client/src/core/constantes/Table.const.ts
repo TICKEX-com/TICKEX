@@ -67,10 +67,12 @@ export const eventData: eventDataType[] = [
   // },
 ];
 export const userColumns = [
-  { key: "id", label: "ID" },
   { key: "name", label: "Name" },
   { key: "email", label: "Email" },
-  { key: "role", label: "Role" },
+  { key: "organizationName", label: "Organisation Name" },
+  { key: "certificate", label: "Justification Document" },
+  { key: "isActive", label: "Status" },
+
 
 ];
 

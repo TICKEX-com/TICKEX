@@ -49,7 +49,7 @@ const id = organizerId
 
       } catch (error) {
         console.log(error);
-        toast.error("something went wrong:error")
+        toast.error(`something went wrong:${error}`)
         throw error
       }
     },

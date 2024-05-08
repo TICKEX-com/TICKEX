@@ -20,29 +20,30 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useAppSelector } from "@/lib/hooks";
 
-
 function page() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [login, { isLoading, isError, error }] = useLoginMutation();
-  const userData = useAppSelector((state) => state.auth.userInfo); // Move useSelector outside of onSubmit
+  const userData = useAppSelector((state) => state.auth.userInfo);
 
   useEffect(() => {
     console.log(userData);
-    
+
     if (userData) {
       const role = userData?.role;
       console.log(role);
-      
+
       if (role === "CLIENT") {
         router.push("/");
-      } else if (role === "ORGANIZER") {
+      } else if (role === "ORGANIZER" && userData?.isActive) {
         router.push("/dashboard");
+      } else if (role === "ORGANIZER" && userData?.isActive === false) {
+        router.push("/waitlist");
       } else {
-        router.push("/");
+        router.push("/adminPanel");
       }
     }
-  }, [userData])
+  }, [userData]);
   const onSubmit = async (formData: FormData) => {
     const user = {
       username: formData.get("username") as string,
@@ -50,8 +51,8 @@ function page() {
     };
     try {
       const res = await login(user).unwrap();
-      const userInfo = res.result.user;
-      
+      const userInfo = res;
+
       dispatch(setCredentials({ ...userInfo }));
       toast.success("you logged in with success");
     } catch (error) {

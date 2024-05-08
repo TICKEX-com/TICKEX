@@ -11,15 +11,17 @@ export default function page() {
   const fetchOrganiser = async ()=> {
     try {
       const res = await api.get("authentication-service/api/users/organizers")
-      console.log(res);
+      console.log(res.data);
+      return res?.data
       
     } catch (error) {
       throw error;
     }
+    
   }
 
   const{data,error,isLoading}=useQuery({queryKey:["organisers"],queryFn: fetchOrganiser});
-
+ const organisersData=data
   return (
     <div>
       <TopNav />
@@ -28,13 +30,15 @@ export default function page() {
           Welcome Back Admin
         </h1>
         <p className="text-[#8444ec]">Please Accept Our New Sellers </p>
-        <UsersTable
-          title="User List"
-          desc="List of registered users"
-          columns={userColumns}
-          data={userData}
-          isAdmin={true}
-        />
+        {organisersData &&
+         <UsersTable
+         title="User List"
+         desc="List of registered users"
+         columns={userColumns}
+         data={organisersData}
+         isAdmin={true}
+       />}
+       
       </section>
     </div>
   );

@@ -81,6 +81,7 @@ function TicketCat() {
       categories: categories.map((cat) => ({
         id: cat.id,
         name: cat.name,
+        color : "",
         seats: cat.seats,
         price: cat.price,
       })),

@@ -1,3 +1,5 @@
+"use client"
+
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
 import eventReducer from "./features/events/eventSlice";
@@ -11,12 +13,14 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { apiSlice } from "./features/auth/apiSlice";
+import storage from "redux-persist/lib/storage";
 
 const persistConfig = {
   key: "root",
-  storage,
+  storage: storage,
 };
 
 const rootReducer = combineReducers({
