@@ -33,8 +33,11 @@ export default function page({ params }: { params: { slug: string } }) {
 	});
 	useEffect(() => {
 	  refetch()
-	}, [eventtype,_city])
-	
+	}, [eventtype,_city,maxprice,minprice])
+	const handleValueChange =(value: number[])=>{
+		setMinPrice(value[0])
+		setMaxPrice(value[1])
+	}
 	return (
 		<Dialog>
 			<div className="font-roboto  flex flex-col items-center">
@@ -138,7 +141,7 @@ export default function page({ params }: { params: { slug: string } }) {
 									Price Range{" "}
 								</h1>
 							</div>
-							<ProgressSlider></ProgressSlider>
+							<ProgressSlider handleValueChange={handleValueChange}></ProgressSlider>
 							<div className="flex flex-row w-fit items-center mt-3">
 								<MapPin height={15} />
 								<h1 className="text-md font-roboto font-bold w-auto">City</h1>
