@@ -275,7 +275,7 @@ namespace event_service.Services
         public async Task<ICollection<EventsDto>> FilterEvents(string Date, string City, string EventType, float MinPrice, float MaxPrice, int pageNumber)
         {
 
-            var query = _context.Events.Include(ev => ev.Categories).AsQueryable();
+            var query = _context.Events.Include(ev => ev.Categories.OrderBy(cat => cat.Price)).AsQueryable();
 
             // Apply filters based on provided parameters
             if (!string.IsNullOrEmpty(Date))
