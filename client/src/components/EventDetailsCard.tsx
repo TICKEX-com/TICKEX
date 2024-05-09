@@ -24,6 +24,7 @@ import {
 import SelectBox from "./SelectBox";
 import { cities } from "@/core/constantes/Event.const";
 import { setEventInfo } from "@/lib/features/events/eventSlice";
+import { useAppSelector } from "@/lib/hooks";
 
 function EventDetailsCard({
   title,
@@ -41,6 +42,7 @@ function EventDetailsCard({
     city: "",
     time: "",
   });
+  const eventData = useAppSelector(state=>state.event.eventInfo)
   const eventDate =fdate?.toISOString()?.split("T")[0]
   useEffect(() => {
     const eventDetails = { ...Data, eventDate };
@@ -72,6 +74,7 @@ function EventDetailsCard({
                 id="title"
                 name="title"
                 type="text"
+                defaultValue={eventData.title}
                 className="w-full"
                 onChange={handleChange}
               />
@@ -83,6 +86,7 @@ function EventDetailsCard({
                 name="description"
                 className="min-h-32"
                 onChange={handleChange}
+                defaultValue={eventData.description}
               />
             </div>
             <div className="grid gap-3">
@@ -93,6 +97,7 @@ function EventDetailsCard({
                 name="address"
                 className="w-full"
                 onChange={handleChange}
+                defaultValue={eventData.address}
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -103,7 +108,7 @@ function EventDetailsCard({
                   element="city"
                   title="Select a city"
                   setDataValue={setData}
-                  value={Data.city}
+                  value={eventData.city}
                 />
               </div>
               <div className="grid gap-3">
@@ -114,6 +119,7 @@ function EventDetailsCard({
                 name="duration"
                 className="w-full"
                 onChange={handleChange}
+                defaultValue={eventData.duration}
               />
             </div>
             </div>
@@ -151,7 +157,8 @@ function EventDetailsCard({
                   name="time"
                   className="p-1.5 rounded-md border border-gray-200 text-gray-400 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#8444ec]"
                   onChange={handleChange}
-                  value={Data.time}
+                  value={eventData.time}
+                  
                 />
               </div>
             </div>

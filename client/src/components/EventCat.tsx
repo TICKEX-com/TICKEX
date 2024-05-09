@@ -7,18 +7,17 @@ import { categories } from "@/core/constantes/Event.const";
 import SelectBox from "./SelectBox";
 import { setEventInfo } from "@/lib/features/events/eventSlice";
 import { useDispatch } from "react-redux";
-
-
-
+import { useAppSelector } from "@/lib/hooks";
 
 function EventCat() {
-  const dispatch= useDispatch()
-  const [eventType,setEventType]=useState({
-    eventType:""
+  const dispatch = useDispatch();
+  const [eventType, setEventType] = useState({
+    eventType: "",
   });
   useEffect(() => {
-    dispatch(setEventInfo( eventType ));
+    dispatch(setEventInfo(eventType));
   }, [eventType, dispatch]);
+  const eventCat = useAppSelector((state) => state.event.eventInfo.eventType);
   return (
     <>
       <Card x-chunk="dashboard-07-chunk-2">
@@ -34,6 +33,7 @@ function EventCat() {
                 element="eventType"
                 title="select your category"
                 setDataValue={setEventType}
+                value={eventCat}
               />
             </div>
           </div>
@@ -43,4 +43,4 @@ function EventCat() {
   );
 }
 
-export default EventCat
+export default EventCat;

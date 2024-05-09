@@ -62,7 +62,7 @@ function page() {
     };
     const userData = {
       ...user,
-      certificat: docUrl,
+      certificate: docUrl,
       profileImage: profileUrl,
     };
     mutate(userData);

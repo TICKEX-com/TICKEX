@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -31,13 +31,20 @@ import {
   Users2,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useAppSelector } from "@/lib/hooks";
 
 function TopNav() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter((item) => item !== "");
-
+  const profileImg = useAppSelector(state=>state.auth.userInfo)
+  useEffect(()=>{
+    console.log(profileImg);
+    
+  },[])
+  
   return (
     <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+    
       <header className="sticky top-0 z-30 flex justify-between h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
         <Sheet>
           <SheetTrigger asChild>
@@ -119,7 +126,7 @@ function TopNav() {
               className="overflow-hidden rounded-full"
             >
               <Image
-                src="/placeholder-user.jpg"
+                src="/svg/Profile.svg"
                 width={36}
                 height={36}
                 alt="Avatar"

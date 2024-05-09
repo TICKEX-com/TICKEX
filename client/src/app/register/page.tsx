@@ -1,6 +1,6 @@
 "use client";
 import { AxiosError } from "axios";
-import React from "react";
+import React, { useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
@@ -21,11 +21,16 @@ import "react-international-phone/style.css";
 import AlertCard from "@/components/Alert";
 import { toast } from "sonner";
 import { User } from "../../core/types/authentication.types";
+import { uploadFile } from "@/lib/fileUpload";
+import Image from "next/image";
 
 function page() {
   const router = useRouter();
+  const [profileUpload, setProfileUpload] = useState<FileList | null>(null);
+  const [profileUrl, setProfileUrl] = useState<string>();
+
   const { mutate, isPending, isError, isSuccess, error } = useMutation({
-    mutationFn: async (user: User) => {
+    mutationFn: async (user) => {
       try {
         const response = await api.post(
           "authentication-service/api/auth/Register/Client",
@@ -40,7 +45,7 @@ function page() {
     },
   });
   const onSubmit = (data: FormData) => {
-    const user: User = {
+    const user = {
       username: data.get("username") as string,
       email: data.get("email") as string,
       firstname: data.get("firstname") as string,
@@ -50,7 +55,11 @@ function page() {
       confirmPassword: data.get("confirmPassword") as string,
     };
 
-    mutate(user);
+    const userData = {
+      ...user,
+      profileImage: profileUrl,
+    };
+    mutate(userData);
   };
 
   return (
@@ -102,11 +111,43 @@ function page() {
             </div>
           </CardContent>
           <CardFooter>
+           {profileUrl &&
             <Button disabled={isPending} className="w-full">
               {isPending ? "Loading..." : "Sign up"}
-            </Button>
+            </Button>}
           </CardFooter>
         </form>
+        <CardContent>
+        <label className="block">
+            <Label htmlFor="confirmPassword">Profile Image</Label>
+            <div className="flex  items-center gap-2">
+              <input
+                type="file"
+                onChange={(event) => {
+                  setProfileUpload(event.target.files);
+                }}
+                className="block w-full text-sm text-slate-500 mt-2
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                            file:bg-violet-50 file:text-violet-700
+                            hover:file:bg-violet-100"
+              />
+
+              <button
+                className="bg-purple-600 text-sm rounded-full  "
+                onClick={() => uploadFile(profileUpload, setProfileUrl)}
+              >
+                <Image
+                  src="/svg/upload.svg"
+                  width={30}
+                  height={30}
+                  alt="upload"
+                />
+              </button>
+            </div>
+          </label>
+          </CardContent>
         <CardContent>
           {isError && error instanceof AxiosError && error.response && (
             <AlertCard

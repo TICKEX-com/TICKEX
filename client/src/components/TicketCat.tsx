@@ -36,16 +36,18 @@ import { useDispatch } from "react-redux";
 import { setEventInfo } from "@/lib/features/events/eventSlice";
 import { eventInfoType } from "@/core/types/event";
 import ConfirmationModel from "./ConfirmationModel";
+import { useAppSelector } from "@/lib/hooks";
 
 function TicketCat() {
   const dispatch = useDispatch();
+  const EventCats = useAppSelector(state=>state.event.eventInfo.categories)
   const [category, setCategory] = useState<string>("");
   const [categories, setCategories] = useState<
-    { id: string; name: string; stock: number; price: number }[]
-  >([]);
+    { id: string; name: string; seats: number; price: number }[]
+  >(EventCats);
 
   const addCategory = () => {
-    const newCategory = { id: uuidv4(), name: category, stock: 0, price: 0 };
+    const newCategory = { id: uuidv4(), name: category, seats: 0, price: 0 };
     setCategories((prevCategories) => [...prevCategories, newCategory]);
     setCategory("");
   };
@@ -72,12 +74,15 @@ function TicketCat() {
     );
   };
 
+
+  
   useEffect(() => {
     const payload: Partial<eventInfoType> = {
       categories: categories.map((cat) => ({
         id: cat.id,
         name: cat.name,
-        seats: cat.stock,
+        color : "",
+        seats: cat.seats,
         price: cat.price,
       })),
     };
@@ -111,7 +116,7 @@ function TicketCat() {
                     <Input
                       id={`${cat.id}-stock`}
                       type="number"
-                      defaultValue={cat.stock.toString()}
+                      defaultValue={cat.seats.toString()}
                       onChange={(e) => updateStock(cat.id, e.target.value)}
                     />
                   </TableCell>

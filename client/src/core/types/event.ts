@@ -41,7 +41,7 @@ export type eventInfoType = {
   eventType: string;
   designId:string ;
   categories: {
-    id?: string;
+    id: string;
     name: string;
     seats: number;
     price: number;

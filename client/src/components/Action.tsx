@@ -8,8 +8,45 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import ConfirmationModel from "./ConfirmationModel";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/lib/api";
+import { toast } from "sonner";
 
-function Action({ id }: { id: string }) {
+function Action({ id, admin }: { id: string; admin?: boolean }) {
+  const { mutate: mutateUpdate } = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const response = await api.put(
+          `/authentication-service/api/users/Accept/Organizer/${id}`
+        );
+        toast.success("Account has been Accepted");
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+  });
+  const { mutate: mutateDeleteOrganiser } = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const response = await api.delete(
+          `/authentication-service/api/users/Accept/Organizer/${id}`
+        );
+        toast.success("Account has been Accepted");
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+  });
+  const handelAccept = () => {
+    mutateUpdate(id);
+  };
+  const handelDeletOrganiser = () => {
+    mutateDeleteOrganiser(id);
+  };
   return (
     <div>
       <DropdownMenu>
@@ -21,7 +58,26 @@ function Action({ id }: { id: string }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          {admin ? (
+            // <ConfirmationModel
+            //   title="Are you sure To remove This Organiser"
+            //   desc="this operation will delete this Organiser from your waitlist "
+            //   onConfirm={handelAccept}
+            // >
+
+            <>
+              <DropdownMenuItem onClick={handelAccept}>Accept</DropdownMenuItem>
+              <DropdownMenuItem onClick={handelDeletOrganiser}>
+                Delete
+              </DropdownMenuItem>
+            </>
+          ) : (
+            <Link href={`./events/${id}`}>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
+            </Link>
+          )}
+
           <DropdownMenuItem>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

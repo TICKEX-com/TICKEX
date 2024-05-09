@@ -8,11 +8,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { eventData } from "@/core/constantes/Table.const";
 import { ListFilter, PlusCircle, File } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 
 function page() {
+  const eventsInfo = eventData;
+  const dataLength = eventsInfo.length;
   return (
     <div className="w-full">
       <div className="flex items-center">
@@ -48,12 +52,34 @@ function page() {
           >
             <Button size="sm" className="h-8 gap-1">
               <PlusCircle className="h-3.5 w-3.5" />
-              Add Product
+              Add event
             </Button>
           </Link>
         </div>
       </div>
-      <DataTable />
+      {dataLength === 0 ? (
+        <div className="flex justify-normal items-center flex-col mt-10">
+          <div>
+            <Image src="/svg/Empty-amico.svg" alt="plus" width={400} height={400} />
+          </div>
+          <div className="grid gap-4 mt-3 mb-3">
+            <h2 className="text-xl font-bold">You haven't added any events yet</h2>
+            <div className="flex justify-center">
+            <Link
+            href="./events/addevent"
+            className="sr-only sm:not-sr-only sm:whitespace-nowrap"
+          >
+            <Button size="sm" className="h-8 gap-1 ">
+              <PlusCircle className="h-3.5 w-3.5" />
+              Add event
+            </Button>
+            </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <DataTable data={eventsInfo} />
+      )}
     </div>
   );
 }
