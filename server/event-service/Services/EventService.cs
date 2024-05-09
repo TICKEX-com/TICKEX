@@ -309,10 +309,10 @@ namespace event_service.Services
                 }
             }
 
-            if (string.IsNullOrEmpty(Date) && string.IsNullOrEmpty(City) && string.IsNullOrEmpty(EventType) && MinPrice == 0 && MaxPrice == 0)
+            /*if (string.IsNullOrEmpty(Date) && string.IsNullOrEmpty(City) && string.IsNullOrEmpty(EventType) && MinPrice == 0 && MaxPrice == 0)
             {
                 return null;
-            }
+            }*/
 
             // Execute the query and retrieve the filtered events
             var filteredEvents = await query.OrderBy(ev => ev.EventDate).Skip((pageNumber - 1) * 6).Take(6).ToListAsync();
