@@ -14,7 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { toast } from "sonner";
 
-function Action({ id, admin }: { id: string; admin?: boolean }) {
+function Action({ id, admin, eventId }: { id: string; admin?: boolean ,eventId?:string|undefined}) {
   const { mutate: mutateUpdate } = useMutation({
     mutationFn: async (id: string) => {
       try {
@@ -41,12 +41,36 @@ function Action({ id, admin }: { id: string; admin?: boolean }) {
       }
     },
   });
+  type EventRoute ={
+    id :string;
+    eventId:string|undefined;
+  }
+  const { mutate: mutateDeleteEvent} = useMutation({
+    mutationFn: async (data: EventRoute) => {
+      try {
+        const response = await api.delete(
+          `/event-service/Organizer/${data?.id}/Events/${data?.eventId}`
+        );
+        toast.success("event has been deleted");
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+  });
   const handelAccept = () => {
     mutateUpdate(id);
   };
   const handelDeletOrganiser = () => {
     mutateDeleteOrganiser(id);
   };
+  const eventArgs :EventRoute={
+    id: id,
+    eventId: eventId
+  }
+  const handleDeleteEvent=()=>{
+    mutateDeleteEvent(eventArgs)
+  }
   return (
     <div>
       <DropdownMenu>
@@ -72,13 +96,13 @@ function Action({ id, admin }: { id: string; admin?: boolean }) {
               </DropdownMenuItem>
             </>
           ) : (
-            <Link href={`./events/${id}`}>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
-            </Link>
+            <>
+              <Link href={`./events/${eventId}`}>
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem onClick={handleDeleteEvent}>Delete</DropdownMenuItem>
+            </>
           )}
-
-          <DropdownMenuItem>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

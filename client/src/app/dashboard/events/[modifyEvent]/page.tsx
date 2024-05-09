@@ -11,20 +11,60 @@ import TicketCat from "@/components/TicketCat";
 import Link from "next/link";
 import { uploadFile } from "@/lib/fileUpload";
 import { useDispatch } from "react-redux";
-import { setImage} from "@/lib/features/events/eventSlice";
+import { setEventInfo, setImage} from "@/lib/features/events/eventSlice";
 import { useAppSelector } from "@/lib/hooks";
+import { useQuery } from "@tanstack/react-query";
+import api from "@/lib/api";
+import { eventInfoType } from "@/core/types/event";
 
-function page() {
+function page({ params }: { params: { modifyEvent: string } }) {
 
   const dispatch = useDispatch();
-  
+  const eventId = params;
+
   const [imageUpload, setImageUpload] = useState<FileList | null>(null);
   const [poster, setPoster] = useState<string>("");
+  const oganiserId = useAppSelector(state =>state.persistedReducer.auth.userInfo?.id);
+  const id = oganiserId;
+  const fetchEvent = async ()=> {
+    try {
+      const res = await api.get(`event-service/Organizer/${id}/Events/${eventId.modifyEvent}`)
+      console.log(res.data);
+      console.log(eventId);
+      
+    
+      return res?.data
+      
+    } catch (error) {
+      throw error;
+    }
+    
+  }
+
+  const{data,error,isLoading}=useQuery({queryKey:["event"],queryFn: fetchEvent});
+  
+  const eventData : eventInfoType={
+    title:data?.title,
+    description:data?.description,
+    city: data?.city,
+    duration:data?.duration,
+    address: data?.address,
+    eventDate: data?.eventDate,
+    time: data?.time,
+    eventType: data?.eventType,
+    poster: data?.poster,
+    categories: data?.categories
+  }
+  
+  useEffect(()=>{
+    dispatch(setEventInfo(eventData));
+  },[eventData])
   useEffect(()=>{
     const payload: Partial<string> =poster
     dispatch(setImage(payload))
   },[dispatch,poster])
 
+    
   const eventPoster = useAppSelector(state=>state.event.eventInfo.poster);
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">

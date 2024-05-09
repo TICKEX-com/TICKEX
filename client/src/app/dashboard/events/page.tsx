@@ -1,3 +1,6 @@
+"use client"
+
+
 import DataTable from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,10 +16,33 @@ import { ListFilter, PlusCircle, File } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import { useAppSelector } from "@/lib/hooks";
+import api from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 
 function page() {
-  const eventsInfo = eventData;
-  const dataLength = eventsInfo.length;
+
+
+  const oganiserId = useAppSelector(state =>state.persistedReducer.auth.userInfo?.id);
+  const id = oganiserId;
+  const fetchEvents = async ()=> {
+    try {
+      const res = await api.get(`event-service/Organizer/${id}/Events`)
+      console.log(res.data);
+      return res?.data
+      
+    } catch (error) {
+      throw error;
+    }
+    
+  }
+
+  const{data,error,isLoading}=useQuery({queryKey:["events"],queryFn: fetchEvents});
+
+  
+  const eventsInfo = data;
+  
+  const dataLength = eventsInfo?.length;
   return (
     <div className="w-full">
       <div className="flex items-center">
@@ -78,7 +104,11 @@ function page() {
           </div>
         </div>
       ) : (
-        <DataTable data={eventsInfo} />
+        <>
+         {eventsInfo &&   <DataTable data={eventsInfo} />}
+        </>
+       
+      
       )}
     </div>
   );

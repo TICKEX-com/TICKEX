@@ -29,7 +29,7 @@ function page() {
   }, [dispatch, poster]);
 
   const organizerId = useAppSelector(
-    (state) => state.persistedReducer.auth?.userInfo?.id
+    state => state.persistedReducer.auth?.userInfo?.id
   );
   const eventData: eventInfoType = useAppSelector(
     (state) => state.event.eventInfo

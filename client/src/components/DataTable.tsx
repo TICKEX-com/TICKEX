@@ -27,6 +27,7 @@ import { eventData } from "@/core/constantes/Table.const";
 import Action from "./Action";
 import PaginationSection from "./PaginationSection";
 import { eventDataType } from "@/core/types/tableData";
+import { useAppSelector } from "@/lib/hooks";
 type Data = {
   data: eventDataType[];
 };
@@ -38,6 +39,7 @@ function DataTable({ data }: Data) {
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = data.slice(firstItemIndex, lastItemIndex);
+  const organiserId = useAppSelector(state=>state.persistedReducer.auth.userInfo?.id)
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -57,13 +59,10 @@ function DataTable({ data }: Data) {
                     <TableHead className="hidden w-[100px] sm:table-cell">
                       <span className="sr-only">Image</span>
                     </TableHead>
-                    <TableHead>Name</TableHead>
+                    <TableHead>Title</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead className="hidden md:table-cell">
-                      Price
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Total Sales
+                      Avg Price
                     </TableHead>
                     <TableHead className="hidden md:table-cell">
                       Created at
@@ -81,27 +80,25 @@ function DataTable({ data }: Data) {
                           alt="Product image"
                           className="aspect-square rounded-md object-cover"
                           height="64"
-                          src="/placeholder.svg"
+                          src={event.poster}
                           width="64"
+                          loading="lazy"
                         />
                       </TableCell>
                       <TableCell className="font-medium">
-                        {event.name}
+                        {event.title}
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline">{event.category}</Badge>
+                        <Badge variant="outline">{event.eventType}</Badge>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        $ {event.price}
+                        $ {event.minPrice}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        {event.totalSales}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {event.createdAt}
+                        {event.eventDate.split("T")[0]}
                       </TableCell>
                       <TableCell>
-                        <Action id={event.id} />
+                        <Action id={organiserId} eventId={event.id}  />
                       </TableCell>
                     </TableRow>
                   ))}
