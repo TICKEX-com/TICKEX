@@ -46,10 +46,10 @@ const AvatarFallback = React.forwardRef<
   />
 ))
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
-function AvatarDemo(){
+function AvatarDemo({image}:{image?:string }){
   return (
     <Avatar>
-      <AvatarImage src="https://img.a.transfermarkt.technology/portrait/big/91845-1669336455.jpg?lm=1" alt="@shadcn" />
+      <AvatarImage src={image??"https://img.a.transfermarkt.technology/portrait/big/91845-1669336455.jpg?lm=1"} alt="@shadcn" />
       <AvatarFallback>CN</AvatarFallback>
     </Avatar>
   )

@@ -4,7 +4,7 @@ import { NavLinks } from "@/components/NavLinks";
 import Navbar1 from "@/components/Navbar1";
 import { MapPin, Search, Ticket } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "@/components/footer";
 import {
 	Dialog,
@@ -17,8 +17,24 @@ import ProgressSlider from "@/components/ProgressSlider";
 import EventsGrid from "@/components/EventsGrid";
 import Paginate from "@/components/Paginate";
 import SearchBar from "@/components/SearchBar";
+import { fetchByFilter } from "./_page";
+import { useQuery } from "@tanstack/react-query";
 
 export default function page({ params }: { params: { slug: string } }) {
+	const [minprice, setMinPrice] = useState(0)
+	const [maxprice, setMaxPrice] = useState(0)
+	const [eventtype, setEventType] = useState<string>("null")
+	const [_city, setCity] = useState<string>("null")
+	const [pagenumber, setPageNumber] = useState<number>(1)
+
+	const { data, isLoading, error, refetch } = useQuery({
+		queryKey: ["fetch_events"],
+		queryFn: () => fetchByFilter(minprice,maxprice,eventtype,_city,pagenumber),
+	});
+	useEffect(() => {
+	  refetch()
+	}, [eventtype,_city])
+	
 	return (
 		<Dialog>
 			<div className="font-roboto  flex flex-col items-center">
@@ -134,7 +150,10 @@ export default function page({ params }: { params: { slug: string } }) {
 											type="radio"
 											name="city"
 											id={city}
+											value={city}
+
 											className="accent-violet-600 h-4 w-4"
+											onChange={(e)=>setCity(e.currentTarget.value)}
 										/>
 										<label htmlFor={city} className="text-sm">
 											{city}
@@ -153,7 +172,9 @@ export default function page({ params }: { params: { slug: string } }) {
 											type="radio"
 											name="event_type"
 											id={event}
+											value={event}
 											className="accent-violet-600 h-4 w-4"
+											onChange={(e)=>setEventType(e.currentTarget.value)}
 										/>
 										<label htmlFor={event} className="text-sm">
 											{event}
@@ -164,7 +185,7 @@ export default function page({ params }: { params: { slug: string } }) {
 						</form>
 					</div>
 					<div className="w-8/12 flex flex-col ">
-						<EventsGrid></EventsGrid>
+					    <EventsGrid events={data}></EventsGrid>
 						<Paginate></Paginate>
 					</div>
 				</div>

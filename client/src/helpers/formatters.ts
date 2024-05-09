@@ -1,9 +1,9 @@
 
-export function formatDate(inputDate : Date ) {
+export function formatDate(inputDate : Date | null | undefined ) {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   
-    const date = new Date(inputDate);
+    const date = new Date(inputDate!);
     const dayOfWeek = days[date.getDay()];
     const dayOfMonth = date.getDate();
     const month = months[date.getMonth()];

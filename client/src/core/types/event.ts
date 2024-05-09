@@ -1,13 +1,14 @@
-type event_card = {
+export type event_card = {
 	city: String|null;
-	date: Date;
+	eventDate: Date|null;
 	eventType: String|null;
-	id: Number;
+	id: Number|null;
 	poster: String|null;
 	title: String|null;
+  minPrice:number|null;
 };
 
-type events_list = Array<event_card>
+export type events_list = Array<event_card>
 
 
 export type eventType = {
@@ -29,14 +30,16 @@ export type Category = {
   price: number;
 };
 export type eventInfoType = {
+  id:number
   title: string;
   description: string;
   address: string;
   duration: number;
   city: string;
-  eventDate: string;
+  eventDate: Date | null | undefined;
   time: string;
   eventType: string;
+  designId:string ;
   categories: {
     id?: string;
     name: string;
@@ -45,8 +48,16 @@ export type eventInfoType = {
     color?: string;
   }[];
   poster: string;
+  organizer:organizerType
 };
 
 export type EventState = {
   eventInfo: eventInfoType;
 };
+
+export type organizerType= {
+  id: string,
+  email: string ,
+  organizationName: string ,
+  phoneNumber: string
+}

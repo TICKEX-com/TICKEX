@@ -2,8 +2,39 @@ import React from "react";
 import Image from "next/image";
 import { Timer } from "lucide-react";
 import Map from "@/components/Map";
+import { eventInfoType, organizerType } from "@/core/types/event";
+import Link from "next/link";
+import { AvatarDemo } from "./ui/avatar";
+import EventsGrid from "./EventsGrid";
+import { useQuery } from "@tanstack/react-query";
+import axios, { AxiosResponse } from "axios";
 
-export default function EventCommonDetails() {
+export default function EventCommonDetails({
+	id,
+	eventType,
+	description,
+	duration,
+	organizer,
+}: {
+	id:number |undefined;
+	eventType:string | undefined;
+	description: string | undefined;
+	duration: number | undefined;
+	organizer: organizerType | undefined;
+}) {
+	const fetchSimilarEvents = async() => {
+		let response: AxiosResponse;
+		try {
+			response = await axios.get(`/api/event-service/Events/Filter?EventType=${eventType}&MinPrice=0&MaxPrice=0&pageNumber=1`);
+			return response.data;
+		} catch (error) {
+			return null;
+		}
+	};
+	const { data, isLoading, error, refetch } = useQuery({
+		queryKey: ["similar_events"],
+		queryFn: () => fetchSimilarEvents(),
+	});
 	return (
 		<div className="flex flex-col">
 			<div className="flex flex-col  w-32  mb-7 mt-5">
@@ -20,18 +51,10 @@ export default function EventCommonDetails() {
 				<div className="border border-transparent bg-black p-1 rounded-md">
 					<Timer size={20} color="white"></Timer>
 				</div>
-				<p>2 hours</p>
+				<p>{duration} hours</p>
 			</div>
 			<div className="text-left w-11/12 mt-7">
-				<p className="text-sm">
-					Hey there! Are you ready for an exciting event happening in Tanger,
-					المغرب? Join us for a fun-filled day at 835780030016989217748266! This
-					in-person event will bring together people from all walks of life to
-					enjoy a day of activities, networking, and more. Whether you're a
-					local or just visiting, this event is a great opportunity to connect
-					with others and have a fantastic time. Don't miss out on this unique
-					experience in Tanger, المغرب!
-				</p>
+				<p className="text-sm">{description}</p>
 			</div>
 			<div className="flex flex-col w-40  mb-4 mt-5">
 				<h1 className="text-lg font-roboto font-bold w-auto">Refund Policy</h1>
@@ -44,7 +67,12 @@ export default function EventCommonDetails() {
 				></Image>
 			</div>
 			<div className="text-left">
-				<p className="text-sm">Contact the organizer to request a refund.</p>
+				<p className="text-sm">
+					Contact the organizer to request a refund. via{" "}
+					<Link href={""} className="text-primary border-0 text-sm">
+						{organizer?.email}
+					</Link>
+				</p>
 			</div>
 			<div className="flex flex-col w-40 mb-4 mt-5">
 				<h1 className="text-lg font-roboto font-bold w-auto">Organized by</h1>
@@ -56,11 +84,16 @@ export default function EventCommonDetails() {
 					className="w-fit"
 				></Image>
 			</div>
-			<div className="text-left">
-				<p className="text-sm">Contact the organizer to request a refund.</p>
+			<div className="text-left border-1 rounded-md flex flex-row w-fit items-center space-x-2 px-6 p-3">
+				<AvatarDemo></AvatarDemo>
+				<div className="flex flex-col">
+					<h1>{organizer?.organizationName}</h1>
+					<p className="text-[11px]">{organizer?.email}</p>
+					<p className="text-[11px]">{organizer?.phoneNumber}</p>
+				</div>
 			</div>
 			<div className="flex flex-col w-40 mb-4 mt-5">
-				<h1 className="text-lg font-roboto font-bold w-auto">Location</h1>
+				<h1 className="text-lg font-roboto font-bold w-auto">Similar Events</h1>
 				<Image
 					src={"/twolines.svg"}
 					alt="two"
@@ -70,7 +103,7 @@ export default function EventCommonDetails() {
 				></Image>
 			</div>
 			<div className="max-w-11/12">
-				<Map></Map>
+				<EventsGrid events={data?.filter((event:eventInfoType)=>event.id!=id)}></EventsGrid>
 			</div>
 		</div>
 	);

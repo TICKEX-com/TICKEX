@@ -1,11 +1,11 @@
 
 
 export const  event_types = [
-	"Music Show",
-	"Soccer Game",
-	"Conference",
-	"Party",
-	"Comedy show",
+	"Sports",
+	"Technology",
+	"Career",
+	"Music",
+	"Art",
 ];
 export const event_types_images = [
 	"/Music.svg",
@@ -18,7 +18,7 @@ export const cities = [
 	"Rabat",
 	"Casablanca",
 	"Marrakech",
-	"Agadir",
+	"Madrid",
 	"Houceima",
-	"Tanger",
+	"Tangier",
 ];
