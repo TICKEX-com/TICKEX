@@ -294,19 +294,21 @@ namespace event_service.Services
             {
                 query = query.Where(ev => ev.EventType.ToLower().Contains(EventType.ToLower()));
             }
-            if (MinPrice < MaxPrice)
-            {
-                if (MinPrice > 0)
-                {
-                    // Filter events based on minimum price of categories
-                    query = query.Where(ev => ev.Categories.Any(cat => cat.Price >= MinPrice));
-                }
 
-                if (MaxPrice > 0)
-                {
-                    // Filter events based on maximum price of categories
-                    query = query.Where(ev => ev.Categories.Any(cat => cat.Price <= MaxPrice));
-                }
+            if (MinPrice > 0 && MaxPrice > 0 && MinPrice < MaxPrice)
+            {
+                // Filter events based on minimum and maximum price of categories
+                query = query.Where(ev => ev.Categories.Min(ct => ct.Price) >= MinPrice && ev.Categories.Max(ct => ct.Price) <= MaxPrice);
+            }
+            if (MinPrice > 0 && MaxPrice == 0)
+            {
+                // Filter events based on minimum price of categories
+                query = query.Where(ev => ev.Categories.Min(ct => ct.Price) >= MinPrice);
+            }
+            if (MinPrice == 0 && MaxPrice > 0)
+            {
+                // Filter events based on maximum price of categories
+                query = query.Where(ev => ev.Categories.Max(ct => ct.Price) <= MaxPrice);
             }
 
             /*if (string.IsNullOrEmpty(Date) && string.IsNullOrEmpty(City) && string.IsNullOrEmpty(EventType) && MinPrice == 0 && MaxPrice == 0)
