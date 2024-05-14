@@ -1,5 +1,6 @@
 ﻿using event_service.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace event_service.Data
 {
@@ -241,7 +242,8 @@ namespace event_service.Data
                     }
                 );
 
-                for (int eventId = 1; eventId <= 10; eventId++)
+
+                for (int eventId = 1; eventId <= 3; eventId++)
                 {
                     // Seed categories for each event
                     for (int categoryId = 1; categoryId <= 3; categoryId++)
@@ -253,6 +255,44 @@ namespace event_service.Data
                                 Name = categoryId == 1 ? "Gold" : (categoryId == 2 ? "Silver" : "Bronze"),
                                 Seats = categoryId == 1 ? 100 : (categoryId == 2 ? 200 : 300), // Adjust seats accordingly
                                 Price = categoryId == 1 ? 1000 : (categoryId == 2 ? 500 : 300), // Adjust prices accordingly
+                                Color = categoryId == 1 ? "#FFD700" : (categoryId == 2 ? "#C0C0C0" : "#CD7F32"), // Gold, Silver, Bronze colors
+                                EventId = eventId,
+                            }
+                        );
+                    }
+                }
+
+                for (int eventId = 4; eventId <= 6; eventId++)
+                {
+                    // Seed categories for each event
+                    for (int categoryId = 1; categoryId <= 3; categoryId++)
+                    {
+                        modelBuilder.Entity<Category>().HasData(
+                            new Category
+                            {
+                                Id = $"{eventId}-{categoryId}", // Generate a string ID
+                                Name = categoryId == 1 ? "VIP" : (categoryId == 2 ? "Premium" : "Classic"),
+                                Seats = categoryId == 1 ? 100 : (categoryId == 2 ? 200 : 300), // Adjust seats accordingly
+                                Price = categoryId == 1 ? 2500 : (categoryId == 2 ? 1000 : 100), // Adjust prices accordingly
+                                Color = categoryId == 1 ? "#FFD700" : (categoryId == 2 ? "#C0C0C0" : "#CD7F32"), // Gold, Silver, Bronze colors
+                                EventId = eventId,
+                            }
+                        );
+                    }
+                }
+
+                for (int eventId = 7; eventId <= 10; eventId++)
+                {
+                    // Seed categories for each event
+                    for (int categoryId = 1; categoryId <= 3; categoryId++)
+                    {
+                        modelBuilder.Entity<Category>().HasData(
+                            new Category
+                            {
+                                Id = $"{eventId}-{categoryId}", // Generate a string ID
+                                Name = categoryId == 1 ? "Government" : (categoryId == 2 ? "Marine" : "Pirate"),
+                                Seats = categoryId == 1 ? 100 : (categoryId == 2 ? 200 : 300), // Adjust seats accordingly
+                                Price = categoryId == 1 ? 8000 : (categoryId == 2 ? 4000 : 1000), // Adjust prices accordingly
                                 Color = categoryId == 1 ? "#FFD700" : (categoryId == 2 ? "#C0C0C0" : "#CD7F32"), // Gold, Silver, Bronze colors
                                 EventId = eventId,
                             }
