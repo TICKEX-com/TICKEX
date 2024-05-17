@@ -44,7 +44,7 @@ public class SecurityConfig {
                         auth -> auth.requestMatchers("/api/auth/authenticate", "/api/auth/signup","/api/auth/cookie").permitAll()
                 )
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/api/design/**","/api/design/duplicate/**", "/api/user/**", "/api/auth/**").authenticated()
+                        auth -> auth.requestMatchers("/api/design/**","/api/design/duplicate/**", "/api/user/**", "/api/auth/**").permitAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -54,7 +54,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-
     }
     @Bean
     public AuthenticationProvider authenticationProvider() {

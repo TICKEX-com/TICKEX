@@ -32,5 +32,5 @@ public class User {
     private LocalDateTime date_created;
     @DBRef
     @Builder.Default
-    private List<Design> myDesigns= new ArrayList<>();;
+    private List<Design> myDesigns= new ArrayList<>();
 }
