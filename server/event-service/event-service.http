@@ -1,15 +1,6 @@
-<<<<<<< HEAD
 @event_service_HostAddress = http://localhost:8080
 
 GET {{event_service_HostAddress}}/event_service/
 Accept: application/json
 
 ###
-=======
-@event_service_HostAddress = http://localhost:8082
-
-GET {{event_service_HostAddress}}/event_service/
-Accept: application/json
-
-###
->>>>>>> authentication

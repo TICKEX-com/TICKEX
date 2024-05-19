@@ -5,11 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-<<<<<<< HEAD
-		<version>3.2.4</version>
-=======
 		<version>3.2.2</version>
->>>>>>> efa59386cb88b73e5438a4dc4671c75e9cbcd88c
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.tickex</groupId>

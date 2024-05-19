@@ -27,7 +27,8 @@ namespace authentication_service.Services
                 new Claim(JwtRegisteredClaimNames.Email,user.Email),
                 new Claim("Id",user.Id),
                 new Claim(JwtRegisteredClaimNames.Name,user.UserName),
-                new Claim("PhoneNumber", user.PhoneNumber)
+                new Claim("PhoneNumber", user.PhoneNumber),
+                new Claim("IsActive", user.isActive.ToString())
             };
 
             claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
@@ -37,7 +38,7 @@ namespace authentication_service.Services
                 Audience = _jwtOptions.Audience,
                 Issuer = _jwtOptions.Issuer,
                 Subject = new ClaimsIdentity(claimList),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

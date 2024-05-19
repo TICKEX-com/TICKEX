@@ -1,0 +1,134 @@
+
+services:
+
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    container_name: zookeeper
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    depends_on:
+      authentication-service-db:
+        condition: service_healthy
+      event-service-db:
+        condition: service_healthy
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092  
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes 
+      - KAFKA_CREATE_TOPICS=Tickex
+    depends_on:
+      - zookeeper
+
+         
+  gateway-service:
+    image: 'madockerhub/tickex-gateway-service'
+    container_name: gateway-service
+    ports:
+      - '8888:8888'
+    depends_on:
+      - event-service
+      - authentication-service
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+
+
+  discovery-service:
+    image: 'madockerhub/tickex-discovery-service'
+    container_name: discovery-service
+    ports:
+      - '8761:8761'
+    expose:
+      - '8761'
+
+
+  authentication-service-db: 
+    image: postgres:latest
+    container_name: authentication-service-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Authentication
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d Authentication'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      
+    
+  event-service-db: 
+    image: postgres:latest
+    container_name: event-service-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Events
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d Events'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  authentication-service:
+    image: 'madockerhub/tickex-authentication-service'
+    container_name: authentication-service
+    environment:
+      - DefaultConnection=Host=authentication-service-db;Database=Authentication;Username=postgres;Password=postgres;Pooling=true
+      - SECRET=THIS IS OUR PROJECT, HERE IS OUR SECRET
+      - ISSUER=auth-api
+      - AUDIENCE=client
+    depends_on:
+      authentication-service-db:
+        condition: service_healthy
+    ports:
+      - '8085:8080'
+      - '8086:8081'
+
+  event-service:
+    image: 'madockerhub/tickex-event-service'  
+    container_name: event-service
+    environment:
+      - DefaultConnection=Host=event-service-db;Database=Events;Username=postgres;Password=postgres;Pooling=true
+      - SECRET=THIS IS OUR PROJECT, HERE IS OUR SECRET
+      - ISSUER=auth-api
+      - AUDIENCE=client
+    depends_on:
+      event-service-db:
+        condition: service_healthy
+    ports:
+      - '8080:8080'
+      - '8081:8081'
+
+  payment-service:
+    image: 'madockerhub/tickex-payment-service'
+    container_name: payment-service
+    expose:
+      - '8090'
+    depends_on:
+      - gateway-service
+    ports:
+      - '8090:8090'    
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+
+
+  client:
+    container_name: client
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"          

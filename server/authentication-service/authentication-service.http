@@ -1,15 +1,6 @@
-<<<<<<< HEAD
 @authentication_service_HostAddress = http://localhost:8080
 
 GET {{authentication_service_HostAddress}}
 Accept: application/json
 
 ###
-=======
-@authentication_service_HostAddress = http://localhost:8080
-
-GET {{authentication_service_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
->>>>>>> authentication

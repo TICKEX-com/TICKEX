@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
@@ -24,30 +23,3 @@ Global
 		SolutionGuid = {C12F1541-A2E0-4483-BB7E-99C6F6C5CC23}
 	EndGlobalSection
 EndGlobal
-=======
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.8.34525.116
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "event-service", "event-service.csproj", "{CF03117E-CBDC-4860-AA6F-91E9A1679251}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CF03117E-CBDC-4860-AA6F-91E9A1679251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF03117E-CBDC-4860-AA6F-91E9A1679251}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF03117E-CBDC-4860-AA6F-91E9A1679251}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF03117E-CBDC-4860-AA6F-91E9A1679251}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {06366EDD-A46B-4B65-9124-9DDB90F5BDA7}
-	EndGlobalSection
-EndGlobal
->>>>>>> authentication

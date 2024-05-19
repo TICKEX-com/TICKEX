@@ -1,6 +1,7 @@
 ﻿using event_service.Data;
 using event_service.Entities;
 using event_service.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace event_service.Services
@@ -8,6 +9,7 @@ namespace event_service.Services
     public class UserService : IUserService
     {
         private readonly DataContext _context;
+
 
         public UserService(DataContext context)
         {
@@ -33,7 +35,8 @@ namespace event_service.Services
                 firstname = organizer.firstname,
                 lastname = organizer.lastname,
                 PhoneNumber = organizer.PhoneNumber,
-                OrganizationName = organizer.OrganizationName
+                OrganizationName = organizer.OrganizationName,
+                profileImage = organizer.profileImage               
             };
             
             _context.Organizers.Add(org);
@@ -56,6 +59,7 @@ namespace event_service.Services
             existingOrganizer.firstname = organizer.firstname;
             existingOrganizer.lastname = organizer.lastname;
             existingOrganizer.Email = organizer.Email;
+            existingOrganizer.profileImage = organizer.profileImage;
 
             var result = await _context.SaveChangesAsync();
             return result > 0;

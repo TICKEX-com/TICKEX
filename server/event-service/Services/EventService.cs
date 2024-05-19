@@ -1,10 +1,11 @@
-<<<<<<< HEAD
 ﻿using event_service.Data;
 using event_service.DTOs;
 using event_service.Entities;
 using event_service.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace event_service.Services
 {
@@ -25,7 +26,7 @@ namespace event_service.Services
 
         public async Task<Event> GetEventById(int id)
         {
-            var _event = await _context.Events.Include(img => img.Images).Include(org => org.Organizer).FirstAsync(ev => ev.Id == id);
+            var _event = await _context.Events.Include(ev => ev.Images).Include(ev => ev.Organizer).Include(ev => ev.Categories).FirstAsync(ev => ev.Id == id);
             
             if (_event.Organizer.OrganizationName.IsNullOrEmpty())
             {
@@ -35,19 +36,54 @@ namespace event_service.Services
             
         }
 
-        public async Task<ICollection<Event>> GetEvents()
+        private async Task<ICollection<EventsDto>> AddMinPrice(List<Event> events)
         {
-            return await _context.Events.OrderBy(ev => ev.Id).ToListAsync();
+            ICollection<EventsDto> _events = new List<EventsDto>();
+
+            foreach (var ev in events)
+            {
+                var category = ev.Categories.FirstOrDefault();
+                EventsDto eve = new EventsDto
+                {
+                    Id = ev.Id,
+                    Title = ev.Title,
+                    EventType = ev.EventType,
+                    EventDate = ev.EventDate,
+                    City = ev.City,
+                    Poster = ev.Poster,
+                    MinPrice = category != null ? category.Price : 0,
+                };
+
+                _events.Add(eve);
+            }
+
+            return _events;
         }
+
+        public async Task<ICollection<EventsDto>> GetEvents(int pageNumber)
+        {
+            var events = await _context.Events
+                .Include(ev => ev.Categories.OrderBy(cat => cat.Price))
+                .OrderBy(ev => ev.EventDate)
+                .Skip((pageNumber - 1) * 6)
+                .Take(6)
+                .ToListAsync();
+
+            var _events = await AddMinPrice(events);
+
+            return _events;
+        }
+
+
 
         public async Task<bool> IsEventExist(int id)
         {
             return await _context.Events.AnyAsync(ev => ev.Id == id);
         }
 
-        public async Task<bool> IsTypeExist(string name)
+        public async Task<bool> IsTypeExist(string type)
         {
-            return await _context.Events.AnyAsync(ev => ev.EventType == name);
+            return await _context.Events.AnyAsync(ev => ev.EventType == type);
         }
 
         public async Task<bool> OrganizerHasEvents(string id)
@@ -55,12 +91,19 @@ namespace event_service.Services
             return await _context.Events.AnyAsync(ev => ev.OrganizerId == id);
         }
 
-        public async Task<ICollection<Event>> GetEventsByOrganizer(string id)
+        public async Task<ICollection<EventsDto>> GetEventsByOrganizer(string id, int pageNumber)
         {
-            return await _context.Events
+            var events = await _context.Events
                                  .Where(ev => ev.OrganizerId == id)
-                                 .OrderBy(ev => ev.Id)
+                                 .Include(ev => ev.Categories.OrderBy(cat => cat.Price))
+                                 .OrderBy(ev => ev.EventDate)
+                                 .Skip((pageNumber - 1) * 6)
+                                 .Take(6)
                                  .ToListAsync();
+
+            var _events = await AddMinPrice(events);
+
+            return _events;
         }
 
         public async Task<Event> GetEventById(string OrganizerId, int id)
@@ -68,36 +111,35 @@ namespace event_service.Services
             return await _context.Events.Where(ev => ev.OrganizerId == OrganizerId).Include(img => img.Images).FirstAsync(ev => ev.Id == id);
         }
 
-        public async Task<ICollection<Event>> GetEventsByType(string name)
-        {
-            return await _context.Events.Where(ev => ev.EventType == name).OrderBy(ev => ev.Id).ToListAsync();
-        }
-
         public async Task<bool> CreateEvent(EventReqDto Event, string OrganizerId)
-        {  
+        {
+            var parsedDate = DateTime.ParseExact(Event.EventDate, "yyyy-mm-dd", CultureInfo.InvariantCulture);
+
+
             Event ev = new()
             {
                 Title = Event.Title,
                 Description = Event.Description,
                 Duration = Event.Duration,
                 Time = Event.Time,
-                Date = DateTime.Now,
+                CreationDate = DateTime.Now,
+                EventDate = parsedDate,
                 City = Event.City,
                 Address = Event.Address,
                 EventType = Event.EventType,
-                OrganizerId = OrganizerId
+                Poster = Event.Poster,
+                OrganizerId = OrganizerId,
+                DesignId = Event.DesignId
             };
 
 
-            if (!string.IsNullOrEmpty(Event.Poster))
-            {
-                ev.Poster = Event.Poster;
-            }
+            
+            
 
             _context.Events.Add(ev);
 
             // Handle images
-            if (Event.Images != null && Event.Images.Any())
+            /*if (Event.Images != null && Event.Images.Any())
             {
                 foreach (var image in Event.Images)
                 {
@@ -105,7 +147,7 @@ namespace event_service.Services
                     var img = new Image { url = image.url, Event = ev };
                     _context.Images.Add(img);
                 }
-            }
+            }*/
 
             if (Event.Categories != null && Event.Categories.Any())
             {
@@ -114,7 +156,7 @@ namespace event_service.Services
                     var cat = new Category {
                         Name = category.Name, 
                         Seats = category.Seats,
-                        Prize = category.Prize,
+                        Price = category.Price,
                         Color = category.Color,
                         Event = ev};
                         _context.Categories.Add(cat);
@@ -150,6 +192,7 @@ namespace event_service.Services
         public async Task<bool> UpdateEvent(EventReqDto ev, string OrganizerId, int EventId)
         {
             var existingEvent = await GetEventById(OrganizerId, EventId);
+            var parsedDate = DateTime.ParseExact(ev.EventDate, "yyyy-mm-dd", CultureInfo.InvariantCulture);
 
             if (existingEvent == null)
                 return false; // Event not found
@@ -159,257 +202,129 @@ namespace event_service.Services
             existingEvent.Description = ev.Description;
             existingEvent.Duration = ev.Duration;
             existingEvent.Time = ev.Time;
-            existingEvent.Date = DateTime.Now;
+            existingEvent.EventDate = parsedDate;
             existingEvent.City = ev.City;
             existingEvent.Address = ev.Address;
             existingEvent.EventType = ev.EventType;
-
-            // Update poster if provided
-            if (!string.IsNullOrEmpty(ev.Poster))
-            {
-                existingEvent.Poster = ev.Poster;
-            }
+            existingEvent.DesignId = ev.DesignId;
+            existingEvent.Poster = ev.Poster;
+            
 
             // Update more images
-            if (ev.Images != null && ev.Images.Any())
+            /*if (ev.Images != null && ev.Images.Any())
             {
                 // Add new images
                 foreach (var image in ev.Images)
                 {
                     _context.Images.Add(new Image { url = image.url, Event = existingEvent });
                 }
-            }
+            }*/
 
             var result = await _context.SaveChangesAsync();
             return result > 0;
 
         }
 
-        public async Task<ICollection<Event>> GetEventsByDate(string Date)
+        public async Task<ICollection<EventsDto>> GetEventsByDate(string Date)
         {
-            // Split the Date string into year, month, and day components
-            string[] dateComponents = Date.Split('-');
-            Console.WriteLine(dateComponents[0]);
-            if (dateComponents.Length != 3)
-            {
-                // Handle invalid date format
-                throw new ArgumentException("Invalid date format. Expected mm-dd-yyyy.");
-            }
+            var parsedDate = DateTime.ParseExact(Date, "yyyy-mm-dd", CultureInfo.InvariantCulture);
 
-            // Parse the components to integers
-            int m = int.Parse(dateComponents[0]);
-            int d = int.Parse(dateComponents[1]);
-            int y = int.Parse(dateComponents[2]);
-
-            return await _context.Events
-                .Where(ev => ev.Date.Year >= y && ev.Date.Month >= m && ev.Date.Day >= d)
+            var events = await _context.Events
+                 .Where(ev => ev.EventDate >= parsedDate)
+                .Include(ev => ev.Categories)
                 .OrderBy(ev => ev.Id)
                 .ToListAsync();
+
+            var _events = await AddMinPrice(events);
+
+            return _events;
         }
 
-        public async Task<ICollection<Event>> GetEventsByTitle(string title)
+        public async Task<ICollection<EventsDto>> GetEventsByTitle(string title)
         {
-            return await _context.Events
-                .Where(ev => ev.Title.Contains(title))
+            var events = await _context.Events
+                .Where(ev => ev.Title.ToLower().Contains(title.ToLower()))
+                .Include(ev => ev.Categories)
                 .OrderBy(ev => ev.Id)
                 .ToListAsync();
+
+            var _events = await AddMinPrice(events);
+
+            return _events;
+        }
+        public async Task<ICollection<EventsDto>> GetEventsByType(string type)
+        {
+            var events = await _context.Events
+                                .Where(ev => ev.EventType.Contains(type))
+                                .Include(ev => ev.Categories)
+                                .OrderBy(ev => ev.Id)
+                                .ToListAsync();
+
+            var _events = await AddMinPrice(events);
+
+            return _events;
         }
 
         public async Task<ICollection<Category>> GetCategoriesByEventId(int id)
         {
             return await _context.Categories.Where(ev => ev.EventId == id).OrderBy(ev => ev.Id).ToListAsync();
         }
-    
+
+
+
+        public async Task<ICollection<EventsDto>> FilterEvents(string Date, string City, string EventType, float MinPrice, float MaxPrice, int pageNumber)
+        {
+
+            var query = _context.Events.Include(ev => ev.Categories.OrderBy(cat => cat.Price)).AsQueryable();
+
+            // Apply filters based on provided parameters
+            if (!string.IsNullOrEmpty(Date))
+            {
+                // Assuming Date is a string in a specific format, you need to parse it to DateTime
+                var parsedDate = DateTime.ParseExact(Date, "yyyy-mm-dd", CultureInfo.InvariantCulture);
+                query = query.Where(ev => ev.EventDate >= parsedDate);
+            }
+
+            if (!string.IsNullOrEmpty(City))
+            {
+                query = query.Where(ev => ev.City.ToLower().Contains(City.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(EventType))
+            {
+                query = query.Where(ev => ev.EventType.ToLower().Contains(EventType.ToLower()));
+            }
+
+            if (MinPrice > 0 && MaxPrice > 0 && MinPrice < MaxPrice)
+            {
+                // Filter events based on minimum and maximum price of categories
+                query = query.Where(ev => ev.Categories.Min(ct => ct.Price) >= MinPrice && ev.Categories.Max(ct => ct.Price) <= MaxPrice);
+            }
+            if (MinPrice > 0 && MaxPrice == 0)
+            {
+                // Filter events based on minimum price of categories
+                query = query.Where(ev => ev.Categories.Min(ct => ct.Price) >= MinPrice);
+            }
+            if (MinPrice == 0 && MaxPrice > 0)
+            {
+                // Filter events based on maximum price of categories
+                query = query.Where(ev => ev.Categories.Max(ct => ct.Price) <= MaxPrice);
+            }
+
+            /*if (string.IsNullOrEmpty(Date) && string.IsNullOrEmpty(City) && string.IsNullOrEmpty(EventType) && MinPrice == 0 && MaxPrice == 0)
+            {
+                return null;
+            }*/
+
+            // Execute the query and retrieve the filtered events
+            var filteredEvents = await query.OrderBy(ev => ev.EventDate).Skip((pageNumber - 1) * 6).Take(6).ToListAsync();
+
+            // Convert the filtered events to DTOs
+            var eventsDto = await AddMinPrice(filteredEvents);
+
+            return eventsDto;
+        }
+
+
     }
 }
-=======
-﻿using event_service.Data;
-using event_service.DTOs;
-using event_service.Entities;
-using event_service.Services.IServices;
-using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace event_service.Services
-{
-    public class EventService : IEventService
-    {
-        private readonly DataContext _context;
-
-        public EventService(DataContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<Event> GetEventById(int id)
-        {
-            return await _context.Events.Include(img => img.Images).Include(ct => ct.Category).FirstAsync(ev => ev.Id == id);
-        }
-
-        public async Task<ICollection<Event>> GetEvents()
-        {
-            return await _context.Events.Include(ct => ct.Category).OrderBy(ev => ev.Id).ToListAsync();
-        }
-
-        public async Task<bool> IsEventExist(int id)
-        {
-            return await _context.Events.AnyAsync(ev => ev.Id == id);
-        }
-
-        public async Task<bool> IsCategoryExist(int id)
-        {
-            return await _context.Categories.AnyAsync(ct => ct.Id == id);
-        }
-
-        public async Task<bool> OrganizerHasEvents(string id)
-        {
-            return await _context.Events.AnyAsync(ev => ev.OrganizerId == id);
-        }
-
-        public async Task<ICollection<Event>> GetEventsByOrganizer(string id)
-        {
-            return await _context.Events
-                                 .Where(ev => ev.OrganizerId == id)
-                                 .Include(ct => ct.Category)
-                                 .OrderBy(ev => ev.Id)
-                                 .ToListAsync();
-        }
-
-        public async Task<Event> GetEventById(string OrganizerId, int id)
-        {
-            return await _context.Events.Where(ev => ev.OrganizerId == OrganizerId).Include(img => img.Images).Include(ct => ct.Category).FirstAsync(ev => ev.Id == id);
-        }
-
-        public async Task<ICollection<Event>> GetEventsByCategory(int id)
-        {
-            return await _context.Events.Where(ct => ct.CategoryId == id).Include(ct => ct.Category).OrderBy(ev => ev.Id).ToListAsync();
-        }
-
-        public async Task<bool> CreateEvent(EventReqDto Event, string OrganizerId)
-        {
-            Event ev = new()
-            {
-                Title = Event.Title,
-                Description = Event.Description,
-                Date = Event.Date,
-                Location = Event.Location,
-                MinPrize = Event.MinPrize,
-                CategoryId = Event.CategoryId,
-                OrganizerId = OrganizerId
-            };
-
-
-            if (!string.IsNullOrEmpty(Event.Poster))
-            {
-                ev.Poster = Event.Poster;
-            }
-
-            _context.Events.Add(ev);
-
-            // Handle images
-            if (Event.Images != null && Event.Images.Any())
-            {
-                foreach (var image in Event.Images)
-                {
-                    // Add image
-                    var img = new Image { url = image.url, Event = ev };
-                    _context.Images.Add(img);
-                }
-            }
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
-        }
-
-        public async Task<bool> DeleteEvent(string OrganizerId, int id)
-        {
-            var _event = await GetEventById(OrganizerId, id);
-
-            if (_event == null)
-                return false; // Event not found
-
-            if (!_event.On_sell && !_event.Is_finished)
-            {
-                _context.Events.Remove(_event);
-                var result = await _context.SaveChangesAsync();
-                return result > 0;
-            }
-            else if (_event.Is_finished)
-            {
-                _context.Events.Remove(_event);
-                var result = await _context.SaveChangesAsync();
-                return result > 0;
-            }
-            return false;
-  
-        }
-
-        public async Task<bool> UpdateEvent(EventReqDto ev, string OrganizerId, int EventId)
-        {
-            var existingEvent = await GetEventById(OrganizerId, EventId);
-
-            if (existingEvent == null)
-                return false; // Event not found
-
-            // Update event properties
-            existingEvent.Title = ev.Title;
-            existingEvent.Description = ev.Description;
-            existingEvent.Date = ev.Date;
-            existingEvent.Location = ev.Location;
-            existingEvent.MinPrize = ev.MinPrize;
-            existingEvent.CategoryId = ev.CategoryId;
-
-            // Update poster if provided
-            if (!string.IsNullOrEmpty(ev.Poster))
-            {
-                existingEvent.Poster = ev.Poster;
-            }
-
-            // Update more images
-            if (ev.Images != null && ev.Images.Any())
-            {
-                // Add new images
-                foreach (var image in ev.Images)
-                {
-                    _context.Images.Add(new Image { url = image.url, Event = existingEvent });
-                }
-            }
-
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
-
-        }
-
-        public async Task<ICollection<Event>> GetEventsByDate(string Date)
-        {
-            // Split the Date string into year, month, and day components
-            string[] dateComponents = Date.Split('-');
-
-            if (dateComponents.Length != 3)
-            {
-                // Handle invalid date format
-                throw new ArgumentException("Invalid date format. Expected yyyy-mm-dd.");
-            }
-
-            // Parse the components to integers
-            int y = int.Parse(dateComponents[0]);
-            int m = int.Parse(dateComponents[1]);
-            int d = int.Parse(dateComponents[2]);
-
-            return await _context.Events
-                .Where(ev => ev.Date.Year >= y && ev.Date.Month >= m && ev.Date.Day >= d)
-                .Include(ct => ct.Category)
-                .OrderBy(ev => ev.Id)
-                .ToListAsync();
-        }
-
-        public async Task<ICollection<Event>> GetEventsByTitle(string title)
-        {
-            return await _context.Events
-                .Where(ev => ev.Title.Contains(title))
-                .Include(ct => ct.Category)
-                .OrderBy(ev => ev.Id)
-                .ToListAsync();
-        }
-    }
-}
->>>>>>> authentication

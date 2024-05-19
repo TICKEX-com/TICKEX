@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿using authentication_service.DTOs;
 using authentication_service.Services.IServices;
 using Confluent.Kafka;
@@ -22,9 +21,21 @@ namespace authentication_service.Services
             {
                 try
                 {
-                    await producer.ProduceAsync(topic, new Message<Null, OrganizerDto> { Value = organizerDto });
-                    producer.Flush(TimeSpan.FromSeconds(10));
-                    return true;
+                    var produceTask = producer.ProduceAsync(topic, new Message<Null, OrganizerDto> { Value = organizerDto });
+
+                    // Wait for either the produce task to complete or 10 seconds timeout
+                    var completedTask = await Task.WhenAny(produceTask, Task.Delay(TimeSpan.FromSeconds(5)));
+
+                    if (completedTask == produceTask)
+                    {
+                        producer.Flush(TimeSpan.FromSeconds(5));
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Publish operation timed out after 5 seconds.");
+                        return false;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -32,53 +43,6 @@ namespace authentication_service.Services
                     return false;
                 }
             }
-
-
         }
     }
 }
-=======
-﻿using authentication_service.DTOs;
-using authentication_service.Entities;
-using authentication_service.Services.IServices;
-using Confluent.Kafka;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Data;
-
-namespace authentication_service.Services
-{
-    public class ProducerService : IProducerService
-    {
-        private ProducerConfig _config;
-        public ProducerService(ProducerConfig config)
-        {
-            _config = config;
-        }
-        public async Task<bool> publish(string topic, UserDto userdto)
-        {
-            UserDto userDto = new()
-            {
-                Id = userdto.Id,
-                Username = userdto.Username,
-                Email = userdto.Email,
-                firstname = userdto.firstname,
-                lastname = userdto.lastname,
-                PhoneNumber = userdto.PhoneNumber,
-                Role = userdto.Role,
-                certificat = userdto.certificat
-            };
-
-            // string serializedEvent = JsonConvert.SerializeObject(e);
-            using (var producer = new ProducerBuilder<Null, UserDto>(_config)
-            .SetValueSerializer(new UserDtoSerializer())
-            .Build())
-            {
-                await producer.ProduceAsync(topic, new Message<Null, UserDto> { Value = userDto });
-                producer.Flush(TimeSpan.FromSeconds(10));
-                return true;
-            }
-        }
-    }
-}
->>>>>>> authentication
