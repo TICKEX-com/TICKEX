@@ -83,7 +83,7 @@ function page() {
           </Link>
         </div>
       </div>
-      {dataLength === 0 ? (
+      {(dataLength === 0 || !eventsInfo)? (
         <div className="flex justify-normal items-center flex-col mt-10">
           <div>
             <Image src="/svg/Empty-amico.svg" alt="plus" width={400} height={400} />
