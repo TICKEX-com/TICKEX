@@ -8,8 +8,19 @@ import React from "react";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import EventCommonDetails from "@/components/EventCommonDetails";
+import { useParams } from "next/navigation";
+import { fetchEventsById } from "./_page";
+import { useQuery } from "@tanstack/react-query";
+import { eventInfoType } from "@/core/types/event";
+import { formatDate } from "@/helpers/formatters";
+import { Badge } from "@/components/ui/badge";
+import { eventData } from "@/core/constantes/Table.const";
 
 export default function page({ params }: { params: { slug: string } }) {
+	const { data, isLoading, error, refetch } = useQuery<eventInfoType>({
+		queryKey: ["event"],
+		queryFn: () => fetchEventsById(params.slug),
+	});
 	return (
 		<div className="font-roboto  flex flex-col">
 			<Navbar1></Navbar1>
@@ -27,17 +38,17 @@ export default function page({ params }: { params: { slug: string } }) {
 			<div className="container main mt-10 flex flex-row">
 				<div className="w-9/12 ">
 					<div className="flex flex-col">
-						<h1 className="text-2xl w-11/12 text-wrap">
-							George Michael By Candlelight at The Monastery, Manchester
+						<h1 className="text-2xl w-11/12 text-wrap align-center">
+						{data?.title} <Badge className="bg-primary rounded-md px-2 mr-2" >{data?.eventType}</Badge>
 						</h1>
 						<div className="flex flex-row mt-5 space-x-6">
 							<div className="flex flex-row align-center items-center space-x-3">
 								<Calendar size={16}></Calendar>
-								<p className="text-sm">Fri 19 Jul 2024 8:00 PM</p>
+								<p className="text-sm">{formatDate(data?.eventDate)}</p>
 							</div>
 							<div className="flex flex-row align-center items-center space-x-3">
 								<MapPin size={16} />
-								<p className="text-sm">The Monastery, Manchester, M12 2WF</p>
+								<p className="text-sm">{data?.city} - {data?.address}</p>
 							</div>
 						</div>
 						<div className="mt-6">
@@ -50,7 +61,7 @@ export default function page({ params }: { params: { slug: string } }) {
 							></Image>
 						</div>
 					</div>
-					<EventCommonDetails></EventCommonDetails>
+					<EventCommonDetails id={data?.id} description={data?.description} duration={data?.duration} organizer={data?.organizer} eventType={data?.eventType}></EventCommonDetails>
 				</div>	
 				<div className="w-3/12 flex flex-col ">
                     <div className="flex flex-row space-x-4 w-full justify-end">
@@ -58,9 +69,9 @@ export default function page({ params }: { params: { slug: string } }) {
                         <Share size={20}></Share>
                     </div>
                     <div className="flex flex-col border p-3 rounded-md space-y-3 mt-6">
-                        <div className="flex flex-col rounded-md border-primary border-2  p-3  space-y-1">
+                        {data?.categories.map((category)=><div className="flex flex-col rounded-md border-primary border-2  p-3  space-y-1">
                             <div className="flex flex-row items-center ">
-                                <p className="flex-1">Category A</p>
+                                <p className="flex-1">{category.name}</p>
                                 <div className="flex flex-1 justify-end flex-row space-x-3 items-center">
                                     <Button className="p-0 "><Minus size={16}></Minus></Button>
                                     <p>1</p>
@@ -68,19 +79,9 @@ export default function page({ params }: { params: { slug: string } }) {
                                 </div>
                                 
                             </div>
-                            <p className="font-bold text-sm">100 DH</p>
-                        </div>
-                        <div className="flex flex-col rounded-md border-primary border-2   p-3  space-y-1">
-                            <div className="flex flex-row items-center ">
-                                <p className="flex-1">Category B</p>
-                                <div className="flex flex-1 justify-end flex-row space-x-3 items-center">
-                                    <Button className="p-0 "><Minus size={16}></Minus></Button>
-                                    <p>1</p>
-                                    <Button className="p-[2px]"><Plus size={16}></Plus></Button>
-                                </div>
-                            </div>
-                            <p className=" text-sm">200 DH</p>
-                        </div>
+                            <p className="font-bold text-sm">{category.price} DH</p>
+                        </div>)}
+                        
                         <Button>Check Out 200 DH</Button>
                     </div>
                 </div>

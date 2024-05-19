@@ -10,6 +10,11 @@ const nextConfig = {
 	async rewrites() {
 		return [
 			{
+				// Specific route for /details/categories/:id
+				source: "/api/details/categories/:id*",
+				destination: "http://localhost:8888/event-service/Events/:id*", // Redirect to a different backend
+			},
+			{
 				source: "/api/:path*", // Adjust this according to your API route
 				destination: "http://localhost:8888/:path*", // Adjust this according to your backend API endpoint
 			},
