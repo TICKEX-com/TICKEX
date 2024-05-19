@@ -23,7 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { eventData } from "@/core/constantes/Table.const";
+
 import Action from "./Action";
 import PaginationSection from "./PaginationSection";
 

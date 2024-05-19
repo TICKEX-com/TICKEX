@@ -12,7 +12,7 @@ const authSlice = createSlice({
     setCredentials: (state, action) => {
       state.userInfo = action.payload;
     },
-    logout: (state, action) => {
+    logout: (state) => {
       state.userInfo = null;
     },
   },

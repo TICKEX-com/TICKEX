@@ -15,12 +15,13 @@ import { setImage } from "@/lib/features/events/eventSlice";
 import { useAppSelector } from "@/lib/hooks";
 import { eventInfoType } from "@/core/types/event";
 import api from "@/lib/api";
-import { error } from "console";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 function page() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [imageUpload, setImageUpload] = useState<FileList | null>(null);
   const [poster, setPoster] = useState<string>("");
   useEffect(() => {
@@ -46,6 +47,7 @@ const id = organizerId
           eventData
         );
         toast.success("Your Event has been created successfully");
+        router.push('./')
 
       } catch (error) {
         console.log(error);

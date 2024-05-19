@@ -22,6 +22,7 @@ function Action({ id, admin, eventId }: { id: string; admin?: boolean ,eventId?:
           `/authentication-service/api/users/Accept/Organizer/${id}`
         );
         toast.success("Account has been Accepted");
+        window.location.reload();
       } catch (error) {
         console.error(error);
         throw error;

@@ -30,21 +30,45 @@ import {
   ShoppingCart,
   Users2,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/hooks";
+import { useMutation } from "@tanstack/react-query";
+import api from "@/lib/api";
+import { useDispatch } from "react-redux";
+import { logout } from "@/lib/features/auth/authSlice";
+
+
 
 function TopNav() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter((item) => item !== "");
-  const profileImg = useAppSelector(state=>state.auth.userInfo)
-  useEffect(()=>{
+  const profileImg = useAppSelector((state) => state.auth.userInfo);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  useEffect(() => {
     console.log(profileImg);
-    
-  },[])
-  
+  }, []);
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      try {
+        const response = await api.post(
+          `authentication-service/api/auth/logout`
+        );
+        console.log(response);
+        dispatch(logout());
+        router.push("/login");
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+  });
+
+  const handleLogOut = async () => {
+    mutate();
+  };
   return (
     <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-    
       <header className="sticky top-0 z-30 flex justify-between h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
         <Sheet>
           <SheetTrigger asChild>
@@ -139,7 +163,7 @@ function TopNav() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogOut}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
