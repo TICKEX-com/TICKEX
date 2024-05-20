@@ -143,6 +143,7 @@ services:
   #   environment:
   #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka      
 
+
   design-service:
     build: ./design-service
     container_name: design-service
