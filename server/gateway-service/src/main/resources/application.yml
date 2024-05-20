@@ -1,23 +1,64 @@
+server:
+  port: 8888
+
 spring:
-  h2:
-    console:
-      enabled: true
-  cloud:
-    discovery:
-      enabled: true
-    config:
-      enabled: false
   application:
-    name: gateway-service
+    name: gateway
+  cloud:
+    gateway:
+      loadbalancer:
+        ribbon:
+          enabled: false
+      discovery:
+          locator:
+            enabled: true
+            lowerCaseServiceId: true
+
+      routes:
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payment-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: discovery-service
+          uri: lb://discovery-service
+          predicates:
+            - Path=/discovery-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: eureka
+          uri: lb://discovery-service
+          predicates:
+            - Path=/eureka/**
+
+        - id: event-service
+          uri: lb://event-service
+          predicates:
+            - Path=/event-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: authentication-service
+          uri: lb://authentication-service
+          predicates:
+            - Path=/authentication-service/**
+          filters:
+            - StripPrefix=1
+            
 eureka:
-  instance:
-    prefer-ip-address: true
   client:
-    service-url:
+    registerWithEureka: true
+    serviceUrl:
       defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
     healthcheck:
       enabled: true
-    registry-fetch-interval-seconds: 200
+      
+  instance:
+    prefer-ip-address: true
+
 management:
   endpoints:
     web:
