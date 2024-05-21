@@ -2,6 +2,13 @@
 using event_service.Entities;
 using event_service.Services.IServices;
 using Newtonsoft.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace event_service.Services
 {
@@ -10,17 +17,16 @@ namespace event_service.Services
         private readonly ILogger<ConsumerService> _logger;
         private readonly ConsumerConfig _consumerConfig;
         private IConsumer<Ignore, string> _consumer;
-        public IServiceProvider _services;
-
-
+        private readonly IServiceProvider _services;
 
         public ConsumerService(IServiceProvider services, ILogger<ConsumerService> logger, ConsumerConfig consumerConfig)
         {
             _services = services;
             _logger = logger;
             _consumerConfig = consumerConfig;
-            _consumer = new ConsumerBuilder<Ignore, string>(_consumerConfig).Build();
-
+            _consumer = new ConsumerBuilder<Ignore, string>(_consumerConfig)
+                .SetErrorHandler((_, e) => Console.WriteLine($"Error: {e.Reason}"))
+                .Build();
         }
 
         private async Task<bool> TopicExists(string topicName)
@@ -28,7 +34,7 @@ namespace event_service.Services
             try
             {
                 using var adminClient = new AdminClientBuilder(_consumerConfig).Build();
-                var metadata = adminClient.GetMetadata(topicName, TimeSpan.FromSeconds(10));
+                var metadata = adminClient.GetMetadata(topicName, TimeSpan.FromSeconds(1));
                 return metadata.Topics.Any(t => t.Topic == topicName);
             }
             catch (Exception ex)
@@ -38,12 +44,11 @@ namespace event_service.Services
             }
         }
 
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Consumer Service running.");
 
-            var topicName = "Tickex";
+            var topicName = "users";
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (await TopicExists(topicName))
@@ -59,21 +64,17 @@ namespace event_service.Services
             }
         }
 
-
         private async Task DoWork(CancellationToken stoppingToken)
         {
-            // Inside your DoWork method, you can use the IUserService to create organizers
-
-
-            _logger.LogInformation(
-                "Tickex Consumer is working.");
+            _logger.LogInformation("Tickex Consumer is working.");
             using (var scope = _services.CreateScope())
             {
                 var user = scope.ServiceProvider.GetRequiredService<IUserService>();
 
                 try
                 {
-                    _consumer.Subscribe("Tickex");
+                    // Assign the consumer to partition 0 of the topic 'users'
+                    _consumer.Assign(new TopicPartition("users", new Partition(0)));
 
                     while (!stoppingToken.IsCancellationRequested)
                     {
@@ -88,7 +89,7 @@ namespace event_service.Services
                             // Check if organizer already exists
                             try
                             {
-                                if (!await user.IsOrganizerExists(organizer.Id))
+                                if (organizer != null && !await user.IsOrganizerExists(organizer.Id))
                                 {
                                     // Create organizer if it doesn't exist
                                     if (await user.CreateOrganizer(organizer))
@@ -102,8 +103,8 @@ namespace event_service.Services
                                 }
                                 else
                                 {
-                                    // Create organizer if it doesn't exist
-                                    if (await user.UpdateOrganizer(organizer))
+                                    // Update organizer if it exists
+                                    if (organizer != null && await user.UpdateOrganizer(organizer))
                                     {
                                         _logger.LogInformation("Organizer updated successfully.");
                                     }
@@ -132,17 +133,14 @@ namespace event_service.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
                     _logger.LogError($"Unexpected error occurred while consuming: {ex.Message}");
                 }
-
             }
         }
 
         public override async Task StopAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation(
-                "Tickex Consumer is stopping.");
+            _logger.LogInformation("Tickex Consumer is stopping.");
             _consumer.Close();  // Ensure the consumer is closed properly
             await base.StopAsync(stoppingToken);
         }

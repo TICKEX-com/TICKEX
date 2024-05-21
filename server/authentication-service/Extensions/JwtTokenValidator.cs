@@ -50,5 +50,39 @@ namespace authentication_service.Extensions
                 throw new Exception("Token validation failed: " + ex.Message);
             }
         }
+
+        public string[] ValidateTokenID(string jwtToken)
+        {
+            try
+            {
+                // Token validation parameters
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = _securityKey,
+                    ValidIssuer = _issuer,
+                    ValidAudience = _audience
+                };
+
+                // Create token handler
+                var tokenHandler = new JwtSecurityTokenHandler();
+
+                // Validate the JWT token
+                var principal = tokenHandler.ValidateToken(jwtToken, tokenValidationParameters, out _);
+
+                // Extract user roles from claims
+                var ID = principal.Claims.Where(c => c.Type == "Id")
+                            .Select(c => c.Value)
+                            .ToArray();
+                Console.WriteLine("hhhhh");
+                return ID;
+            }
+            catch (Exception ex)
+            {
+                // Token validation failed
+                // You can log the error or handle it as needed
+                throw new Exception("Token validation failed: " + ex.Message);
+            }
+        }
     }
 }

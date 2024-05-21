@@ -65,7 +65,7 @@ builder.Services.AddSwaggerGen(option =>
 // Services config
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<IProducerService, ProducerService>();
 
 
 
@@ -77,10 +77,15 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.AddAppAuthentication();
 builder.Services.AddAuthorization();
 
+// Kafka Configuration for Consumer
 var consumerConfig = new ConsumerConfig();
 builder.Configuration.Bind("consumer", consumerConfig);
 builder.Services.AddSingleton(consumerConfig);
 
+// Kafka Configuration for Producer
+var producerConfig = new ProducerConfig();
+builder.Configuration.Bind("producer", producerConfig);
+builder.Services.AddSingleton(producerConfig);
 
 // Consumer Configuration
 builder.Services.AddHostedService<ConsumerService>();

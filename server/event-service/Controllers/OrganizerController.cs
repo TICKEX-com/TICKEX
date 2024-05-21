@@ -16,16 +16,18 @@ namespace event_service.Controllers
     {
         private readonly IEventService _eventService;
         private readonly IUserService _userService;
+        private readonly IProducerService _producerService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
 
-        public OrganizerController(IEventService eventService, IMapper mapper, IUserService userService, IConfiguration configuration)
+        public OrganizerController(IEventService eventService, IMapper mapper, IUserService userService, IConfiguration configuration, IProducerService producerService)
         {
             _eventService = eventService;
             _mapper = mapper;
             _userService = userService;
             _configuration = configuration;
+            _producerService = producerService;
         }
 
         private bool AuthorizeRole(string role)
@@ -61,36 +63,29 @@ namespace event_service.Controllers
             }
         }
 
-        private bool AuthorizeID(string ID)
+        private string? AuthorizeID()
         {
             // Retrieve JWT token from the request headers
             var jwtToken = HttpContext.Request.Cookies["jwtToken"];
             if (string.IsNullOrEmpty(jwtToken))
             {
-                return false;
+                return null;
             }
 
             // Initialize JwtTokenValidator with the issuer, audience, and secret key
-            var Secret = Environment.GetEnvironmentVariable("SECRET");
+            /*var Secret = Environment.GetEnvironmentVariable("SECRET");
             var Issuer = Environment.GetEnvironmentVariable("ISSUER");
             var Audience = Environment.GetEnvironmentVariable("AUDIENCE");
-            var tokenValidator = new JwtTokenValidator(Issuer, Audience, Secret);
+            var tokenValidator = new JwtTokenValidator(Issuer, Audience, Secret);*/
 
 
-            /*var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);*/
+            var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
 
             // Validate JWT token and extract user roles
-            var IDs = tokenValidator.ValidateTokenID(jwtToken);
+            var ID = tokenValidator.ValidateTokenID(jwtToken);
 
-            if (IDs.Contains(ID))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ID[0];
         }
 
         [HttpGet("Organizers")]
@@ -115,24 +110,36 @@ namespace event_service.Controllers
         }
 
 
-        [HttpPost("Organizer/{OrganizerId}/Events")]
-        public async Task<IActionResult> CreateEvent([FromBody] EventReqDto ev, string OrganizerId)
+        [HttpPost("Organizer/CreateEvent")]
+        public async Task<IActionResult> CreateEvent([FromBody] EventReqDto ev)
         {
             try
             {
-                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
+                var id = AuthorizeID();
+                if (id!=null && AuthorizeRole("ORGANIZER"))
                 {
-                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                    if (!await _userService.IsOrganizerExists(id))
                         return NotFound("Organizer not found");
 
-                    if (await _eventService.CreateEvent(ev, OrganizerId))
+                    if (await _producerService.TestKafkaConnectionAsync())
                     {
-                        return Ok(ev);
-                    }
-                    else
-                    {
-                        return BadRequest("Failed to create event.");
-                    }
+                        var eventid = await _eventService.CreateEvent(ev, id);
+                        if (eventid!=null)
+                        {
+                            var _event = _mapper.Map<PublishDto>(ev);
+                            _event.Id = (int)eventid;
+                            _event.OrganizerId = id;
+                            await _producerService.publish("events", _event);
+                            return Ok(_event);   
+                        }
+                        else
+                        {
+                            return BadRequest("Failed to create event.");
+                        }
+                    } else
+                    {   
+                        return BadRequest("Connection failure to Kafka");
+                    }      
                 }
                 else
                 {
@@ -147,20 +154,21 @@ namespace event_service.Controllers
             }
         }
 
-        [HttpGet("Organizer/{OrganizerId}/Events")]
-        public async Task<IActionResult> GetAllEvents(string OrganizerId, int pageNumber = 1)
+        [HttpGet("Organizer/Events")]
+        public async Task<IActionResult> GetAllEvents(int pageNumber = 1)
         {
             try
             {
-                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
+                var id = AuthorizeID();
+                if (id!=null && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
-                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                    if (!await _userService.IsOrganizerExists(id))
                         return NotFound("Organizer not found");
 
-                    if (!await _eventService.OrganizerHasEvents(OrganizerId))
+                    if (!await _eventService.OrganizerHasEvents(id))
                         return NotFound();
 
-                    var events = await _eventService.GetEventsByOrganizer(OrganizerId, pageNumber);
+                    var events = await _eventService.GetEventsByOrganizer(id, pageNumber);
 
                     if (!ModelState.IsValid)
                         return BadRequest(ModelState);
@@ -179,20 +187,21 @@ namespace event_service.Controllers
             }
         }
 
-        [HttpGet("Organizer/{OrganizerId}/Events/{EventId}")]
-        public async Task<IActionResult> GetEventById(string OrganizerId, int EventId)
+        [HttpGet("Organizer/Events/{EventId}")]
+        public async Task<IActionResult> GetEventById(int EventId)
         {
             try
             {
-                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
+                var id = AuthorizeID();
+                if (id!=null && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
-                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                    if (!await _userService.IsOrganizerExists(id))
                         return NotFound("Organizer not found");
 
                     if (!await _eventService.IsEventExist(EventId))
                         return NotFound("Event not found");
 
-                    var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(OrganizerId, EventId));
+                    var _event = _mapper.Map<EventByIdDto>(await _eventService.GetEventById(id, EventId));
 
                     if (!ModelState.IsValid)
                         return BadRequest(ModelState);
@@ -211,20 +220,21 @@ namespace event_service.Controllers
             }
         }
 
-        [HttpDelete("Organizer/{OrganizerId}/Events/{EventId}")]
-        public async Task<IActionResult> DeleteEvent(string OrganizerId, int EventId)
+        [HttpDelete("Organizer/DeleteEvent/{EventId}")]
+        public async Task<IActionResult> DeleteEvent(int EventId)
         {
             try
             {
-                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
+                var id = AuthorizeID();
+                if (id!=null && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
-                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                    if (!await _userService.IsOrganizerExists(id))
                         return NotFound("Organizer not found");
 
                     if (!await _eventService.IsEventExist(EventId))
                         return NotFound("Event not found");
 
-                    var temp = await _eventService.DeleteEvent(OrganizerId, EventId);
+                    var temp = await _eventService.DeleteEvent(id, EventId);
 
                     if (!ModelState.IsValid)
                         return BadRequest(ModelState);
@@ -246,28 +256,43 @@ namespace event_service.Controllers
             }
         }
         
-        [HttpPut("Organizer/{OrganizerId}/Events/{EventId}")]
-        public async Task<IActionResult> UpdateEvent([FromBody] EventReqDto ev, string OrganizerId, int EventId)
+        [HttpPut("Organizer/UpdateEvent/{EventId}")]
+        public async Task<IActionResult> UpdateEvent([FromBody] EventReqDto ev, int EventId)
         {
             try
             {
-                if (AuthorizeID(OrganizerId) && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
+                var id = AuthorizeID();
+                if (id!=null && (AuthorizeRole("ORGANIZER") || AuthorizeRole("ADMIN")))
                 {
-                    if (!await _userService.IsOrganizerExists(OrganizerId))
+                    if (!await _userService.IsOrganizerExists(id))
                         return NotFound("Organizer not found");
 
                     if (!await _eventService.IsEventExist(EventId))
                         return NotFound("Event not found");
 
-                    var temp = await _eventService.UpdateEvent(ev, OrganizerId, EventId);
 
                     if (!ModelState.IsValid)
                         return BadRequest(ModelState);
 
-                    if (temp)
-                        return Ok(temp);
-                    else
-                        return BadRequest("Failed to update event.");
+                    if (await _producerService.TestKafkaConnectionAsync())
+                    {
+                        var eventid = await _eventService.UpdateEvent(ev, id, EventId);
+                        if (eventid!=null)
+                        {
+                            var _event = _mapper.Map<PublishDto>(ev);
+                            _event.Id = (int)eventid;
+                            _event.OrganizerId = id;
+                            await _producerService.publish("events", _event);
+                            return Ok(_event);   
+                        }
+                        else
+                        {
+                            return BadRequest("Failed to update event.");
+                        }
+                    } else
+                    {   
+                        return BadRequest("Connection failure to Kafka");
+                    }    
                 }
                 else
                 {

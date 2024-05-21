@@ -108,10 +108,14 @@ namespace event_service.Services
 
         public async Task<Event> GetEventById(string OrganizerId, int id)
         {
-            return await _context.Events.Where(ev => ev.OrganizerId == OrganizerId).Include(img => img.Images).FirstAsync(ev => ev.Id == id);
+            return await _context.Events
+            .Where(ev => ev.OrganizerId == OrganizerId)
+            .Include(ev => ev.Categories.OrderBy(cat => cat.Price))
+            .Include(ev => ev.Organizer)
+            .FirstAsync(ev => ev.Id == id);
         }
 
-        public async Task<bool> CreateEvent(EventReqDto Event, string OrganizerId)
+        public async Task<int?> CreateEvent(EventReqDto Event, string OrganizerId)
         {
             var parsedDate = DateTime.ParseExact(Event.EventDate, "yyyy-mm-dd", CultureInfo.InvariantCulture);
 
@@ -131,10 +135,6 @@ namespace event_service.Services
                 OrganizerId = OrganizerId,
                 DesignId = Event.DesignId
             };
-
-
-            
-            
 
             _context.Events.Add(ev);
 
@@ -163,7 +163,10 @@ namespace event_service.Services
                 }
             }
             var result = await _context.SaveChangesAsync();
-            return result > 0;
+            if (result > 0){
+                return ev.Id;
+            }
+            return null;
         }
 
         public async Task<bool> DeleteEvent(string OrganizerId, int id)
@@ -189,13 +192,13 @@ namespace event_service.Services
   
         }
 
-        public async Task<bool> UpdateEvent(EventReqDto ev, string OrganizerId, int EventId)
+        public async Task<int?> UpdateEvent(EventReqDto ev, string OrganizerId, int EventId)
         {
             var existingEvent = await GetEventById(OrganizerId, EventId);
             var parsedDate = DateTime.ParseExact(ev.EventDate, "yyyy-mm-dd", CultureInfo.InvariantCulture);
 
             if (existingEvent == null)
-                return false; // Event not found
+                return null; // Event not found
 
             // Update event properties
             existingEvent.Title = ev.Title;
@@ -221,7 +224,11 @@ namespace event_service.Services
             }*/
 
             var result = await _context.SaveChangesAsync();
-            return result > 0;
+            if (result > 0)
+            {
+                return EventId;
+            }
+            return null;
 
         }
 

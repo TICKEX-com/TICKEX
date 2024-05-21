@@ -12,6 +12,7 @@ public class MappingConfig
             config =>
             {
                 config.CreateMap<EventReqDto, Event>().ReverseMap();
+                config.CreateMap<EventReqDto, PublishDto>().ReverseMap();
                 config.CreateMap<EventsDto, Event>().ReverseMap();
                 config.CreateMap<EventByIdDto, Event>().ReverseMap();
                 config.CreateMap<ImageDto, Image>().ReverseMap();
