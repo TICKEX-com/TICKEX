@@ -40,7 +40,7 @@ export default function Navbar1({ children, with_NewEvent }: props) {
           </Link>
         )}
 
-        {myCookie&&icons.map((val, indx) => (
+        {!myCookie&&icons.map((val, indx) => (
           <div className="items-center">
             <button className="relative border-0 group inline-flex h-12 w-16 items-center justify-center rounded-md bg-background px-2 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-accent/50 data-[active]:bg-accent/50">
               <Image src={val} alt={val} width={25} height={25}></Image>
