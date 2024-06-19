@@ -36,6 +36,7 @@ import { useMutation } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { useDispatch } from "react-redux";
 import { logout } from "@/lib/features/auth/authSlice";
+import ShortProfile from "./ShortProfile";
 
 
 
@@ -141,30 +142,8 @@ function TopNav() {
             )}
           </BreadcrumbList>
         </Breadcrumb>
-
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="overflow-hidden rounded-full"
-            >
-              <Image
-                src="/svg/Profile.svg"
-                width={36}
-                height={36}
-                alt="Avatar"
-                className="overflow-hidden rounded-full"
-              />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogOut}>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
+          <ShortProfile></ShortProfile>
         </DropdownMenu>
       </header>
     </div>

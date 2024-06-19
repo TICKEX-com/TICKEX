@@ -5,7 +5,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import NextTopLoader from "nextjs-toploader";
 import Providers from "@/lib/Providers";
 import { Toaster } from "sonner";
-
+import Cookies from "js-cookie";
 
 const robo = Roboto_Mono({
 	subsets: ["latin"],

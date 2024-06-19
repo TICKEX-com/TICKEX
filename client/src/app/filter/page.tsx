@@ -19,12 +19,21 @@ import Paginate from "@/components/Paginate";
 import SearchBar from "@/components/SearchBar";
 import { fetchByFilter } from "./_page";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from 'next/navigation'
 
-export default function page({ params }: { params: { slug: string } }) {
+
+export default function page() {
+	const searchParams = useSearchParams()
+
+	const city = searchParams.get('city')
+	const category = searchParams.get('category')
+	const title = searchParams.get('title')
+
+
 	const [minprice, setMinPrice] = useState(0)
 	const [maxprice, setMaxPrice] = useState(0)
-	const [eventtype, setEventType] = useState<string>("null")
-	const [_city, setCity] = useState<string>("null")
+	const [eventtype, setEventType] = useState<string>(category??"null")
+	const [_city, setCity] = useState<string>(city??"null")
 	const [pagenumber, setPageNumber] = useState<number>(1)
 
 	const { data, isLoading, error, refetch } = useQuery({
@@ -37,6 +46,8 @@ export default function page({ params }: { params: { slug: string } }) {
 	const handleValueChange =(value: number[])=>{
 		setMinPrice(value[0])
 		setMaxPrice(value[1])
+	}
+	const handleUnsetParams= ()=>{
 	}
 	return (
 		<Dialog>
@@ -147,19 +158,19 @@ export default function page({ params }: { params: { slug: string } }) {
 								<h1 className="text-md font-roboto font-bold w-auto">City</h1>
 							</div>
 							<div className="space-y-2 pl-6">
-								{cities.map((city) => (
+								{cities.map((citye) => (
 									<div className="flex items-center space-x-2">
 										<input
 											type="radio"
 											name="city"
-											id={city}
-											value={city}
-
+											id={citye}
+											value={citye}
 											className="accent-violet-600 h-4 w-4"
 											onChange={(e)=>setCity(e.currentTarget.value)}
+											defaultChecked={citye==city&&_city==city}
 										/>
-										<label htmlFor={city} className="text-sm">
-											{city}
+										<label htmlFor={citye} className="text-sm">
+											{citye}
 										</label>
 									</div>
 								))}
@@ -178,6 +189,7 @@ export default function page({ params }: { params: { slug: string } }) {
 											value={event}
 											className="accent-violet-600 h-4 w-4"
 											onChange={(e)=>setEventType(e.currentTarget.value)}
+											defaultChecked={event==category&&eventtype==category}
 										/>
 										<label htmlFor={event} className="text-sm">
 											{event}
@@ -189,7 +201,7 @@ export default function page({ params }: { params: { slug: string } }) {
 					</div>
 					<div className="w-8/12 flex flex-col ">
 					    <EventsGrid events={data}></EventsGrid>
-						<Paginate></Paginate>
+						{data&&<Paginate></Paginate>}
 					</div>
 				</div>
 				<Footer></Footer>
