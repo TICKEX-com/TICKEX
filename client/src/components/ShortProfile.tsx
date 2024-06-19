@@ -31,11 +31,34 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AvatarDemo } from "./ui/avatar";
-import { useAppSelector } from "@/lib/hooks";
+import {  useRouter } from "next/navigation";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "@/lib/features/auth/authSlice";
+import api from "@/lib/api";
 
 export default function ShortProfile() {
-  const userData = useAppSelector((state) => state.auth.userInfo);
+  const router = useRouter();
+  const dispatch = useDispatch();
+	const { mutate } = useMutation({
+		mutationFn: async () => {
+			try {
+				const response = await api.post(
+					`authentication-service/api/auth/logout`
+				);
+				dispatch(logout());
+				router.push("/login");
+			} catch (error) {
+				console.log(error);
+				throw error;
+			}
+		},
+	});
+
+	const handleLogOut = async () => {
+		mutate();
+	};
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger className="outline-0">
@@ -54,13 +77,13 @@ export default function ShortProfile() {
 						<span>Settings</span>
 						<DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
 					</DropdownMenuItem>
-						<DropdownMenuItem>
-							<LifeBuoy className="mr-2 h-4 w-4" />
-							<Link href={"/dashboard"} >Dashoard</Link>
-						</DropdownMenuItem>
+					<DropdownMenuItem>
+						<LifeBuoy className="mr-2 h-4 w-4" />
+						<Link href={"/dashboard"}>Dashoard</Link>
+					</DropdownMenuItem>
 					<DropdownMenuItem>
 						<LogOut className="mr-2 h-4 w-4" />
-						<span>Log out</span>
+						<span onClick={handleLogOut}>Log out</span>
 						<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
 					</DropdownMenuItem>
 				</DropdownMenuGroup>

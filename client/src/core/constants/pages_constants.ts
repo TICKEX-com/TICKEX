@@ -18,7 +18,7 @@ export const cities = [
 	"Rabat",
 	"Casablanca",
 	"Marrakech",
-	"Madrid",
+	"Agadir",
 	"Houceima",
 	"Tangier",
 ];
