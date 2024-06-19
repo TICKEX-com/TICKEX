@@ -10,8 +10,11 @@ import {
 	CarouselPrevious,
 } from "@/components/ui/carousel";
 import { motion, Variants } from "framer-motion";
-import { event_types, event_types_images } from "@/core/constants/pages_constants";
-
+import {
+	event_types,
+	event_types_images,
+} from "@/core/constants/pages_constants";
+import Link from "next/link";
 
 const cardVariants: Variants = {
 	offscreen: {
@@ -34,11 +37,12 @@ export default function Slider() {
 		>
 			<CarouselContent>
 				{event_types_images.map((val, index) => (
-						<CarouselItem
-							key={index}
-							className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 items-center flex flex-col group transition-transform duration-300 transform"
-						>
-							<Card className="rounded-full h-36 w-36 ">
+					<CarouselItem
+						key={index}
+						className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 items-center flex flex-col group transition-transform duration-300 transform"
+					>
+						<Card className="rounded-full h-36 w-36 ">
+							<Link href={`/filter?category=${event_types[index]}`}>
 								<CardContent className="flex aspect-square items-center justify-center">
 									<Image
 										src={val}
@@ -48,11 +52,12 @@ export default function Slider() {
 										className="transition-transform duration-300 transform group-hover:scale-95"
 									></Image>
 								</CardContent>
-							</Card>
-							<h2 className="text-sm font-semibold group-hover:opacity-60">
-								{event_types[index]}
-							</h2>
-						</CarouselItem>
+							</Link>
+						</Card>
+						<h2 className="text-sm font-semibold group-hover:opacity-60">
+							{event_types[index]}
+						</h2>
+					</CarouselItem>
 				))}
 			</CarouselContent>
 			<CarouselPrevious children={undefined} />

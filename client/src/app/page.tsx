@@ -17,6 +17,7 @@ import Footer from "@/components/footer";
 import { fetchEvents } from "./_page";
 import { useQuery } from "@tanstack/react-query";
 import EventsGrid from "@/components/EventsGrid";
+import Link from "next/link";
 
 const features = ["Event Promotion", "Live Events", "Seat Map"];
 
@@ -219,6 +220,7 @@ export default function Home() {
 					className="absolute left-[5%] transform scale-x-[-1] scale-y-[-1] "
 				></Image>
 				<EventsGrid events={data}></EventsGrid>
+				<Link className="absolute top-[92%] right-[50%]" href={"/filter"} >See More</Link>
 				<Image
 					src={"/halfsquare.svg"}
 					alt="two"
