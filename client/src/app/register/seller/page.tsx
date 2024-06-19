@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { User } from "@/core/types/authentication.types";
 import { AxiosError } from "axios";
 import { uploadFile } from "@/lib/fileUpload";
+import Navbar1 from "@/components/Navbar1";
 
 function page() {
   const [value] = useState();
@@ -68,7 +69,9 @@ function page() {
     mutate(userData);
   };
   return (
-    <div className="flex justify-center h-screen items-center">
+    <div className="flex flex-col ">
+      <Navbar1></Navbar1>
+    <div className="flex mt-10 justify-center h-screen items-center">
       <Card className="w-[40%]">
         <form action={onSubmit}>
           <CardHeader className="space-y-1">
@@ -219,6 +222,7 @@ function page() {
           </span>
         </CardContent>
       </Card>
+    </div>
     </div>
   );
 }

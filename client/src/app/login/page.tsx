@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useAppSelector } from "@/lib/hooks";
+import Navbar1 from "@/components/Navbar1";
 
 function page() {
   const router = useRouter();
@@ -61,7 +62,9 @@ function page() {
   };
 
   return (
-    <div className="flex justify-center h-screen items-center">
+    <div className="flex flex-col ">
+      <Navbar1></Navbar1>
+    <div className="flex mt-10 justify-center h-screen items-center">
       <Card className="w-1/4 p-6 ">
         <form action={onSubmit}>
           <CardHeader className="space-y-1">
@@ -118,6 +121,8 @@ function page() {
         </CardContent>
       </Card>
     </div>
+    </div>
+
   );
 }
 

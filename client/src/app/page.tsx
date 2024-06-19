@@ -34,9 +34,9 @@ export default function Home() {
 					<Navbar1 with_NewEvent={true}>
 						<NavLinks></NavLinks>
 					</Navbar1>
-					<DialogOverlay className="container fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
-						<DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
-							<SearchBar></SearchBar>
+					<DialogOverlay className=" fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+						<DialogContent className="fixed  left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+							<SearchBar data={data}></SearchBar>
 						</DialogContent>
 					</DialogOverlay>
 					<div className="container flex flex-row align-center items-center justify-center w-full">
@@ -146,7 +146,7 @@ export default function Home() {
 			<main className="container w-full flex flex-row justify-center mt-14">
 				<Slider></Slider>
 			</main>
-			<main className="w-full h-full p-0 items-center relative">
+			<main className="container h-full p-0 items-center relative">
 				<Image
 					src={"/pannel.svg"}
 					alt="pannel"
@@ -165,8 +165,8 @@ export default function Home() {
 					height={500}
 					className="absolute top-[12%] left-[20%]"
 				></Image>
-				<div className="container absolute top-[30%] flex font-roboto flex-row">
-					<div className="flex flex-1 flex-col">
+				<div className="container absolute top-[30%] flex font-roboto flex-row items-center">
+					<div className="flex flex-col">
 						<h1 className="text-4xl font-semibold mb-5 ">What We Offer </h1>
 						<p className="max-w-[50vw] text-sm text-gray-600 mb-7 items-center">
 							You have access to all of our features, whatever size your event,
@@ -220,7 +220,6 @@ export default function Home() {
 					className="absolute left-[5%] transform scale-x-[-1] scale-y-[-1] "
 				></Image>
 				<EventsGrid events={data}></EventsGrid>
-				<Link className="absolute top-[92%] right-[50%]" href={"/filter"} >See More</Link>
 				<Image
 					src={"/halfsquare.svg"}
 					alt="two"
@@ -229,7 +228,7 @@ export default function Home() {
 					className="absolute top-[90%] right-[5%]"
 				></Image>
 			</main>
-			<main className="w-full h-[30vh] bg-black mb-12 flex flex-col items-center justify-start font-roboto">
+			<main className="container h-[30vh] bg-black mb-12 flex flex-col items-center justify-start font-roboto">
 				<h1 className="text-white my-auto text-lg font-semibold">
 					Our Partners
 				</h1>

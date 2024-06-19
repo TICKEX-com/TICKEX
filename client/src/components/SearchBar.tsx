@@ -10,10 +10,10 @@ import {
     CommandShortcut,
   } from "@/components/ui/searchitems"
 import { CommandDialog } from "cmdk"
+import Link from "next/link"
 import { useEffect, useState } from "react"
   
-export default function SearchBar() {
-  const [open, setOpen] = useState(true)
+export default function SearchBar({data}:{data:any}) {
 
   return (
     <Command>
@@ -21,9 +21,7 @@ export default function SearchBar() {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Suggestions">
-          <CommandItem>Calendar</CommandItem>
-          <CommandItem>Search Emoji</CommandItem>
-          <CommandItem>Calculator</CommandItem>
+          {data?.map((event:any)=><CommandItem><Link href={`/details/categories/${event.id}`}>{event.title}</Link></CommandItem>)}
         </CommandGroup>
       </CommandList>
     </Command>
