@@ -41,14 +41,14 @@ namespace authentication_service.Controllers
             }
 
             // Initialize JwtTokenValidator with the issuer, audience, and secret key
-            var Secret = Environment.GetEnvironmentVariable("SECRET");
+            /*var Secret = Environment.GetEnvironmentVariable("SECRET");
             var Issuer = Environment.GetEnvironmentVariable("ISSUER");
             var Audience = Environment.GetEnvironmentVariable("AUDIENCE");
-            var tokenValidator = new JwtTokenValidator(Issuer, Audience, Secret);
+            var tokenValidator = new JwtTokenValidator(Issuer, Audience, Secret);*/
 
 
-            /*var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
-            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);*/
+            var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
 
 
             // Validate JWT token and extract user roles
@@ -64,6 +64,31 @@ namespace authentication_service.Controllers
             }
         }
 
+        private string? AuthorizeID()
+        {
+            // Retrieve JWT token from the request headers
+            var jwtToken = HttpContext.Request.Cookies["jwtToken"];
+            if (string.IsNullOrEmpty(jwtToken))
+            {
+                return null;
+            }
+
+            // Initialize JwtTokenValidator with the issuer, audience, and secret key
+            /*var Secret = Environment.GetEnvironmentVariable("SECRET");
+            var Issuer = Environment.GetEnvironmentVariable("ISSUER");
+            var Audience = Environment.GetEnvironmentVariable("AUDIENCE");
+            var tokenValidator = new JwtTokenValidator(Issuer, Audience, Secret);*/
+
+
+            var jwtOptions = _configuration.GetSection("ApiSettings:JwtOptions").Get<JwtOptions>();
+            var tokenValidator = new JwtTokenValidator(jwtOptions.Issuer, jwtOptions.Audience, jwtOptions.Secret);
+
+            // Validate JWT token and extract user roles
+            var ID = tokenValidator.ValidateTokenID(jwtToken);
+
+            return ID[0];
+        }
+
 
         /*[HttpGet("organizer/{topic}/{username}")]
         public async Task<IActionResult> GetOrganizerByUsername(string topic, string username)
@@ -73,7 +98,7 @@ namespace authentication_service.Controllers
                 var organizer = await _userService.GetOrganizerByUsername(username);
                 if (organizer != null)
                 {
-                    await _producerService.publish(topic, organizer);
+                    await _producerService.Publish(topic, organizer);
                     _responseDto.Result = organizer;
                     _responseDto.Message = "Message send successfuly";
                     return Ok(_responseDto);
@@ -104,34 +129,34 @@ namespace authentication_service.Controllers
 
                     if (organizers.Any())
                     {
-                        _responseDto.Result = organizers;
-                        _responseDto.Message = "Success";
+                        // _responseDto.Result = organizers;
+                        // _responseDto.Message = "Success";
                         return Ok(organizers);
                     }
                     else
                     {
-                        _responseDto.Message = "Organizers table is empty";
-                        _responseDto.IsSuccess = false;
+                        // _responseDto.Message = "Organizers table is empty";
+                        // _responseDto.IsSuccess = false;
                         return BadRequest("Organizers table is empty");
                     }
                 }
                 else
                 {
                     // User does not have the required role
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Unauthorized";
-                    return Unauthorized("Unauthorized");
+                    // _responseDto.IsSuccess = false;
+                    // _responseDto.Message = "Unauthorized";
+                    return Unauthorized();
                 }
             }
             catch (Exception ex)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
+                // _responseDto.IsSuccess = false;
+                // _responseDto.Message = ex.Message;
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpGet("organizer/{id}")]
+        [HttpGet("Organizer/{id}")]
         public async Task<IActionResult> GetOrganizerById(string id)
         {
             try
@@ -143,7 +168,47 @@ namespace authentication_service.Controllers
                     organizer.Role = "ORGANIZER";
                     if (organizer != null)
                     {
-                        // await _producerService.publish("Tickex", organizer);
+                        // await _producerService.Publish("Tickex", organizer);
+                        // _responseDto.Result = organizer;
+                        // _responseDto.Message = "Organizer found successfully";
+                        return Ok(organizer);
+                    }
+                    else
+                    {
+                        // _responseDto.Message = "Organizer doesn't exist";
+                        // _responseDto.IsSuccess = false;
+                        return BadRequest("Organizer doesn't exist");
+                    }
+                }
+                else
+                {
+                    // User does not have the required role
+                    // _responseDto.IsSuccess = false;
+                    // _responseDto.Message = "Unauthorized";
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                // _responseDto.IsSuccess = false;
+                // _responseDto.Message = ex.Message;
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Organizer/Profil")]
+        public async Task<IActionResult> GetOrganizerById()
+        {
+            try
+            {
+                var id = AuthorizeID();
+                if (id!=null && Authorize("ORGANIZER"))
+                {
+                    var organizer = await _userService.GetOrganizerById(id);
+                    organizer.Role = "ORGANIZER";
+                    if (organizer != null)
+                    {
+                        // await _producerService.Publish("Tickex", organizer);
                         _responseDto.Result = organizer;
                         _responseDto.Message = "Organizer found successfully";
                         return Ok(organizer);
@@ -152,38 +217,37 @@ namespace authentication_service.Controllers
                     {
                         _responseDto.Message = "Organizer doesn't exist";
                         _responseDto.IsSuccess = false;
-
+                        return BadRequest("Organizer doesn't exist");
                     }
-                    return BadRequest("Organizer doesn't exist");
                 }
                 else
                 {
                     // User does not have the required role
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Unauthorized";
-                    return Unauthorized("Unauthorized");
+                    /*_responseDto.IsSuccess = false;
+                    _responseDto.Message = "Unauthorized";*/
+                    return Unauthorized();
                 }
             }
             catch (Exception ex)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
+                /*_responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;*/
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut("Organizer/{id}")]
-        public async Task<IActionResult> UpdateOrganizer([FromBody] UpdateReqOrganizerDto requestDto, string id)
+        [HttpPut("Organizer/UpdateProfil")]
+        public async Task<IActionResult> UpdateOrganizer([FromBody] UpdateReqOrganizerDto requestDto)
         {
             try
             {
-                // Check if the user has the required role ("ADMIN")
-                if (Authorize("ADMIN"))
+                var id = AuthorizeID();
+                if (id!=null && Authorize("ORGANIZER"))
                 {
                     if (!await _userService.IsOrganizerExist(id))
                     {
-                        _responseDto.IsSuccess = false;
-                        _responseDto.Message = "Organizer not found";
+                        /*_responseDto.IsSuccess = false;
+                        _responseDto.Message = "Organizer not found";*/
                         return NotFound("Organizer not found");
                     }
 
@@ -192,40 +256,40 @@ namespace authentication_service.Controllers
                     organizer.isActive = await _userService.IsOrganizerAccepted(id);
                     if (organizer.isActive)
                     {
-                        var response = await _producerService.publish("Tickex", organizer);
-                        if (response)
-                        {
-                            // Console.WriteLine("the organizer is published");
+                        if (await _producerService.TestKafkaConnectionAsync())
+                        {                            
                             var errorMessage = await _userService.UpdateOrganizer(requestDto, id);
                             var organizer2 = await _userService.GetOrganizerById(id);
                             if (errorMessage != "success")
                             {
-                                _responseDto.IsSuccess = false;
-                                _responseDto.Message = errorMessage;
+                                /*_responseDto.IsSuccess = false;
+                                _responseDto.Message = errorMessage;*/
                                 return BadRequest(errorMessage);
+                            } else {
+                                await _producerService.Publish("users", organizer2);
+                                /*_responseDto.Message = "the organizer updated";
+                                _responseDto.Result = organizer2;*/
+                                return Ok(organizer2);
                             }
-                            _responseDto.Message = "the organizer is published and it is updated in DB";
-                            _responseDto.Result = organizer2;
-                            Console.WriteLine("the organizer is published and it is updated in DB");
-                            return Ok(organizer2);
-                        }
+                        }                        
                         else
                         {
-                            _responseDto.Message = "the organizer isn't updated in DB due to connection failure to Kafka";
-                            _responseDto.IsSuccess = false;
-                            return BadRequest("the organizer isn't updated in DB due to connection failure to Kafka");
+                            // _responseDto.Message = "Connection failure to Kafka";
+                            // _responseDto.IsSuccess = false;
+                            return BadRequest("Connection failure to Kafka");
                         }
+                    } else {
+                        /*_responseDto.Message = "the organizer isn't accepted";
+                        _responseDto.IsSuccess = false;*/
+                        return BadRequest("the organizer isn't accepted");
                     }
-                    _responseDto.Message = "the organizer isn't accepted";
-                    _responseDto.IsSuccess = false;
-                    return BadRequest("the organizer isn't accepted");
                 }
                 else
                 {
                     // User does not have the required role
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Unauthorized";
-                    return Unauthorized("Unauthorized");
+                    /*_responseDto.IsSuccess = false;
+                    _responseDto.Message = "Unauthorized";*/
+                    return Unauthorized();
                 }
             }
             catch (Exception ex)
@@ -246,8 +310,8 @@ namespace authentication_service.Controllers
                 {
                     if (!await _userService.IsOrganizerExist(id))
                     {
-                        _responseDto.IsSuccess = false;
-                        _responseDto.Message = "Organizer not found";
+                        // _responseDto.IsSuccess = false;
+                        // _responseDto.Message = "Organizer not found";
                         return NotFound("Organizer not found");
                     }
 
@@ -255,39 +319,40 @@ namespace authentication_service.Controllers
 
                     if (organizer.isActive)
                     {
-                        _responseDto.Message = "Organizer is already accepted";
-                        _responseDto.Result = organizer;
+                        // _responseDto.Message = "Organizer is already accepted";
+                        // _responseDto.Result = organizer;
                         return Ok("Organizer is already accepted");
                     }
 
-                    organizer.isActive = true;
-                    var response = await _producerService.publish("Tickex", organizer);
-                    if (response)
+                    if (await _producerService.TestKafkaConnectionAsync())
                     {
                         var isAccepted = await _userService.AcceptOrganizer(id);
                         if (!isAccepted)
                         {
-                            _responseDto.IsSuccess = false;
-                            _responseDto.Message = "Organizer not accepted";
+                            // _responseDto.IsSuccess = false;
+                            // _responseDto.Message = "Organizer not accepted";
                             return BadRequest("Organizer not accepted");
                         }
                         else
                         {
-                            _responseDto.Message = "Organizer is accepted";
-                            _responseDto.Result = organizer;
+                            organizer.isActive = true;
+                            await _producerService.Publish("users", organizer);
+                            // _responseDto.Message = "Organizer is accepted";
+                            // _responseDto.Result = organizer;
                             return Ok("Organizer is accepted");
-                        }
-                    }
-                    _responseDto.Message = "the organizer isn't accepted in DB due to connection failure to Kafka";
-                    _responseDto.IsSuccess = false;
-                    return BadRequest("the organizer isn't accepted in DB due to connection failure to Kafka");
+                        }                        
+                    } else {
+                        // _responseDto.Message = "Connection failure to Kafka";
+                        // _responseDto.IsSuccess = false;
+                        return BadRequest("Connection failure to Kafka");
+                    }             
                 }
                 else
                 {
                     // User does not have the required role
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Unauthorized";
-                    return Unauthorized("Unauthorized");
+                    // _responseDto.IsSuccess = false;
+                    // _responseDto.Message = "Unauthorized";
+                    return Unauthorized();
                 }
             }
             catch (Exception ex)
@@ -308,8 +373,8 @@ namespace authentication_service.Controllers
                     var isDeleted = await _userService.DeleteOrganizer(id);
                     if (!isDeleted)
                     {
-                        _responseDto.IsSuccess = false;
-                        _responseDto.Message = "Organizer not deleted";
+                        // _responseDto.IsSuccess = false;
+                        // _responseDto.Message = "Organizer not deleted";
                         return BadRequest("Organizer not deleted");
                     }
                     _responseDto.Message = "Organizer is deleted";
@@ -318,15 +383,15 @@ namespace authentication_service.Controllers
                 else
                 {
                     // User does not have the required role
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Unauthorized";
-                    return Unauthorized("Unauthorized");
+                    // _responseDto.IsSuccess = false;
+                    // _responseDto.Message = "Unauthorized";
+                    return Unauthorized();
                 }
             }
             catch (Exception ex)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
+                // _responseDto.IsSuccess = false;
+                // _responseDto.Message = ex.Message;
                 return BadRequest(ex.Message);
             }
         }

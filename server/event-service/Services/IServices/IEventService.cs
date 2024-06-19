@@ -14,9 +14,9 @@ namespace event_service.Services.IServices
         Task<ICollection<EventsDto>> GetEventsByOrganizer(string id, int pageNumber);
         Task<Event> GetEventById(string OrganizerId, int id);
         Task<ICollection<EventsDto>> GetEventsByType(string type);
-        Task<bool> CreateEvent(EventReqDto Event, string OrganizerId);
+        Task<int?> CreateEvent(EventReqDto Event, string OrganizerId);
         Task<bool> DeleteEvent(string OrganizerId, int id);
-        Task<bool> UpdateEvent(EventReqDto Event, string OrganizerId, int id);
+        Task<int?> UpdateEvent(EventReqDto Event, string OrganizerId, int id);
         Task<bool> IsEventExist(int id);
         Task<bool> IsTypeExist(string type);
         Task<bool> OrganizerHasEvents(string id);

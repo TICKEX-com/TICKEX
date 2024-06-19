@@ -36,4 +36,3 @@ import {
       </Pagination>
     )
   }
-  

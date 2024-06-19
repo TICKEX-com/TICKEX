@@ -4,6 +4,8 @@ namespace authentication_service.Services.IServices
 {
     public interface IProducerService
     {
-        public Task<bool> publish(string topic, OrganizerDto organizerDto);
+        public Task<bool> Publish(string topic, OrganizerDto organizerDto);
+        public Task<bool> TestKafkaConnectionAsync();
+
     }
 }

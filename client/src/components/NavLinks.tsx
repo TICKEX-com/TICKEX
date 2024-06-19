@@ -102,6 +102,7 @@ export function NavLinks() {
           			
 					<NavigationMenuContent>
 						<ul className="grid grid-cols-1  gap-3 p-4 md:w-[300px] lg:w-[400px] sm:w-[200px]">
+						
 							<ListItem href="/docs" title="Blog">
 								Re-usable components built using Radix UI and Tailwind CSS.
 							</ListItem>

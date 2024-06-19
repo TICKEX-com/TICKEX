@@ -82,7 +82,7 @@ namespace authentication_service.Services
 
                 var cookieOptions = new CookieOptions
                 {
-                    HttpOnly = true,
+                    HttpOnly = false,
                     Expires = DateTime.UtcNow.AddHours(3),
                 };
 

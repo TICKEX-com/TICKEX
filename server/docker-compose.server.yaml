@@ -25,7 +25,6 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092  
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes 
-      - KAFKA_CREATE_TOPICS=Tickex
     depends_on:
       - zookeeper
 
@@ -121,14 +120,14 @@ services:
       - '8081:8081'
 
 
-  payment-service:
-    build: ./payment-service
-    container_name: payment-service
-    expose:
-      - '8090'
-    depends_on:
-      - gateway-service
-    ports:
-      - '8090:8090'       
-    environment:
-      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka      
+  # payment-service:
+  #   build: ./payment-service
+  #   container_name: payment-service
+  #   expose:
+  #     - '8090'
+  #   depends_on:
+  #     - gateway-service
+  #   ports:
+  #     - '8090:8090'       
+  #   environment:
+  #     - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka      
