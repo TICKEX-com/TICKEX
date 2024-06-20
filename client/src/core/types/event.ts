@@ -36,10 +36,11 @@ export type eventInfoType = {
   address: string;
   duration: number;
   city: string;
+  
   eventDate: Date | null | undefined;
   time: string;
   eventType: string;
-  designId:string ;
+  designId:number ;
   categories: {
     id: string;
     name: string;

@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 
 import DataTable from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { eventData } from "@/core/constantes/Table.const";
 import { ListFilter, PlusCircle, File } from "lucide-react";
 import Link from "next/link";
@@ -21,27 +31,25 @@ import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 function page() {
-
-
-  const oganiserId = useAppSelector(state =>state.persistedReducer.auth.userInfo?.id);
-  const id = oganiserId;
-  const fetchEvents = async ()=> {
+ 
+  
+  const fetchEvents = async () => {
     try {
-      const res = await api.get(`event-service/Organizer/${id}/Events`)
+      const res = await api.get(`event-service/Organizer/Events`);
       console.log(res.data);
-      return res?.data
-      
+      return res?.data;
     } catch (error) {
       throw error;
     }
-    
-  }
+  };
 
-  const{data,error,isLoading}=useQuery({queryKey:["events"],queryFn: fetchEvents});
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["events"],
+    queryFn: fetchEvents,
+  });
 
-  
   const eventsInfo = data;
-  
+
   const dataLength = eventsInfo?.length;
   return (
     <div className="w-full">
@@ -72,43 +80,82 @@ function page() {
               Export
             </span>
           </Button>
-          <Link
-            href="./events/addevent"
-            className="sr-only sm:not-sr-only sm:whitespace-nowrap"
-          >
-            <Button size="sm" className="h-8 gap-1">
-              <PlusCircle className="h-3.5 w-3.5" />
-              Add event
-            </Button>
-          </Link>
+
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button size="sm" className="h-8 gap-1">
+                <PlusCircle className="h-3.5 w-3.5" />
+                Add event
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="flex justify-center">
+                  Choose the event type
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  <div className="grid grid-cols-2 gap-9">
+                    <div className="flex flex-col justify-center">
+                      <Image
+                        src="/svg/simple-event.svg"
+                        alt="plus"
+                        width={200}
+                        height={200}
+                      />
+                      <AlertDialogAction>
+                        <Link href="./events/addevent">Simple Event</Link>
+                      </AlertDialogAction>
+                    </div>
+                    <div className="flex flex-col justify-center">
+                      <Image
+                        src="/svg/design-event.svg"
+                        alt="plus"
+                        width={200}
+                        height={200}
+                      />
+
+                      <AlertDialogAction>
+                        <Link href="./events/addeventwithdesign">
+                          Event with design
+                        </Link>
+                      </AlertDialogAction>
+                    </div>
+                  </div>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
-      {(dataLength === 0 || !eventsInfo)? (
+      {dataLength === 0 || !eventsInfo ? (
         <div className="flex justify-normal items-center flex-col mt-10">
           <div>
-            <Image src="/svg/Empty-amico.svg" alt="plus" width={400} height={400} />
+            <Image
+              src="/svg/Empty-amico.svg"
+              alt="plus"
+              width={400}
+              height={400}
+            />
           </div>
           <div className="grid gap-4 mt-3 mb-3">
-            <h2 className="text-xl font-bold">You haven't added any events yet</h2>
+            <h2 className="text-xl font-bold">
+              You haven't added any events yet
+            </h2>
             <div className="flex justify-center">
-            <Link
-            href="./events/addevent"
-            className="sr-only sm:not-sr-only sm:whitespace-nowrap"
-          >
-            <Button size="sm" className="h-8 gap-1 ">
-              <PlusCircle className="h-3.5 w-3.5" />
-              Add event
-            </Button>
-            </Link>
+              <Link
+                href="./events/addevent"
+                className="sr-only sm:not-sr-only sm:whitespace-nowrap"
+              >
+                <Button size="sm" className="h-8 gap-1 ">
+                  <PlusCircle className="h-3.5 w-3.5" />
+                  Add event
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       ) : (
-        <>
-         {eventsInfo &&   <DataTable data={eventsInfo} />}
-        </>
-       
-      
+        <>{eventsInfo && <DataTable data={eventsInfo} />}</>
       )}
     </div>
   );

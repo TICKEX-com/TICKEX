@@ -29,21 +29,17 @@ function page() {
     dispatch(setImage(payload));
   }, [dispatch, poster]);
 
-  const organizerId = useAppSelector(
-    state => state.persistedReducer.auth?.userInfo?.id
-  );
+  
   const eventData: eventInfoType = useAppSelector(
     (state) => state.event.eventInfo
   );
-const id = organizerId
+
   const { mutate, isPending, isError, isSuccess, error } = useMutation({
     mutationFn: async (event: eventInfoType) => {
       try {
       
-        console.log(id);
-        
         const response = await api.post(
-          `event-service/Organizer/${id}/Events`,
+          `event-service/Organizer/CreateEvent`,
           eventData
         );
         toast.success("Your Event has been created successfully");

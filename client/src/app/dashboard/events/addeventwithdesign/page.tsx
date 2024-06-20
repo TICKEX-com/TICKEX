@@ -11,91 +11,55 @@ import TicketCat from "@/components/TicketCat";
 import Link from "next/link";
 import { uploadFile } from "@/lib/fileUpload";
 import { useDispatch } from "react-redux";
-import { setEventInfo, setImage } from "@/lib/features/events/eventSlice";
+import { setImage } from "@/lib/features/events/eventSlice";
 import { useAppSelector } from "@/lib/hooks";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import api from "@/lib/api";
 import { eventInfoType } from "@/core/types/event";
-import EventDesign from "@/components/EventDesign";
+import api from "@/lib/api";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import EventDesign from "@/components/EventDesign";
 
-function page({ params }: { params: { modifyEvent: string } }) {
+function page() {
   const dispatch = useDispatch();
-  const eventId = params;
   const router = useRouter();
-
   const [imageUpload, setImageUpload] = useState<FileList | null>(null);
   const [poster, setPoster] = useState<string>("");
-
-  const fetchEvent = async () => {
-    try {
-      const res = await api.get(
-        `event-service/Organizer/Events/${eventId.modifyEvent}`
-      );
-      console.log(res.data);
-      console.log(eventId);
-
-      return res?.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["event"],
-    queryFn: fetchEvent,
-  });
-
   useEffect(() => {
-    if (data) {
-      const eventData: eventInfoType = {
-        title: data.title,
-        description: data.description,
-        city: data.city,
-        duration: data.duration,
-        address: data.address,
-        eventDate: data.eventDate,
-        time: data.time,
-        designId: data.designId,
-        eventType: data.eventType,
-        poster: data.poster,
-        categories: data.categories,
-      };
-      dispatch(setEventInfo(eventData));
-    }
-  }, [data, dispatch]);
+    const payload: Partial<string> = poster;
+    dispatch(setImage(payload));
+  }, [dispatch, poster]);
 
-  useEffect(() => {
-    if (poster) {
-      dispatch(setImage(poster));
-    }
-  }, [poster, dispatch]);
+  
+  const eventData: eventInfoType = useAppSelector(
+    (state) => state.event.eventInfo
+  );
 
-  const eventInfo = useAppSelector((state) => state.event.eventInfo);
-  const eventPoster = eventInfo.poster;
-
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isPending, isError, isSuccess, error } = useMutation({
     mutationFn: async (event: eventInfoType) => {
       try {
-        const response = await api.put(
-          `event-service/Organizer/UpdateEvent/${eventId.modifyEvent}`,
-          event
+      
+       
+        
+        const response = await api.post(
+          `event-service/Organizer/CreateEvent`,
+          eventData
         );
-        toast.success("Your Event has been  modified successfully");
+        toast.success("Your Event has been created successfully");
         router.push('./')
 
       } catch (error) {
         console.log(error);
-        toast.error(`something went wrong:${error}`);
-        throw error;
+        toast.error(`something went wrong:${error}`)
+        throw error
       }
     },
   });
 
   const handleSubmit = async () => {
-    mutate(eventInfo);
+    mutate(eventData);
   };
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
@@ -107,10 +71,10 @@ function page({ params }: { params: { modifyEvent: string } }) {
             </Button>
           </Link>
           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-            Modify Event
+            Add Event
           </h1>
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
-            <Button size="sm" onClick={handleSubmit}>
+            <Button size="sm" onClick={handleSubmit} >
               Save Event
             </Button>
           </div>
@@ -122,7 +86,7 @@ function page({ params }: { params: { modifyEvent: string } }) {
               description="Please Add Your Next Event"
             />
             <EventCat />
-            {data?.designId ? <EventDesign /> : <div></div>}
+            <EventDesign />
             <TicketCat />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
@@ -133,10 +97,10 @@ function page({ params }: { params: { modifyEvent: string } }) {
               <CardContent>
                 <div className="grid gap-2">
                   <Image
-                    alt="Product image"
+                    alt="Poster"
                     className="aspect-square w-full rounded-md object-cover"
                     height="300"
-                    src={poster ? poster : eventPoster}
+                    src={poster ? poster : "/svg/Image-upload-bro.svg"}
                     width="300"
                   />
                   <input

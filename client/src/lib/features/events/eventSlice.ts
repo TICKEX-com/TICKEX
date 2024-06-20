@@ -12,6 +12,7 @@ const initialState: EventState = {
     duration: 0,
     city: "",
     eventDate: "",
+    designId:0 ,
     time: "",
     eventType: "",
     categories: [],
@@ -25,6 +26,9 @@ const eventSlice = createSlice({
   reducers: {
     setType: (state, action: PayloadAction<string>) => {
       state.eventInfo.eventType = action.payload;
+    },
+    setDesign: (state, action: PayloadAction<number>) => {
+      state.eventInfo.designId = action.payload;
     },
     setCategoriesInfo: (state, action: PayloadAction<string[]>) => {
       const newCategories = action.payload.map((name) => ({
@@ -56,6 +60,7 @@ export const {
   setCategoriesInfo,
   setImage,
   clearEventInfo,
+  setDesign,
 } = eventSlice.actions;
 
 export default eventSlice.reducer;

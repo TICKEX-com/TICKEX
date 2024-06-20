@@ -95,7 +95,7 @@ function DataTable({ data }: Data) {
                         $ {event.minPrice}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        {event.eventDate.split("T")[0]}
+                        {event.eventDate && event.eventDate.split("T")[0]}
                       </TableCell>
                       <TableCell>
                         <Action id={organiserId} eventId={event.id}  />
