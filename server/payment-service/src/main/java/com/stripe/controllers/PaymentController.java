@@ -28,10 +28,10 @@ public class PaymentController {
 		return "homepage";
 	}
 
-	@GetMapping("/subscription")
+	@GetMapping("/payment")
 	public String subscriptionPage(Model model) {
 		model.addAttribute("stripePublicKey", API_PUBLIC_KEY);
-		return "subscription";
+		return "payment";
 	}
 
 	@GetMapping("/charge")
@@ -40,8 +40,8 @@ public class PaymentController {
 		return "charge";
 	}
 
-	@PostMapping("/create-subscription")
-	public @ResponseBody Response createSubscription(String email, String token, String plan, String coupon) {
+	@PostMapping("/create-payment")
+	public @ResponseBody Response createPayment(String email, String token, String plan, String coupon) {
 
 		if (token == null || plan.isEmpty()) {
 			return new Response(false, "Stripe payment token is missing. Please try again later.");
@@ -53,7 +53,7 @@ public class PaymentController {
 			return new Response(false, "An error accurred while trying to create customer");
 		}
 
-		String subscriptionId = stripeService.createSubscription(customerId, plan, coupon);
+		String subscriptionId = stripeService.createPayment(customerId, plan, coupon);
 
 		if (subscriptionId == null) {
 			return new Response(false, "An error accurred while trying to create subscription");
@@ -62,10 +62,10 @@ public class PaymentController {
 		return new Response(true, "Success! your subscription id is " + subscriptionId);
 	}
 
-	@PostMapping("/cancel-subscription")
+	@PostMapping("/cancel-payment")
 	public @ResponseBody Response cancelSubscription(String subscriptionId) {
 
-		boolean subscriptionStatus = stripeService.cancelSubscription(subscriptionId);
+		boolean subscriptionStatus = stripeService.cancelPayment(subscriptionId);
 
 		if (!subscriptionStatus) {
 			return new Response(false, "Faild to cancel subscription. Please try again later");
@@ -95,7 +95,7 @@ public class PaymentController {
 			return new Response(false, "Stripe payment token is missing. please try again later.");
 		}
 
-		String chargeId = stripeService.createCharge(email, token, 999);// 9.99 usd
+		String chargeId = stripeService.createCharge(email, token, 999);
 
 		if (chargeId == null) {
 			return new Response(false, "An error accurred while trying to charge.");

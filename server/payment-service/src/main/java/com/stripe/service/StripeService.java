@@ -43,7 +43,7 @@ public class StripeService {
 		return id;
 	}
 
-	public String createSubscription(String customerId, String plan, String coupon) {
+	public String createPayment(String customerId, String plan, String coupon) {
 
 		String subscriptionId = null;
 
@@ -73,7 +73,7 @@ public class StripeService {
 		return subscriptionId;
 	}
 	
-	public boolean cancelSubscription(String subscriptionId) {
+	public boolean cancelPayment(String subscriptionId) {
 		
 		boolean subscriptionStatus;
 		

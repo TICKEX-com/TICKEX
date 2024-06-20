@@ -10,29 +10,14 @@ namespace event_service.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
-        // private readonly IGreeterService _greeterService;
         private readonly IMapper _mapper;
 
         public EventsController(IEventService eventService, IMapper mapper)
         {
             _eventService = eventService;
             _mapper = mapper;
-            // _greeterService = greeterService;
-        }
-        // [HttpGet("grpc")]
-        // public async Task<IActionResult> TestGrpc()
-        // {
-        //     try
-        //     {
-        //         var test = await _greeterService.Hello();
-        //         Console.WriteLine(test);
-        //         return Ok(test);
-        //     } catch (Exception ex)
-        //     {
-        //         return StatusCode(500, $"{ex.Message}");
 
-        //     }
-        // }
+        }
 
         [HttpGet("Events")]
         public async Task<IActionResult> GetEvents(int pageNumber = 1)

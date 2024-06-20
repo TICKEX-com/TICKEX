@@ -24,10 +24,10 @@ export default function EventCard({event}:Props) {
 		<Card className="max-w-xl min-w-xl font-roboto transition-all ease-in-out duration-300  border-2 border-transparent pointer hover:border-gray-200 hover:scale-95 m-2">
 			<CardHeader className="p-0">
 				<Image
-					src={"/music.svg"}
+					src={event?.poster}
 					alt="two"
-					width={0}
-					height={0}
+					width={100}
+					height={70}
 					className="w-full"
 				></Image>
 			</CardHeader>

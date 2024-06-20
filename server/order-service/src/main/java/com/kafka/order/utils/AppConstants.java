@@ -1,4 +1,4 @@
-package com.kafka.order;
+package com.kafka.order.utils;
 
 public class AppConstants {
 

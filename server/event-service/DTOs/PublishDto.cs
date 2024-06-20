@@ -1,14 +1,14 @@
-﻿using event_service.Entities;
+using event_service.Entities;
 
 namespace event_service.DTOs
 {
-    public class EventByIdDto
+    public class PublishDto
     {
         public int Id { get; set; } 
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime EventDate { get; set; }
         public string Time { get; set; }
+        public string EventDate { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
         public string Poster { get; set; }
@@ -16,7 +16,7 @@ namespace event_service.DTOs
         public string EventType { get; set; }
         public int DesignId { get; set; }
         public List<CategoryDto> Categories { get; set; }
-        public OrganizerDto Organizer { get; set; }
+        public string OrganizerId { get; set; }
         // public List<ImageDto> Images { get; set; }
     }
 }

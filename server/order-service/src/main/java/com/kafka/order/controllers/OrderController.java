@@ -1,5 +1,8 @@
-package com.kafka.order;
+package com.kafka.order.controllers;
 
+import com.kafka.order.producer.OrderProducer;
+import com.kafka.order.repository.OrderRepository;
+import com.kafka.order.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/orders")
 public class OrderController {
 
-    private final  OrderProducer orderProducer;
+    private final OrderProducer orderProducer;
 
     @Autowired
     public OrderController(OrderProducer orderProducer) {

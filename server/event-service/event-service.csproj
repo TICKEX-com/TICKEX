@@ -49,8 +49,4 @@
 	  <PackageReference Include="Steeltoe.Discovery.EurekaBase" Version="2.5.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Both" />
-  </ItemGroup>
-
 </Project>

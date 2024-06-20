@@ -191,30 +191,30 @@ export const weeklyData: chartData[] = [
 export const salesData: chartData[] = [
   {
     date: "Sunday",
-    value: 10, // Random value between 0 and 10
+    value: 2, 
   },
   {
     date: "Monday",
-    value: 10,
+    value: 3,
   },
   {
     date: "Tuesday",
-    value: 10,
+    value: 0,
   },
   {
     date: "Wednesday",
-    value: 10,
+    value: 2,
   },
   {
     date: "Thursday",
-    value: 10,
+    value: 1,
   },
   {
     date: "Friday",
-    value: 10,
+    value: 4,
   },
   {
     date: "Saturday",
-    value: 10,
+    value: 3,
   },
 ];

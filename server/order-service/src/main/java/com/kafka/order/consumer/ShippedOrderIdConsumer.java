@@ -1,5 +1,7 @@
-package com.kafka.order;
+package com.kafka.order.consumer;
 
+import com.kafka.order.controllers.OrderController;
+import com.kafka.order.utils.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

@@ -10,20 +10,20 @@ function page() {
       <div className="grid grid-cols-4 gap-6">
         <ContentCard
           icon="/svg/customers.svg"
-          title="Total Sales"
-          number="15342"
+          title="Total Customers"
+          number="12"
         />
         <ContentCard
           icon="/svg/dollar.svg"
           title="Total Income"
-          number="$ 56180"
+          number="MAD 765"
         />
         <ContentCard
           icon="/svg/stats.svg"
-          title="Total ...."
-          number="2882182"
+          title="Total Sales"
+          number="15"
         />
-        <ContentCard icon="/svg/ticket.svg" title="Total Events" number="35" />
+        <ContentCard icon="/svg/ticket.svg" title="Total Events" number="3" />
       </div>
       <div className="mt-5 grid grid-cols-2 gap-4">
         <LineChartCard title="Sales Per Category" data={weeklyData} />
