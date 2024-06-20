@@ -1,10 +1,10 @@
-package com.tickex.paymentservice;
+package com.kafka.order;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PaymentServiceApplicationTests {
+class OrderApplicationTests {
 
 	@Test
 	void contextLoads() {
